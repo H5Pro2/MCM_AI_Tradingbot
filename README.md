@@ -1,131 +1,127 @@
 # MCM Trading System  
-Mental Core Matrix – Market Energy Model
+Mental Core Matrix – Energetisches Marktmodell
 
-## Overview
+## Überblick
 
-This project implements a trading system based on the **Mental Core Matrix (MCM)** — a conceptual model I developed to describe dynamic decision processes in complex systems.
+Dieses Projekt implementiert ein Trading-System, das auf der **von mir entwickelten Mental Core Matrix (MCM)** basiert.
 
-The MCM was **not originally designed for financial markets**.  
-Instead, the trading system presented here is a **conceptual application of the MCM model to market dynamics**.
+Die Mental Core Matrix ist ein konzeptionelles Modell zur Beschreibung dynamischer Entscheidungsprozesse in komplexen Systemen.  
+Sie wurde ursprünglich **nicht speziell für Finanzmärkte entwickelt**.
 
-Financial markets are well suited for this application because they represent a complex system where countless participants continuously interact, forming emergent patterns of collective decision making.
+Das hier vorgestellte Trading-System ist daher eine **konzeptionelle Anwendung der MCM auf Marktstrukturen**.
 
-This project explores the idea that **market charts represent energetic structures of collective behavior**, rather than simple sequences of prices.
+Finanzmärkte eignen sich besonders gut für diese Anwendung, da sie ein komplexes System darstellen, in dem viele Marktteilnehmer gleichzeitig Entscheidungen treffen und dadurch kollektive Muster entstehen.
 
 ---
 
-# Core Idea
+# Grundidee
 
-Traditional trading systems interpret market data primarily as numerical price series.
+In den meisten Trading-Systemen werden Märkte als **Preiszeitreihen** betrachtet.
 
-Indicators such as:
+Aus diesen Preisen werden klassische Indikatoren berechnet, zum Beispiel:
 
 - RSI
-- Moving averages
+- Moving Average
 - MACD
 
-are derived from these price values.
+Dieses System verfolgt einen anderen Ansatz.
 
-In this project a different perspective is used.
+Ein Marktchart wird hier nicht nur als Preisdiagramm betrachtet, sondern als **sichtbares Muster kollektiver Entscheidungen**.
 
-A market chart is interpreted as the **result of collective psychological interaction between market participants**.
+Jede Preisbewegung entsteht durch:
 
-Every price movement is the result of:
+- Erwartungen
+- Risikoentscheidungen
+- Reaktionen auf Informationen
+- Liquiditätsverschiebungen
+- Emotionen der Marktteilnehmer
 
-- expectations
-- fear
-- risk management
-- reaction to information
-- liquidity dynamics
-
-From this perspective a chart can be seen as a **psychodynamic pattern of collective decision making**.
-
-The goal of the system is therefore not to analyze prices directly, but to **model the energetic structure behind market movement**.
+Ein Chart kann daher als **psychodynamisches Muster kollektiver Interaktion** verstanden werden.
 
 ---
 
-# Candles as Energy Surfaces
+# Kerzen als Flächenenergie
 
-A standard OHLC candle contains four values:
+Eine klassische OHLC-Kerze enthält vier Werte:
 
 - Open
 - High
 - Low
 - Close
 
-In this system a candle is interpreted as an **energy surface within the market tension field**.
+In diesem System wird eine Kerze nicht nur als Preisintervall interpretiert.
 
-The energetic characteristics of a candle are derived from:
+Stattdessen wird sie als **energetische Fläche im Marktspannungsfeld** betrachtet.
 
-- the range between High and Low
-- the position of Open and Close
-- the structural context of the candle
-- the speed and direction of movement
+Die energetische Struktur einer Kerze entsteht aus:
 
-This allows each candle to be interpreted as a **small energetic unit inside the global market system**.
+- der Spanne zwischen High und Low
+- der Position von Open und Close
+- der Richtung der Bewegung
+- der strukturellen Position innerhalb des Marktverlaufs
 
-Strong movements create higher energetic tension, while quiet market phases contain lower energy.
+Eine Kerze kann damit als **kleine Energieeinheit innerhalb des globalen Marktsystems** verstanden werden.
+
+Starke Bewegungen erzeugen höhere energetische Spannung, während ruhige Marktphasen weniger Energie enthalten.
 
 ---
 
-# Market Energy Representation
+# Energetische Marktparameter
 
-The raw candle data is transformed into a set of **state variables** that describe the energetic structure of the market.
+Die Kerzendaten werden in energetische Zustandsgrößen transformiert.
 
-These variables are computed in:
+Diese Berechnung erfolgt in:
 
-`mcm_core_engine.py`
-
-```python
-energy, coherence, asymmetry, coh_zone = compute_tension_from_ohlc(...)
+```
+mcm_core_engine.py
 ```
 
 :contentReference[oaicite:0]{index=0}
 
-The resulting state parameters are:
+Die wichtigsten Zustandsgrößen sind:
 
-| Variable | Meaning |
-|--------|--------|
-Energy | intensity of movement |
-Coherence | directional consistency of price action |
-Asymmetry | directional bias of the candle |
-Cohesion Zone | market regime classification |
+| Parameter | Bedeutung |
+|----------|-----------|
+Energy | Intensität der Bewegung |
+Coherence | Ordnung bzw. Richtungsstabilität |
+Asymmetry | Richtungsdominanz |
+Cohesion Zone | Marktregime |
 
-This transformation converts price data into an **energetic state representation of the market**.
+Dadurch wird der Markt nicht mehr nur als Preisreihe betrachtet, sondern als **energetischer Zustandsraum**.
 
 ---
 
-# Trading Architecture
+# Trading Pipeline
 
-The trading system follows a structured pipeline.
+Der Bot arbeitet mit einer klar strukturierten Pipeline:
 
 ```
-OHLC Data
+OHLC Daten
     ↓
 compute_tension_from_ohlc
     ↓
-Resonance Gate
+ResonanceGate
     ↓
-Structure Entry Gate
+StructureEntryGate
     ↓
-Direction via Asymmetry
+Richtung über Asymmetrie
     ↓
-Risk / RR Calculation
+Risk / RR Berechnung
     ↓
-MCM_AI Decision
+MCM_AI Entscheidung
     ↓
-Trade Value Gate
+TradeValueGate
     ↓
-Order Execution
+Order Ausführung
 ```
 
 ---
 
 # Resonance Gate
 
-The **Resonance Gate** filters market noise and detects valid market activity.
+Das **ResonanceGate** filtert Marktphasen und blockiert Rauschen.
 
-Implemented in:
+Implementiert in:
 
 ```
 resonance_gate.py
@@ -133,22 +129,22 @@ resonance_gate.py
 
 :contentReference[oaicite:1]{index=1}
 
-It evaluates:
+Geprüft werden:
 
-- resonance strength
-- phase stability
-- energy gradient
-- short-term stability
+- Resonanzstärke
+- Phasenstabilität
+- Energiegradient
+- Stabilitätsfenster
 
-Only if these conditions are met will the system allow structure analysis.
+Nur wenn diese Bedingungen erfüllt sind, wird eine Strukturprüfung zugelassen.
 
 ---
 
 # Structure Entry Gate
 
-The **StructureEntryGate** detects market structure patterns.
+Das **StructureEntryGate** erkennt Marktstruktur.
 
-Implemented in:
+Implementiert in:
 
 ```
 structure_entry_gate.py
@@ -156,26 +152,26 @@ structure_entry_gate.py
 
 :contentReference[oaicite:2]{index=2}
 
-Recognized structures include:
+Erkannte Strukturen:
 
 - Higher High (HH)
 - Higher Low (HL)
 - Lower High (LH)
 - Lower Low (LL)
 
-Additional metrics include:
+Zusätzlich werden berechnet:
 
-- structure strength
-- structure age
-- structure break (BOS / CHOCH)
+- structure_strength
+- structure_age
+- structure_break (BOS / CHOCH)
 
 ---
 
-# Direction Determination
+# Richtungsbestimmung
 
-Trade direction is determined using **asymmetry smoothing**.
+Die Richtung wird nicht direkt aus einer einzelnen Kerze bestimmt.
 
-The system averages the last asymmetry values to determine directional bias.
+Stattdessen wird die **Asymmetrie über mehrere Kerzen gemittelt**.
 
 ```
 asymmetry > 0 → LONG
@@ -184,41 +180,43 @@ asymmetry < 0 → SHORT
 
 ---
 
-# Risk Model
+# Risiko-Modell
 
-Risk is calculated dynamically based on entry price and market energy.
+Das Risiko wird dynamisch aus Entrypreis und Marktenergie berechnet.
 
 ```
 risk = entry_price * risk_pct * energy_scale
 ```
 
-Stop Loss is then derived from the entry price.
+Der Stop-Loss ergibt sich direkt aus diesem Risiko.
 
 ---
 
 # MCM_AI
 
-The **MCM_AI** represents the cognitive component of the system.
+Die **MCM_AI** ist die adaptive Komponente des Systems.
 
-It receives the full market state including:
+Sie erhält den vollständigen Marktzustand:
 
-- energy
-- coherence
-- asymmetry
-- resonance
-- structure information
-- risk parameters
+- Energy
+- Coherence
+- Asymmetry
+- Resonance
+- Strukturinformationen
+- Risiko-Parameter
 
-The AI can:
+Die AI kann:
 
-- allow or block trades
-- adjust entry position
-- modify the risk-reward target
-- learn from TP / SL outcomes
+- Trades blockieren
+- das Risk-Reward Verhältnis anpassen
+- den Entry verfeinern
+- aus TP/SL Ergebnissen lernen
 
-However, the AI **cannot worsen the structural entry**.
+Dabei gilt eine wichtige Regel:
 
-Example rule:
+Die AI darf den Entry **verbessern, aber nicht verschlechtern**.
+
+Beispiel:
 
 ```
 LONG:
@@ -232,35 +230,33 @@ entry_ai ≥ entry_structure
 
 # Trade Value Gate
 
-Before a trade is executed it passes through the **TradeValueGate**.
+Vor der Orderausführung wird jeder Trade ökonomisch geprüft.
 
-This module verifies economic viability.
-
-Implemented in:
+Implementiert in:
 
 ```
 trade_value_gate.py
 ```
 
-Checks include:
+Die Prüfung beinhaltet:
 
-- risk > 0
-- reward > 0
-- RR above minimum threshold
-- stop loss distance within allowed range
+- Risiko > 0
+- Gewinn > 0
+- RR über Mindestwert
+- Stop-Loss Abstand innerhalb erlaubter Grenzen
 
 ---
 
-# Backtesting Engine
+# Backtesting
 
-The bot supports both:
+Der Bot unterstützt zwei Modi:
 
 ```
-BACKTEST mode
-LIVE mode
+BACKTEST
+LIVE
 ```
 
-Configuration is defined in:
+Die Konfiguration erfolgt in:
 
 ```
 config.py
@@ -268,7 +264,7 @@ config.py
 
 :contentReference[oaicite:3]{index=3}
 
-Backtesting uses historical OHLC data via a CSV feed.
+Backtests verwenden historische OHLC Daten über:
 
 ```
 csv_feed.py
@@ -278,9 +274,9 @@ csv_feed.py
 
 ---
 
-# Order Execution
+# Orderausführung
 
-Live order execution and monitoring are handled by:
+Die Orderverwaltung erfolgt über:
 
 ```
 place_orders.py
@@ -288,49 +284,50 @@ place_orders.py
 
 :contentReference[oaicite:5]{index=5}
 
-Features include:
+Funktionen:
 
-- order monitoring thread
-- missed-TP detection
-- reconnect handling
-- restart synchronization
-
----
-
-# Philosophy of the System
-
-The architecture combines two different approaches:
-
-**Rule-based structure**
-
-- market structure
-- resonance filters
-- risk management
-
-**Adaptive learning**
-
-- MCM_AI evaluation
-- memory of previous states
-- reward feedback from TP / SL outcomes
-
-This hybrid design allows the system to remain structurally stable while still adapting to evolving market conditions.
+- Order Monitor Thread
+- Missed-TP Erkennung
+- Neustart-Synchronisation
+- Reconnect Handling
+- Failsafe bei offenen Positionen
 
 ---
 
-# Research Direction
+# Systemphilosophie
 
-This project explores the idea that markets can be modeled as **energetic systems of collective decision dynamics**.
+Das System kombiniert zwei Ansätze:
 
-By interpreting candles as energy surfaces and market movement as gradients of tension, the system attempts to analyze market behavior at a deeper structural level.
+**Regelbasierte Struktur**
 
-The trading bot therefore represents **one possible application of the Mental Core Matrix model** to financial markets.
+- Marktstruktur
+- Resonanzfilter
+- Risikomanagement
+
+**Adaptive Komponente**
+
+- MCM_AI Bewertung
+- Erfahrungsbasierte Anpassung
+- Lernen aus Trade-Ergebnissen
+
+Diese Kombination ermöglicht ein System, das strukturell stabil bleibt und sich gleichzeitig an Marktveränderungen anpassen kann.
 
 ---
 
-# Disclaimer
+# Forschungsidee
 
-This project is an experimental research implementation.
+Dieses Projekt untersucht die Hypothese, dass Finanzmärkte als **energetische Systeme kollektiver Entscheidungsprozesse** modelliert werden können.
 
-It should not be interpreted as financial advice.
+Indem Kerzen als Flächenenergie interpretiert werden und Marktbewegungen als Gradienten eines Spannungsfeldes betrachtet werden, entsteht eine neue Perspektive auf Marktanalyse.
 
-Trading financial markets involves significant risk.
+Der Trading-Bot stellt somit **eine mögliche Anwendung der Mental Core Matrix auf Finanzmärkte dar**.
+
+---
+
+# Hinweis
+
+Dieses Projekt ist ein experimentelles Forschungsprojekt.
+
+Es stellt **keine Finanzberatung** dar.
+
+Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden.
