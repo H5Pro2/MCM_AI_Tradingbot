@@ -42,6 +42,8 @@ Ein Chart kann daher als **psychodynamisches Muster kollektiver Interaktion** ve
 
 # Kerzen als Flächenenergie
 
+![alt text](Kerzen_Flächenspannung.png)
+
 Eine klassische OHLC-Kerze enthält vier Werte:
 
 - Open
@@ -63,8 +65,6 @@ Die energetische Struktur einer Kerze entsteht aus:
 Eine Kerze kann damit als **kleine Energieeinheit innerhalb des globalen Marktsystems** verstanden werden.
 
 Starke Bewegungen erzeugen höhere energetische Spannung, während ruhige Marktphasen weniger Energie enthalten.
-
-![alt text](Kerzen_Flächenspannung.bmp)
 
 ---
 
