@@ -64,6 +64,8 @@ Eine Kerze kann damit als **kleine Energieeinheit innerhalb des globalen Marktsy
 
 Starke Bewegungen erzeugen höhere energetische Spannung, während ruhige Marktphasen weniger Energie enthalten.
 
+![alt text](![alt text](image.png).png)
+
 ---
 
 # Energetische Marktparameter
