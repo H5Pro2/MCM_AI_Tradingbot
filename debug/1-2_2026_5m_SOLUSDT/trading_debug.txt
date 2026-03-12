@@ -1,0 +1,408 @@
+EXIT SL | time=N/A side=LONG entry=131.2523 tp=133.9914 sl=129.8891 risk=1.3631 mfe=1.8577 mae=1.2823 energy=1.8000000000000163 stim=reward attr=engage socially eff=0.6 node=1651 mem=explore res=1.4400000000000424 pnl=-1.3631
+AI_DECISION | ml=LONG ai=LONG rr=2.4776429248575176 stim=reward attr=engage socially eff=0.6 node=1651 mem=explore
+EXIT SL | time=N/A side=SHORT entry=130.7971 tp=127.5227 sl=132.0426 risk=1.2455 mfe=0.2671 mae=1.2129 energy=1.6400000000001 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0496000000002281 pnl=-1.2455
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=LONG entry=132.0497 tp=134.0050 sl=130.7204 risk=1.3293 mfe=2.6003 mae=0.6997 energy=1.741935483871021 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.292403746097947 pnl=1.9553
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=134.1301 tp=137.3024 sl=132.6902 risk=1.4398 mfe=3.6199 mae=1.0101 energy=1.8636363636363578 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.609504132231389 pnl=3.1723
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=LONG entry=135.9781 tp=138.6009 sl=134.6654 risk=1.3127 mfe=1.3519 mae=0.9581 energy=1.666666666666737 stim=reward attr=engage socially eff=0.6 node=1441 mem=explore res=1.1111111111112748 pnl=-1.3127
+AI_DECISION | ml=LONG ai=LONG rr=2.4776429248575176 stim=reward attr=engage socially eff=0.6 node=1441 mem=explore
+EXIT SL | time=N/A side=LONG entry=135.3290 tp=137.8639 sl=134.0575 risk=1.2715 mfe=0.7310 mae=1.5090 energy=1.6190476190476157 stim=reward attr=engage socially eff=0.6 node=920 mem=explore res=1.002267573696138 pnl=-1.2715
+AI_DECISION | ml=LONG ai=LONG rr=2.4776429248575176 stim=reward attr=engage socially eff=0.6 node=920 mem=explore
+EXIT SL | time=N/A side=SHORT entry=134.2533 tp=130.8286 sl=135.3157 risk=1.0624 mfe=0.8533 mae=1.1667 energy=1.346153846153878 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.37278106508877706 pnl=-1.0624
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=135.1969 tp=131.8556 sl=136.7521 risk=1.5552 mfe=0.8769 mae=1.2231 energy=2.0 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis res=2.0 pnl=-1.5552
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis
+EXIT TP | time=N/A side=LONG entry=135.9330 tp=137.8198 sl=134.6433 risk=1.2897 mfe=2.2470 mae=0.0000 energy=1.6363636363636365 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.0413223140495869 pnl=1.8868
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=LONG entry=138.2775 tp=140.3073 sl=136.8966 risk=1.3809 mfe=0.8825 mae=1.3375 energy=1.7272727272727273 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.256198347107438 pnl=-1.3809
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=137.5592 tp=140.3269 sl=136.1782 risk=1.3809 mfe=3.4308 mae=0.1592 energy=1.7368421052631697 stim=reward attr=engage socially eff=0.6 node=920 mem=explore res=1.2797783933518299 pnl=2.7677
+AI_DECISION | ml=LONG ai=LONG rr=2.4776429248575176 stim=reward attr=engage socially eff=0.6 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=143.0795 tp=139.2753 sl=144.4316 risk=1.3521 mfe=4.5095 mae=0.0205 energy=1.6249999999999911 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis res=1.01562499999998 pnl=3.8042
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=138.2860 tp=134.6616 sl=139.5757 risk=1.2897 mfe=1.8660 mae=1.4840 energy=1.60465116279072 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=0.9702541914548898 pnl=-1.2897
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT SL | time=N/A side=LONG entry=139.7289 tp=142.9437 sl=138.2670 risk=1.4618 mfe=1.3711 mae=1.5789 energy=1.8139534883721868 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.4764737696054386 pnl=-1.4618
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=LONG entry=138.9958 tp=140.9445 sl=137.6651 risk=1.3308 mfe=0.7142 mae=1.9258 energy=1.652173913043532 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.0775047258980444 pnl=-1.3308
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT TP | time=N/A side=SHORT entry=137.3868 tp=134.2179 sl=138.8681 risk=1.4813 mfe=2.6668 mae=0.8232 energy=1.8666666666667804 stim=reward attr=engage socially eff=0.6578947368421053 node=21 mem=analysis res=1.6177777777780886 pnl=3.1688
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=21 mem=analysis
+EXIT SL | time=N/A side=LONG entry=134.5689 tp=136.4726 sl=133.2698 risk=1.2991 mfe=0.1611 mae=1.1289 energy=1.666666666666706 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.111111111111203 pnl=-1.2991
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=SHORT entry=133.8753 tp=130.1470 sl=135.1962 risk=1.3209 mfe=0.4553 mae=1.8447 energy=1.7014925373134442 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=1.193584317219898 pnl=-1.3209
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT TP | time=N/A side=LONG entry=137.7360 tp=141.0629 sl=136.2282 risk=1.5079 mfe=3.4340 mae=1.1160 energy=1.9024390243902625 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.7168352171327113 pnl=3.3268
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=SHORT entry=139.6972 tp=135.9923 sl=140.8430 risk=1.1459 mfe=0.1272 mae=1.0528 energy=1.4000000000000759 stim=reward attr=engage socially eff=1.0 node=3 mem=analysis res=0.5600000000001365 pnl=-1.1459
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=3 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=140.5627 tp=135.8060 sl=141.7167 risk=1.1540 mfe=4.5427 mae=0.0673 energy=1.4 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.5599999999999999 pnl=4.7567
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=136.0709 tp=131.6893 sl=137.1380 risk=1.0670 mfe=0.8809 mae=1.0191 energy=1.3333333333333046 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis res=0.3636363636363872 pnl=-1.0670
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis
+EXIT TP | time=N/A side=LONG entry=138.2418 tp=140.8524 sl=136.9331 risk=1.3088 mfe=2.9882 mae=0.2718 energy=1.6326530612244827 stim=reward attr=engage socially eff=0.6 node=920 mem=explore res=1.0329029571011918 pnl=2.6106
+AI_DECISION | ml=LONG ai=LONG rr=2.4776429248575176 stim=reward attr=engage socially eff=0.6 node=920 mem=explore
+EXIT SL | time=N/A side=SHORT entry=139.6711 tp=136.3781 sl=141.2085 risk=1.5373 mfe=2.1811 mae=1.6889 energy=1.9090909090909052 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis res=1.7355371900826335 pnl=-1.5373
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis
+EXIT TP | time=N/A side=LONG entry=141.8515 tp=143.8464 sl=140.4895 risk=1.3620 mfe=2.3885 mae=0.0215 energy=1.6571428571427853 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.0889795918365683 pnl=1.9949
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=LONG entry=142.6832 tp=145.9602 sl=141.1929 risk=1.4903 mfe=0.6668 mae=1.5232 energy=1.8108108108108316 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.4682249817385498 pnl=-1.4903
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=SHORT entry=142.0890 tp=138.2944 sl=143.4374 risk=1.3484 mfe=2.9890 mae=2.0110 energy=1.6333333333333018 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=1.034444444444373 pnl=-1.3484
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT SL | time=N/A side=LONG entry=143.3428 tp=145.4327 sl=141.9201 risk=1.4226 mfe=0.3672 mae=2.0228 energy=1.7160493827160628 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.2287761012041174 pnl=-1.4226
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=SHORT entry=142.1215 tp=138.5177 sl=143.4908 risk=1.3693 mfe=3.7415 mae=0.6285 energy=1.658536585365884 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0922070196312423 pnl=3.6038
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=LONG entry=139.2271 tp=142.4812 sl=137.7490 risk=1.4781 mfe=3.8929 mae=1.4071 energy=1.842105263157887 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore res=1.5512465373961009 pnl=3.2541
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore
+EXIT SL | time=N/A side=SHORT entry=141.6831 tp=138.4581 sl=143.1923 risk=1.5092 mfe=0.3131 mae=1.2169 energy=1.8461538461538713 stim=reward attr=engage socially eff=0.6578947368421053 node=21 mem=analysis res=1.5621301775148608 pnl=-1.5092
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=21 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=141.8776 tp=138.0633 sl=143.3211 risk=1.4435 mfe=0.1476 mae=1.6524 energy=1.7564102564102597 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3285667324128945 pnl=-1.4435
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=LONG entry=143.1891 tp=146.1008 sl=141.7723 risk=1.4168 mfe=4.1709 mae=0.7591 energy=1.7105263157895092 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.2153739612189223 pnl=2.9118
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT SL | time=N/A side=LONG entry=146.5223 tp=148.5415 sl=145.1413 risk=1.3810 mfe=1.0777 mae=1.6423 energy=1.6250000000000246 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.0156250000000555 pnl=-1.3810
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=SHORT entry=145.3539 tp=141.7540 sl=146.7241 risk=1.3701 mfe=1.6439 mae=1.7961 energy=1.6206896551723748 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0059453032103767 pnl=-1.3701
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=147.1660 tp=150.3115 sl=145.6409 risk=1.5251 mfe=0.2940 mae=1.5160 energy=1.795918367346954 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.4294044148271952 pnl=-1.5251
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT SL | time=N/A side=LONG entry=146.9607 tp=149.8393 sl=145.5561 risk=1.4046 mfe=0.7693 mae=1.2607 energy=1.6491228070175596 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.0704832256079155 pnl=-1.4046
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=146.2810 tp=142.2972 sl=147.6949 risk=1.4138 mfe=4.1910 mae=0.0000 energy=1.6666666666666667 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=1.1111111111111112 pnl=3.9838
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=142.7415 tp=138.8907 sl=144.1087 risk=1.3673 mfe=0.8415 mae=1.3385 energy=1.6483516483516545 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=1.0687115082719618 pnl=-1.3673
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=143.3062 tp=139.9419 sl=144.8776 risk=1.5713 mfe=2.8062 mae=1.6538 energy=1.9036144578313117 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis res=1.720133546233087 pnl=-1.5713
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=145.0344 tp=148.4868 sl=143.4682 risk=1.5662 mfe=0.0656 mae=1.4344 energy=1.8749999999999334 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.6406249999998168 pnl=-1.5662
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=LONG entry=143.9999 tp=147.3498 sl=142.4779 risk=1.5220 mfe=0.5301 mae=1.5699 energy=1.8333333333332544 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.5277777777775674 pnl=-1.5220
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT TP | time=N/A side=SHORT entry=142.9336 tp=138.6384 sl=144.4478 risk=1.5143 mfe=4.6936 mae=0.3164 energy=1.8333333333334911 stim=reward attr=engage socially eff=0.7727272727272727 node=696 mem=analysis res=1.5277777777781987 pnl=4.2951
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=696 mem=analysis
+EXIT SL | time=N/A side=LONG entry=134.0640 tp=135.9419 sl=132.7814 risk=1.2825 mfe=0.0160 mae=1.3540 energy=1.65079365079365 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.0743260267069774 pnl=-1.2825
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT SL | time=N/A side=LONG entry=133.7974 tp=135.7243 sl=132.4845 risk=1.3129 mfe=1.3626 mae=1.3974 energy=1.6956521739130597 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.1795841209830253 pnl=-1.3129
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT TP | time=N/A side=SHORT entry=131.7171 tp=128.7232 sl=133.1183 risk=1.4012 mfe=3.0271 mae=0.3729 energy=1.8424657534246653 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis res=1.5522142991180545 pnl=2.9940
+AI_DECISION | ml=SHORT ai=SHORT rr=2.6212960705892594 stim=reward attr=engage socially eff=0.6578947368421053 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=128.8675 tp=125.3550 sl=130.1957 risk=1.3283 mfe=4.1875 mae=0.9025 energy=1.78260869565219 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis res=1.3950850661626122 pnl=3.5124
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=127.3641 tp=124.0972 sl=128.6046 risk=1.2405 mfe=0.4841 mae=1.1459 energy=1.6800000000000068 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.142400000000016 pnl=-1.2405
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=127.9091 tp=124.4330 sl=129.2239 risk=1.3148 mfe=1.2691 mae=1.5909 energy=1.7777777777777426 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3827160493826263 pnl=-1.3148
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=128.4473 tp=124.6478 sl=129.7881 risk=1.3408 mfe=3.1873 mae=2.0727 energy=1.8043478260869774 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis res=1.4513232514178236 pnl=-1.3408
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=131.1357 tp=127.6037 sl=132.4724 risk=1.3367 mfe=3.9157 mae=0.0000 energy=1.7619047619047168 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis res=1.3424036281178 pnl=3.5320
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis
+EXIT SL | time=N/A side=LONG entry=127.5900 tp=130.2890 sl=126.2805 risk=1.3095 mfe=2.0500 mae=1.3800 energy=1.77777777777777 stim=reward attr=engage socially eff=0.625 node=1651 mem=explore res=1.3827160493826962 pnl=-1.3095
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1651 mem=explore
+EXIT SL | time=N/A side=SHORT entry=125.9647 tp=122.9213 sl=127.3561 risk=1.3914 mfe=0.1247 mae=2.1353 energy=1.9176470588235368 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis res=1.7597231833910247 pnl=-1.3914
+AI_DECISION | ml=SHORT ai=SHORT rr=2.673170932888069 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=128.6224 tp=131.8236 sl=127.1743 risk=1.4481 mfe=1.1976 mae=1.6224 energy=1.9591836734693677 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore res=1.8792169929195581 pnl=-1.4481
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore
+EXIT SL | time=N/A side=LONG entry=127.6108 tp=129.5260 sl=126.3103 risk=1.3006 mfe=0.5092 mae=1.4008 energy=1.7647058823529067 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.3494809688580442 pnl=-1.3006
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT TP | time=N/A side=SHORT entry=126.5962 tp=123.5637 sl=127.9832 risk=1.3870 mfe=3.7762 mae=0.4438 energy=1.9000000000000212 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis res=1.7100000000000597 pnl=3.0325
+AI_DECISION | ml=SHORT ai=SHORT rr=2.673170932888069 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=122.7756 tp=118.7537 sl=124.1865 risk=1.4109 mfe=5.6256 mae=0.0000 energy=2.0 stim=reward attr=engage socially eff=0.7727272727272727 node=696 mem=analysis res=2.0 pnl=4.0218
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=696 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=118.5645 tp=115.5430 sl=119.7122 risk=1.1477 mfe=1.1345 mae=1.0055 energy=1.6666666666666627 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.111111111111102 pnl=-1.1477
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=LONG entry=119.2382 tp=120.9774 sl=118.0544 risk=1.1838 mfe=1.8418 mae=0.0000 energy=1.716666666666668 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.2302777777777807 pnl=1.7392
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=122.2469 tp=124.6609 sl=120.8749 risk=1.3721 mfe=2.7131 mae=1.1369 energy=1.95238095238093 stim=reward attr=engage socially eff=0.6 node=304 mem=explore res=1.8594104308389368 pnl=2.4139
+AI_DECISION | ml=LONG ai=LONG rr=2.1765455302976635 stim=reward attr=engage socially eff=0.6 node=304 mem=explore
+EXIT SL | time=N/A side=SHORT entry=123.5862 tp=120.4952 sl=124.7618 risk=1.1756 mfe=0.0462 mae=1.1638 energy=1.6363636363636422 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0413223140496002 pnl=-1.1756
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=124.5128 tp=121.4339 sl=125.6848 risk=1.1720 mfe=1.3828 mae=1.7272 energy=1.6181818181818017 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.00033057851236 pnl=-1.1720
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=126.3459 tp=128.1925 sl=125.0893 risk=1.2567 mfe=0.0000 mae=1.5759 energy=1.7199999999999704 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.2383999999999278 pnl=-1.2567
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=LONG entry=125.8265 tp=128.8145 sl=124.4708 risk=1.3557 mfe=2.4835 mae=1.6365 energy=1.8695652173913553 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore res=1.6257088846882304 pnl=-1.3557
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=29 mem=explore
+EXIT TP | time=N/A side=SHORT entry=124.0759 tp=120.4837 sl=125.1795 risk=1.1036 mfe=3.7859 mae=0.0000 energy=1.5241935483871034 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.7989724245577661 pnl=3.5922
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=120.4688 tp=116.8044 sl=121.5906 risk=1.1218 mfe=4.3488 mae=0.0000 energy=1.6 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.96 pnl=3.6644
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT SL | time=N/A side=LONG entry=117.2511 tp=118.8717 sl=116.1430 risk=1.1081 mfe=0.7889 mae=3.0811 energy=1.6296296296296453 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.0260631001372094 pnl=-1.1081
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT SL | time=N/A side=SHORT entry=115.7881 tp=112.6174 sl=116.9128 risk=1.1246 mfe=2.6081 mae=1.4319 energy=1.6727272727272586 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis res=1.125289256198314 pnl=-1.1246
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=116.1194 tp=111.9048 sl=117.1367 risk=1.0173 mfe=0.4994 mae=1.0206 energy=1.4999999999999838 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis res=0.7499999999999677 pnl=-1.0173
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=115.4633 tp=112.7527 sl=116.7047 risk=1.2414 mfe=0.8833 mae=1.3267 energy=1.8620689655172369 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis res=1.605231866825196 pnl=-1.2414
+AI_DECISION | ml=SHORT ai=SHORT rr=2.673170932888069 stim=reward attr=engage socially eff=0.6666666666666666 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=116.8769 tp=119.6279 sl=115.9252 risk=0.9517 mfe=0.2031 mae=1.8369 energy=1.3913043478260332 stim=reward attr=engage socially eff=1.0 node=26 mem=explore res=0.5444234404535904 pnl=-0.9517
+AI_DECISION | ml=LONG ai=LONG rr=3.5594405594405525 stim=reward attr=engage socially eff=1.0 node=26 mem=explore
+EXIT SL | time=N/A side=SHORT entry=115.1888 tp=112.2319 sl=116.3113 risk=1.1225 mfe=0.7088 mae=1.9812 energy=1.6785714285714346 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.139030612244912 pnl=-1.1225
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=117.3634 tp=119.1611 sl=116.1446 risk=1.2189 mfe=1.4866 mae=1.6734 energy=1.799999999999983 stim=reward attr=engage socially eff=0.5882352941176471 node=1477 mem=explore res=1.4399999999999558 pnl=-1.2189
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=1477 mem=explore
+EXIT TP | time=N/A side=SHORT entry=115.8070 tp=112.7616 sl=116.9612 risk=1.1542 mfe=3.6070 mae=1.1130 energy=1.7187499999999896 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.2353515624999745 pnl=3.0454
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=111.5382 tp=108.4944 sl=112.6890 risk=1.1508 mfe=3.1182 mae=0.0000 energy=1.7823529411764683 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis res=1.3944290657439387 pnl=3.0438
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=110.7656 tp=107.2114 sl=111.6313 risk=0.8658 mfe=5.0256 mae=0.0000 energy=1.328571428571433 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis res=0.43653061224490514 pnl=3.5542
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=107.4451 tp=104.7162 sl=108.2919 risk=0.8468 mfe=4.5951 mae=0.0000 energy=1.3404255319148872 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.45631507469442106 pnl=2.7289
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=105.3318 tp=102.3515 sl=106.3865 risk=1.0548 mfe=3.4518 mae=0.0000 energy=1.7272727272727264 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis res=1.2561983471074356 pnl=2.9803
+AI_DECISION | ml=SHORT ai=SHORT rr=3.429589300327823 stim=reward attr=engage socially eff=0.7727272727272727 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=104.9238 tp=102.3465 sl=106.1009 risk=1.1770 mfe=1.3338 mae=1.3662 energy=1.9491525423729026 stim=reward attr=engage socially eff=0.6666666666666666 node=21 mem=analysis res=1.8500430910658472 pnl=-1.1770
+AI_DECISION | ml=SHORT ai=SHORT rr=2.673170932888069 stim=reward attr=engage socially eff=0.6666666666666666 node=21 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=104.7818 tp=102.1504 sl=105.7823 risk=1.0005 mfe=3.0318 mae=0.0000 energy=1.6428571428571308 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0561224489795642 pnl=2.6314
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=102.7698 tp=100.3189 sl=103.8913 risk=1.1215 mfe=2.1298 mae=0.0000 energy=1.8939393939393823 stim=reward attr=engage socially eff=0.6666666666666666 node=21 mem=analysis res=1.693067033976092 pnl=2.4509
+AI_DECISION | ml=SHORT ai=SHORT rr=2.673170932888069 stim=reward attr=engage socially eff=0.6666666666666666 node=21 mem=analysis
+EXIT TP | time=N/A side=LONG entry=101.7681 tp=103.2214 sl=100.7772 risk=0.9909 mfe=1.9819 mae=0.6381 energy=1.681818181818179 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.1466942148760262 pnl=1.4532
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT SL | time=N/A side=SHORT entry=100.9032 tp=97.8390 sl=101.9669 risk=1.0637 mfe=0.6232 mae=1.5368 energy=1.8230088495575314 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.500352416007543 pnl=-1.0637
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=101.8524 tp=98.8574 sl=102.8942 risk=1.0418 mfe=3.5824 mae=1.0276 energy=1.7662337662337604 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.3533479507505335 pnl=2.9951
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT TP | time=N/A side=LONG entry=100.7037 tp=102.7973 sl=99.6867 risk=1.0170 mfe=1.9563 mae=0.0000 energy=1.7478260869565176 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.3070699432892146 pnl=2.0935
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=101.9603 tp=99.3451 sl=102.9532 risk=0.9929 mfe=2.9603 mae=0.0000 energy=1.678571428571443 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.139030612244932 pnl=2.6151
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=98.7957 tp=96.3113 sl=99.7402 risk=0.9445 mfe=2.4357 mae=0.0000 energy=1.6450000000000031 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0610250000000072 pnl=2.4843
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=102.5145 tp=99.9599 sl=103.4863 risk=0.9718 mfe=0.0745 mae=0.9255 energy=1.630434782608687 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0278827977315492 pnl=-0.9718
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=104.1714 tp=106.7554 sl=103.2811 risk=0.8902 mfe=1.7686 mae=0.9914 energy=1.464788732394388 stim=reward attr=engage socially eff=1.0 node=26 mem=explore res=0.6808172981551699 pnl=-0.8902
+AI_DECISION | ml=LONG ai=LONG rr=3.5594405594405525 stim=reward attr=engage socially eff=1.0 node=26 mem=explore
+EXIT SL | time=N/A side=SHORT entry=103.8422 tp=100.9111 sl=104.8648 risk=1.0225 mfe=1.4822 mae=1.2078 energy=1.6999999999999929 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.1899999999999828 pnl=-1.0225
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=104.3172 tp=101.2284 sl=105.3915 risk=1.0743 mfe=3.1872 mae=0.5028 energy=1.783333333333344 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.3969444444444719 pnl=3.0888
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=101.3631 tp=98.7085 sl=102.3695 risk=1.0064 mfe=0.8631 mae=0.6869 energy=1.7118644067796598 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.2186153404194167 pnl=-1.0064
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=100.9368 tp=98.1106 sl=101.9233 risk=0.9865 mfe=3.8268 mae=0.0000 energy=1.6865671641791147 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.1579416351080658 pnl=2.8263
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=LONG entry=100.0566 tp=101.4789 sl=99.0864 risk=0.9702 mfe=1.6434 mae=0.0000 energy=1.6744186046511889 stim=reward attr=engage socially eff=0.5882352941176471 node=1441 mem=explore res=1.1292590589508456 pnl=1.4223
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=1441 mem=explore
+EXIT SL | time=N/A side=SHORT entry=97.9082 tp=94.4001 sl=98.7558 risk=0.8477 mfe=0.7382 mae=0.7818 energy=1.4831460674157377 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis res=0.7165761898750302 pnl=-0.8477
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=4 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=98.5400 tp=95.8589 sl=99.5538 risk=1.0139 mfe=0.9300 mae=0.9400 energy=1.7777777777777979 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3827160493827673 pnl=-1.0139
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=98.1164 tp=100.4363 sl=97.0635 risk=1.0529 mfe=0.0000 mae=1.6564 energy=1.862068965517223 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.6052318668251575 pnl=-1.0529
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT SL | time=N/A side=LONG entry=97.6347 tp=99.5928 sl=96.6810 risk=0.9537 mfe=0.3253 mae=2.0547 energy=1.6874999999999807 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.160156249999954 pnl=-0.9537
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT SL | time=N/A side=LONG entry=96.3277 tp=98.2090 sl=95.2576 risk=1.0701 mfe=0.1523 mae=1.4477 energy=1.931818181818179 stim=reward attr=engage socially eff=0.6 node=304 mem=explore res=1.8001033057851157 pnl=-1.0701
+AI_DECISION | ml=LONG ai=LONG rr=2.1765455302976635 stim=reward attr=engage socially eff=0.6 node=304 mem=explore
+EXIT TP | time=N/A side=SHORT entry=94.8192 tp=92.1374 sl=95.7544 risk=0.9352 mfe=2.6492 mae=0.0000 energy=1.7000000000000095 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.1900000000000228 pnl=2.6818
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=91.3878 tp=89.0873 sl=92.4180 risk=1.0302 mfe=0.3478 mae=1.0122 energy=1.9587628865979316 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.87798915931553 pnl=-1.0302
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=90.8422 tp=88.4412 sl=91.7518 risk=0.9097 mfe=0.7122 mae=1.4278 energy=1.727272727272734 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.2561983471074545 pnl=-0.9097
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=91.5361 tp=89.1953 sl=92.5835 risk=1.0474 mfe=0.3861 mae=1.2339 energy=1.991935483870975 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.9758714880333206 pnl=-1.0474
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=91.0462 tp=88.7486 sl=91.9195 risk=0.8733 mfe=0.4462 mae=0.8738 energy=1.6511627906976776 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0751757706868648 pnl=-0.8733
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=90.6603 tp=88.1090 sl=91.5505 risk=0.8902 mfe=0.2903 mae=1.4497 energy=1.6942148760330562 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.1761491701386475 pnl=-0.8902
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=90.4570 tp=87.7891 sl=91.3849 risk=0.9279 mfe=0.5770 mae=1.1730 energy=1.7730496453900753 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.3706553996277964 pnl=-0.9279
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=91.5011 tp=88.9353 sl=92.3964 risk=0.8953 mfe=1.1311 mae=0.5289 energy=1.6857142857142822 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.1559183673469307 pnl=-0.8953
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=LONG entry=92.4295 tp=94.2309 sl=91.5502 risk=0.8793 mfe=0.1805 mae=1.5795 energy=1.64102564102564 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.0519395134779728 pnl=-0.8793
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT SL | time=N/A side=SHORT entry=90.4496 tp=87.6842 sl=91.4091 risk=0.9595 mfe=2.1196 mae=0.9804 energy=1.8351648351648309 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=1.53266513706073 pnl=-0.9595
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=89.0680 tp=86.6823 sl=89.9710 risk=0.9031 mfe=2.9880 mae=0.0000 energy=1.7500000000000087 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3125000000000215 pnl=2.3857
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=83.3717 tp=81.3529 sl=84.2778 risk=0.9061 mfe=0.9317 mae=1.1783 energy=1.882352941176473 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.6608996539792453 pnl=-0.9061
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=84.0967 tp=81.8318 sl=84.8892 risk=0.7925 mfe=1.9367 mae=0.0000 energy=1.620253164556965 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.004967152699895 pnl=2.2649
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=80.8579 tp=78.3556 sl=81.7255 risk=0.8676 mfe=2.3079 mae=0.0000 energy=1.8571428571428514 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=1.5918367346938618 pnl=2.5023
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=80.6885 tp=78.6187 sl=81.4743 risk=0.7858 mfe=3.0585 mae=0.0000 energy=1.6774193548387075 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.136316337148798 pnl=2.0698
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=80.4377 tp=78.2832 sl=81.2532 risk=0.8156 mfe=0.8777 mae=0.8423 energy=1.75 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3125 pnl=-0.8156
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL (BOTH HIT) | time=N/A side=SHORT entry=74.4486 tp=72.4290 sl=75.2124 risk=0.7638 mfe=6.9486 mae=0.0000 energy=1.7719626168224298 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3678888985937634 pnl=-0.7638
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=77.2298 tp=78.2821 sl=76.5597 risk=0.6701 mfe=0.9702 mae=0.9198 energy=1.4886363636363578 stim=reward attr=engage socially eff=0.5 node=25 mem=explore res=0.7274018595041206 pnl=-0.6701
+AI_DECISION | ml=LONG ai=LONG rr=2.0 stim=reward attr=engage socially eff=0.5 node=25 mem=explore
+EXIT SL | time=N/A side=SHORT entry=76.5681 tp=74.3772 sl=77.3319 risk=0.7638 mfe=0.3481 mae=1.1419 energy=1.725490196078433 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.2518262206843562 pnl=-0.7638
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=LONG entry=79.4145 tp=80.5581 sl=78.6352 risk=0.7793 mfe=1.4155 mae=0.6645 energy=1.6956521739130166 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.1795841209829225 pnl=1.1437
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=83.7463 tp=84.8659 sl=83.0322 risk=0.7142 mfe=1.2037 mae=0.0000 energy=1.4615384615384532 stim=reward attr=engage socially eff=0.5 node=25 mem=explore res=0.6745562130177354 pnl=1.1195
+AI_DECISION | ml=LONG ai=LONG rr=2.0 stim=reward attr=engage socially eff=0.5 node=25 mem=explore
+EXIT SL | time=N/A side=SHORT entry=85.9397 tp=83.5937 sl=86.8267 risk=0.8869 mfe=0.5297 mae=0.8303 energy=1.7829457364341064 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3959497626344513 pnl=-0.8869
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=87.2866 tp=85.2039 sl=88.2224 risk=0.9357 mfe=1.3766 mae=0.9734 energy=1.8554216867469993 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis res=1.5871679489040806 pnl=-0.9357
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=87.8212 tp=85.2506 sl=88.7158 risk=0.8946 mfe=2.9812 mae=0.8188 energy=1.7619047619047723 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.3424036281179403 pnl=2.5706
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=85.6967 tp=83.2438 sl=86.5514 risk=0.8547 mfe=1.1867 mae=1.5033 energy=1.7199999999999704 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.2383999999999278 pnl=-0.8547
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=86.0711 tp=83.8502 sl=86.9141 risk=0.8430 mfe=0.5611 mae=0.4989 energy=1.689655172413805 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.1652794292509199 pnl=-0.8430
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=88.2795 tp=89.5172 sl=87.4343 risk=0.8452 mfe=0.6705 mae=1.0395 energy=1.652173913043532 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.0775047258980444 pnl=-0.8452
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT SL | time=N/A side=SHORT entry=87.9523 tp=85.8096 sl=88.9140 risk=0.9617 mfe=1.1523 mae=0.8777 energy=1.8999999999999502 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis res=1.7099999999998607 pnl=-0.9617
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=87.1253 tp=84.7405 sl=88.0269 risk=0.9016 mfe=0.6853 mae=1.1947 energy=1.7894736842105183 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis res=1.4127423822714478 pnl=-0.9016
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=21 mem=analysis
+EXIT SL | time=N/A side=LONG entry=88.3036 tp=90.3847 sl=87.3588 risk=0.9448 mfe=0.3864 mae=0.9536 energy=1.8571428571428474 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore res=1.5918367346938511 pnl=-0.9448
+AI_DECISION | ml=LONG ai=LONG rr=2.6954738298700134 stim=reward attr=engage socially eff=0.7777777777777778 node=1477 mem=explore
+EXIT TP | time=N/A side=SHORT entry=87.8794 tp=85.8372 sl=88.7989 risk=0.9195 mfe=1.8694 mae=0.0306 energy=1.8139534883721 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.4764737696052102 pnl=2.0422
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=86.9331 tp=84.4145 sl=87.8103 risk=0.8772 mfe=0.2931 mae=1.2869 energy=1.7446808510638496 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.2992304210050292 pnl=-0.8772
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=87.8224 tp=85.2966 sl=88.7026 risk=0.8801 mfe=1.5524 mae=0.3876 energy=1.733333333333325 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.2711111111110904 pnl=-0.8801
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=87.3070 tp=84.9232 sl=88.1405 risk=0.8335 mfe=2.3970 mae=0.6730 energy=1.645161290322562 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.0613943808532356 pnl=2.3838
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=84.9817 tp=82.7628 sl=85.8233 risk=0.8415 mfe=2.0017 mae=1.2083 energy=1.7096774193548623 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.2133194588970395 pnl=-0.8415
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=86.8945 tp=84.4800 sl=87.8064 risk=0.9119 mfe=2.4845 mae=0.7755 energy=1.8157894736842262 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.4813019390582132 pnl=2.4145
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=84.7258 tp=82.4234 sl=85.5965 risk=0.8707 mfe=2.1458 mae=0.5142 energy=1.7749999999999946 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3756249999999863 pnl=2.3024
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=82.2238 tp=80.0251 sl=83.0564 risk=0.8325 mfe=0.0000 mae=0.9962 energy=1.7499999999999862 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3124999999999658 pnl=-0.8325
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=83.5714 tp=84.7648 sl=82.7577 risk=0.8137 mfe=0.7086 mae=0.9014 energy=1.6818181818181466 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.1466942148759498 pnl=-0.8137
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=SHORT entry=82.9527 tp=80.6849 sl=83.7455 risk=0.7928 mfe=2.2527 mae=0.0000 energy=1.647058823529402 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.0657439446366557 pnl=2.2678
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=81.3803 tp=78.6756 sl=82.3145 risk=0.9342 mfe=0.8103 mae=1.7897 energy=2.0 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=2.0 pnl=-0.9342
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=80.5488 tp=78.2209 sl=81.3594 risk=0.8106 mfe=2.5088 mae=0.2112 energy=1.7363636363636328 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.278595041322305 pnl=2.3278
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT TP | time=N/A side=LONG entry=79.6765 tp=80.8723 sl=78.8645 risk=0.8120 mfe=1.2235 mae=0.6965 energy=1.7647058823529067 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.3494809688580442 pnl=1.1958
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=80.1122 tp=81.6755 sl=79.3492 risk=0.7630 mfe=1.6478 mae=0.4022 energy=1.642857142857063 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.0561224489794094 pnl=1.5633
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=81.5862 tp=78.9960 sl=82.4830 risk=0.8969 mfe=2.9062 mae=0.6038 energy=1.909090909090862 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.7355371900825123 pnl=2.5902
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=78.6933 tp=76.3755 sl=79.4997 risk=0.8064 mfe=2.0133 mae=1.2067 energy=1.7750000000000083 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.3756250000000214 pnl=-0.8064
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=LONG entry=79.5698 tp=81.0828 sl=78.8300 risk=0.7398 mfe=2.0002 mae=0.0698 energy=1.6000000000000143 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=0.9600000000000313 pnl=1.5130
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT SL | time=N/A side=LONG entry=85.3032 tp=87.3145 sl=84.4133 risk=0.8898 mfe=0.0768 mae=1.0132 energy=1.8076923076923224 stim=reward attr=engage socially eff=0.7894736842105263 node=39 mem=explore res=1.4600591715976714 pnl=-0.8898
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=39 mem=explore
+EXIT TP | time=N/A side=LONG entry=84.6948 tp=85.8929 sl=83.8772 risk=0.8176 mfe=1.1552 mae=0.4848 energy=1.6666666666666983 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.1111111111111849 pnl=1.1982
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=85.5347 tp=86.8358 sl=84.6521 risk=0.8826 mfe=1.6253 mae=0.0000 energy=1.7878787878787306 stim=reward attr=engage socially eff=0.5882352941176471 node=1477 mem=explore res=1.408631772267988 pnl=1.3011
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=1477 mem=explore
+EXIT SL | time=N/A side=SHORT entry=86.4234 tp=84.2773 sl=87.2401 risk=0.8167 mfe=0.4234 mae=1.1766 energy=1.6249999999999944 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0156249999999876 pnl=-0.8167
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=88.2022 tp=85.7611 sl=89.0549 risk=0.8527 mfe=0.8922 mae=1.0478 energy=1.6666666666667456 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.1111111111112952 pnl=-0.8527
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=LONG entry=89.8202 tp=91.9306 sl=89.0900 risk=0.7302 mfe=1.1598 mae=0.6902 energy=1.388888888888891 stim=reward attr=engage socially eff=1.0 node=26 mem=explore res=0.5401234567901273 pnl=-0.7302
+AI_DECISION | ml=LONG ai=LONG rr=3.5594405594405525 stim=reward attr=engage socially eff=1.0 node=26 mem=explore
+EXIT TP | time=N/A side=SHORT entry=89.2234 tp=86.8151 sl=90.1348 risk=0.9114 mfe=2.0234 mae=0.2966 energy=1.7666666666666873 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3544444444444965 pnl=2.4083
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=87.5814 tp=85.0158 sl=88.4743 risk=0.8929 mfe=2.6914 mae=0.0000 energy=1.7647058823529067 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.3494809688580442 pnl=2.5656
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=86.0874 tp=83.7531 sl=86.9705 risk=0.8831 mfe=2.6074 mae=0.8426 energy=1.7741935483870974 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.3735691987513026 pnl=2.3343
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=84.3239 tp=85.5588 sl=83.4836 risk=0.8403 mfe=0.0661 mae=1.6539 energy=1.723404255319158 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.2467179719330235 pnl=-0.8403
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=84.6928 tp=86.7020 sl=83.8043 risk=0.8885 mfe=2.0272 mae=0.4528 energy=1.8181818181818534 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore res=1.487603305785217 pnl=2.0092
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore
+EXIT SL | time=N/A side=SHORT entry=86.5463 tp=83.8816 sl=87.4709 risk=0.9245 mfe=0.7863 mae=0.8637 energy=1.853658536585359 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=1.582391433670416 pnl=-0.9245
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=86.5827 tp=84.4203 sl=87.4054 risk=0.8227 mfe=2.1927 mae=0.1573 energy=1.6363636363635776 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0413223140494532 pnl=2.1625
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=85.3502 tp=82.6053 sl=86.0188 risk=0.6686 mfe=2.4302 mae=0.4998 energy=1.3333333333333333 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis res=0.4444444444444444 pnl=-0.6686
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=85.4153 tp=83.3121 sl=86.3584 risk=0.9432 mfe=2.1853 mae=0.0000 energy=1.9166666666667456 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis res=1.756944444444668 pnl=2.1031
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=82.4673 tp=80.3786 sl=83.2610 risk=0.7938 mfe=0.5173 mae=1.2627 energy=1.6578947368420884 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0907202216066094 pnl=-0.7938
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=82.4597 tp=83.6665 sl=81.6385 risk=0.8212 mfe=0.1303 mae=1.5097 energy=1.7222222222222265 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.243827160493838 pnl=-0.8212
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT SL | time=N/A side=SHORT entry=81.0488 tp=78.9875 sl=81.8320 risk=0.7832 mfe=0.1988 mae=0.8312 energy=1.6666666666666272 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.111111111111019 pnl=-0.7832
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=LONG entry=81.7529 tp=83.8056 sl=80.8485 risk=0.9044 mfe=0.6971 mae=1.5629 energy=1.923076923076881 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore res=1.7751479289939631 pnl=-0.9044
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore
+EXIT SL | time=N/A side=SHORT entry=80.6157 tp=78.0233 sl=81.2472 risk=0.6315 mfe=0.9457 mae=0.5843 energy=1.3333333333333333 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis res=0.4444444444444444 pnl=-0.6315
+AI_DECISION | ml=SHORT ai=SHORT rr=5.0 stim=reward attr=engage socially eff=1.0 node=49 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=81.0231 tp=79.0686 sl=81.9009 risk=0.8779 mfe=0.5131 mae=0.7469 energy=1.8823529411764115 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis res=1.6608996539790757 pnl=-0.8779
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=21 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=81.4452 tp=79.4659 sl=82.3337 risk=0.8884 mfe=1.2252 mae=0.7548 energy=1.8928571428571392 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.6900510204081531 pnl=-0.8884
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=82.1708 tp=80.0979 sl=82.9589 risk=0.7881 mfe=0.2508 mae=1.3492 energy=1.6538461538461475 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.0813609467455476 pnl=-0.7881
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=83.1029 tp=81.1698 sl=83.9732 risk=0.8703 mfe=0.5929 mae=1.1871 energy=1.8148148148148227 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.4787379972565364 pnl=-0.8703
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=84.4810 tp=86.2041 sl=83.6428 risk=0.8382 mfe=0.1590 mae=1.0310 energy=1.7142857142856949 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.2244897959183203 pnl=-0.8382
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT SL | time=N/A side=SHORT entry=83.5255 tp=81.2842 sl=84.3102 risk=0.7847 mfe=1.6155 mae=0.6745 energy=1.6190476190476835 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.0022675736962894 pnl=-0.7847
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=LONG entry=83.9750 tp=85.1937 sl=83.1451 risk=0.8299 mfe=0.5050 mae=1.0750 energy=1.7083333333333555 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.2100694444444982 pnl=-0.8299
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=84.7627 tp=86.3608 sl=83.8514 risk=0.9113 mfe=1.8973 mae=0.7227 energy=1.8666666666666856 stim=reward attr=engage socially eff=0.6 node=1651 mem=explore res=1.6177777777778295 pnl=1.5981
+AI_DECISION | ml=LONG ai=LONG rr=2.1765455302976635 stim=reward attr=engage socially eff=0.6 node=1651 mem=explore
+EXIT TP | time=N/A side=SHORT entry=86.3082 tp=83.7001 sl=87.2140 risk=0.9058 mfe=2.6082 mae=0.4118 energy=1.8181818181818064 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=1.487603305785093 pnl=2.6081
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=83.7505 tp=81.3421 sl=84.5896 risk=0.8391 mfe=2.4305 mae=0.2995 energy=1.7307692307692077 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.2647928994082271 pnl=2.4084
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT SL | time=N/A side=LONG entry=78.0161 tp=79.0944 sl=77.2788 risk=0.7373 mfe=0.0139 mae=0.8661 energy=1.6296296296296453 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore res=1.0260631001372094 pnl=-0.7373
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=39 mem=explore
+EXIT SL | time=N/A side=SHORT entry=77.9188 tp=75.8049 sl=78.7184 risk=0.7996 mfe=0.1388 mae=1.2312 energy=1.7750000000000221 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.3756250000000565 pnl=-0.7996
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=79.0974 tp=77.1006 sl=79.9917 risk=0.8943 mfe=0.3874 mae=1.2526 energy=1.9687499999999847 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.9072265624999551 pnl=-0.8943
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=80.2847 tp=81.9091 sl=79.4942 risk=0.7905 mfe=0.7753 mae=0.6447 energy=1.6999999999999857 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.1899999999999658 pnl=-0.7905
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT TP | time=N/A side=SHORT entry=78.7936 tp=76.8428 sl=79.5362 risk=0.7425 mfe=2.1836 mae=0.5064 energy=1.6206896551724392 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.0059453032105206 pnl=1.9508
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=78.1456 tp=75.8074 sl=78.9580 risk=0.8124 mfe=2.5156 mae=0.0744 energy=1.7966101694915189 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis res=1.4311979316288252 pnl=2.3382
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=696 mem=analysis
+EXIT TP | time=N/A side=LONG entry=77.1482 tp=78.6525 sl=76.4140 risk=0.7341 mfe=1.4818 mae=0.1182 energy=1.6399999999999864 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.049599999999969 pnl=1.5043
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=LONG entry=79.0100 tp=81.0234 sl=78.1238 risk=0.8862 mfe=2.9300 mae=0.3500 energy=1.949999999999975 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore res=1.8524999999999276 pnl=2.0134
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore
+EXIT SL | time=N/A side=LONG entry=82.0258 tp=83.9903 sl=81.1575 risk=0.8682 mfe=0.7442 mae=0.7758 energy=1.8363636363636335 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore res=1.5358677685950337 pnl=-0.8682
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=1477 mem=explore
+EXIT TP | time=N/A side=LONG entry=82.4202 tp=83.6013 sl=81.6152 risk=0.8051 mfe=1.3298 mae=0.0002 energy=1.6875000000000389 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore res=1.1601562500000924 pnl=1.1811
+AI_DECISION | ml=LONG ai=LONG rr=1.859877741858422 stim=reward attr=engage socially eff=0.5882352941176471 node=48 mem=explore
+EXIT TP | time=N/A side=LONG entry=83.3773 tp=84.9860 sl=82.5914 risk=0.7858 mfe=2.4227 mae=0.0000 energy=1.6250000000000666 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.0156250000001499 pnl=1.6087
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT TP | time=N/A side=LONG entry=89.7704 tp=91.9112 sl=88.8240 risk=0.9464 mfe=1.3496 mae=0.2504 energy=1.8285714285714192 stim=reward attr=engage socially eff=0.7894736842105263 node=29 mem=explore res=1.5151020408163018 pnl=2.1408
+AI_DECISION | ml=LONG ai=LONG rr=2.766506855505724 stim=reward attr=engage socially eff=0.7894736842105263 node=29 mem=explore
+EXIT TP | time=N/A side=SHORT entry=89.7782 tp=87.6800 sl=90.7222 risk=0.9440 mfe=2.7082 mae=0.0000 energy=1.8181818181818166 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.4876033057851195 pnl=2.0982
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=88.1846 tp=85.7945 sl=89.0888 risk=0.9041 mfe=2.6346 mae=0.6454 energy=1.7719298245614088 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.367805478608816 pnl=2.3901
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=84.8988 tp=82.7967 sl=85.8411 risk=0.9423 mfe=0.3888 mae=1.5612 energy=1.9268292682926795 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis res=1.7858417608566233 pnl=-0.9423
+AI_DECISION | ml=SHORT ai=SHORT rr=2.722184886175114 stim=reward attr=engage socially eff=0.675 node=11 mem=analysis
+EXIT SL | time=N/A side=LONG entry=86.0704 tp=87.8419 sl=85.2092 risk=0.8612 mfe=0.2196 mae=0.7104 energy=1.7307692307692077 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore res=1.2647928994082271 pnl=-0.8612
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=1441 mem=explore
+EXIT SL | time=N/A side=SHORT entry=85.8522 tp=83.3703 sl=86.7167 risk=0.8645 mfe=0.5322 mae=0.8778 energy=1.7407407407407232 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis res=1.2894375857338385 pnl=-0.8645
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=10 mem=analysis
+EXIT TP | time=N/A side=LONG entry=86.4395 tp=88.2616 sl=85.5554 risk=0.8841 mfe=1.7105 mae=0.0895 energy=1.7692307692307525 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.3609467455620876 pnl=1.8221
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=87.7528 tp=85.5197 sl=88.6013 risk=0.8484 mfe=2.4028 mae=0.0372 energy=1.6666666666666035 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.1111111111109637 pnl=2.2332
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=85.7779 tp=83.6198 sl=86.5983 risk=0.8204 mfe=2.6379 mae=0.0000 energy=1.645833333333352 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.06293402777782 pnl=2.1581
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT TP | time=N/A side=SHORT entry=83.4409 tp=81.1698 sl=84.2998 risk=0.8589 mfe=2.1209 mae=0.0000 energy=1.7804878048780386 stim=reward attr=engage socially eff=0.7419354838709677 node=76 mem=analysis res=1.389649018441378 pnl=2.2711
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=76 mem=analysis
+EXIT SL | time=N/A side=LONG entry=81.6552 tp=83.2737 sl=80.8663 risk=0.7889 mfe=0.2148 mae=0.7052 energy=1.6666666666666667 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.1111111111111112 pnl=-0.7889
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT SL | time=N/A side=LONG entry=81.9639 tp=83.5463 sl=81.1910 risk=0.7729 mfe=0.2561 mae=2.8339 energy=1.6249999999999778 stim=reward attr=engage socially eff=0.625 node=920 mem=explore res=1.01562499999995 pnl=-0.7729
+AI_DECISION | ml=LONG ai=LONG rr=2.539332691002463 stim=reward attr=engage socially eff=0.625 node=920 mem=explore
+EXIT TP | time=N/A side=SHORT entry=80.1141 tp=77.9856 sl=80.9202 risk=0.8061 mfe=2.4841 mae=0.0000 energy=1.7361111111111138 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.2779706790123524 pnl=2.1285
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=78.1955 tp=76.0888 sl=78.9926 risk=0.7971 mfe=0.2955 mae=1.4245 energy=1.759999999999991 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis res=1.337599999999977 pnl=-0.7971
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=12 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=79.1153 tp=76.5293 sl=80.0090 risk=0.8937 mfe=1.3753 mae=1.8347 energy=1.9607843137254706 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis res=1.8838908112263941 pnl=-0.8937
+AI_DECISION | ml=SHORT ai=SHORT rr=3.481784200184849 stim=reward attr=engage socially eff=0.782608695652174 node=40 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=80.4690 tp=78.4035 sl=81.2533 risk=0.7842 mfe=0.8490 mae=0.8510 energy=1.6800000000000068 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis res=1.142400000000016 pnl=-0.7842
+AI_DECISION | ml=SHORT ai=SHORT rr=3.214040100910985 stim=reward attr=engage socially eff=0.7419354838709677 node=11 mem=analysis
+EXIT SL | time=N/A side=SHORT entry=81.0258 tp=78.8096 sl=81.7097 risk=0.6839 mfe=0.3458 mae=1.3442 energy=1.444444444444475 stim=reward attr=engage socially eff=1.0 node=3 mem=analysis res=0.6419753086420333 pnl=-0.6839
+AI_DECISION | ml=SHORT ai=SHORT rr=3.9597551386890357 stim=reward attr=engage socially eff=1.0 node=3 mem=analysis
