@@ -15,6 +15,12 @@ _BOOTSTRAPPED = False
 _BOOTSTRAP_LOCK = threading.Lock()
 _EXCHANGE = None
 _SYMBOL = None
+_ENTRY_REFERENCE = None
+_ENTRY_DISTANCE = None
+_RISK_REFERENCE = None
+_ENTRY_VALIDITY_CENTER = None
+_ENTRY_VALIDITY_LOWER = None
+_ENTRY_VALIDITY_UPPER = None
 # --------------------------------------------------
 # CANCEL TRACKING
 # --------------------------------------------------

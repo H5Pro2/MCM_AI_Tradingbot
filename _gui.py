@@ -139,10 +139,19 @@ class TradeStatsGUI:
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
-        path_abs = os.path.join(base_dir, "bot_memory", "mcm_memory_engine.json")
-        path_rel = os.path.join("bot_memory", "mcm_memory_engine.json")
+        path_abs_v2 = os.path.join(base_dir, "bot_memory", "mcm_meta_vector_memory.json")
+        path_rel_v2 = os.path.join("bot_memory", "mcm_meta_vector_memory.json")
+        path_abs_legacy = os.path.join(base_dir, "bot_memory", "mcm_memory_engine.json")
+        path_rel_legacy = os.path.join("bot_memory", "mcm_memory_engine.json")
 
-        path = path_abs if os.path.exists(path_abs) else path_rel
+        if os.path.exists(path_abs_v2):
+            path = path_abs_v2
+        elif os.path.exists(path_rel_v2):
+            path = path_rel_v2
+        elif os.path.exists(path_abs_legacy):
+            path = path_abs_legacy
+        else:
+            path = path_rel_legacy
 
         if not os.path.exists(path):
             return None
@@ -575,10 +584,19 @@ class TradeStatsGUI:
         # RL HEATMAP LIVE UPDATE (mit mtime-Prüfung)
         # --------------------------------------------------
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        path_abs = os.path.join(base_dir, "bot_memory", f"mcm_memory_engine.json")
-        path_rel = os.path.join("bot_memory", f"mcm_memory_engine.json")
+        path_abs_v2 = os.path.join(base_dir, "bot_memory", "mcm_meta_vector_memory.json")
+        path_rel_v2 = os.path.join("bot_memory", "mcm_meta_vector_memory.json")
+        path_abs_legacy = os.path.join(base_dir, "bot_memory", "mcm_memory_engine.json")
+        path_rel_legacy = os.path.join("bot_memory", "mcm_memory_engine.json")
 
-        path = path_abs if os.path.exists(path_abs) else path_rel
+        if os.path.exists(path_abs_v2):
+            path = path_abs_v2
+        elif os.path.exists(path_rel_v2):
+            path = path_rel_v2
+        elif os.path.exists(path_abs_legacy):
+            path = path_abs_legacy
+        else:
+            path = path_rel_legacy
 
         if os.path.exists(path):
             try:

@@ -73,7 +73,7 @@ class TradeStats:
             pass
 
     # ─────────────────────────────────────────────
-    def on_exit(self, *, entry: float, tp: float, sl: float, reason: str, side: str = None, amount: float = 1.0):
+    def on_exit(self, *, entry: float, tp: float, sl: float, reason: str, side: str = None, amount: float = 1.0, exploration_trade: bool = False):
         pnl = 0.0
 
         side = str(side).upper().strip() if side is not None else "LONG"
@@ -87,6 +87,9 @@ class TradeStats:
                 return
             self.data["tp"] += 1
 
+            if exploration_trade:
+                self.data["exploration_tp"] = int(self.data.get("exploration_tp", 0) or 0) + 1
+
         elif reason == "sl_hit":
             if side == "LONG":
                 pnl = (sl - entry) * float(amount)
@@ -95,6 +98,9 @@ class TradeStats:
             else:
                 return
             self.data["sl"] += 1
+
+            if exploration_trade:
+                self.data["exploration_sl"] = int(self.data.get("exploration_sl", 0) or 0) + 1
 
         else:
             return
@@ -113,6 +119,10 @@ class TradeStats:
         pnl = pnl - fees
 
         self.data["trades"] += 1
+
+        if exploration_trade:
+            self.data["exploration_trades"] = int(self.data.get("exploration_trades", 0) or 0) + 1
+            self.data["exploration_pnl"] = float(self.data.get("exploration_pnl", 0.0) or 0.0) + float(pnl)
 
         # GESAMT = Summe aller Trades (Gewinn + Verlust)
         self.data["pnl_netto"] += pnl
@@ -174,22 +184,42 @@ class TradeStats:
             else 0.0
         )
 
+        exploration_trades = int(data.get("exploration_trades", 0) or 0)
+        exploration_tp = int(data.get("exploration_tp", 0) or 0)
+        exploration_sl = int(data.get("exploration_sl", 0) or 0)
+        exploration_pnl = float(data.get("exploration_pnl", 0.0) or 0.0)
+
+        exploration_avg = (
+            exploration_pnl / exploration_trades
+            if exploration_trades > 0
+            else 0.0
+        )
+
         data.update({
             "avg_win": avg_win,
             "avg_loss": avg_loss,
             "profit_factor": profit_factor,
             "expectancy": expectancy,
+            "exploration_avg": exploration_avg,
+            "normal_trades": max(0, trades - exploration_trades),
+            "normal_tp": max(0, int(data.get("tp", 0) or 0) - exploration_tp),
+            "normal_sl": max(0, int(data.get("sl", 0) or 0) - exploration_sl),
+            "normal_cancels": max(0, int(data.get("cancels", 0) or 0) - int(data.get("exploration_cancels", 0) or 0)),
         })
 
         return data
     # ─────────────────────────────────────────────
-    def on_cancel(self, *, order_id=None, cause: str = None):
+    def on_cancel(self, *, order_id=None, cause: str = None, exploration_trade: bool = False):
         """
         Order wurde gecancelt bevor ein Trade/Exit stattgefunden hat.
         Keine PnL-Änderung – nur Zählung.
         """
         try:
             self.data["cancels"] = int(self.data.get("cancels", 0) or 0) + 1
+
+            if exploration_trade:
+                self.data["exploration_cancels"] = int(self.data.get("exploration_cancels", 0) or 0) + 1
+
             self._save()
         except Exception:
             pass

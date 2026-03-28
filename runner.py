@@ -60,49 +60,40 @@ def _print_backtest_range(path):
 # ==================================================
 if __name__ == "__main__":
 
-    print("=======================================================")
-    print(f"MODE: {Config.MODE}")
-
-    if Config.MODE == "BACKTEST":
-        print(f"BACKTEST_FILE: {Config.BACKTEST_FILEPATH}")
-        print(f"START_EQUITY: {Config.START_EQUITY}")
-
-    print("-------------------------------------------------------")
-    print("MARKET")
-    print(f"  SYMBOL: {Config.SYMBOL}")
-    print(f"  TIMEFRAME: {Config.TIMEFRAME}")
-    print(f"  MECHANIK: {Config.MECHANIK}")
-    print(f"  ORDER_SIZE: {Config.ORDER_SIZE}")
-
     print("-------------------------------------------------------")
     print("WORKSPACE")
     print(f"  WINDOW_SIZE: {Config.WINDOW_SIZE}")
-    print(f"  STRUCTURE_LOOKBACK: {Config.STRUCTURE_LOOKBACK}")
 
     print("-------------------------------------------------------")
     print("RISK MANAGEMENT")
     print(f"  RR: {Config.RR}")
     print(f"  MIN_RR: {Config.MIN_RR}")
     print(f"  MAX_RR: {Config.MAX_RR}")
-    print(f"  RR_EXECUTION_MIN: {Config.RR_EXECUTION_MIN}")
+    print(f"  BASE_RISK_PCT: {Config.BASE_RISK_PCT}")
     print(f"  MAX_SL_DISTANCE: {Config.MAX_SL_DISTANCE}")
     print(f"  MIN_TP_DISTANCE: {Config.MIN_TP_DISTANCE}")
+    print(f"  RR_EXECUTION_MIN: {Config.RR_EXECUTION_MIN}")
+    print(f"  PENDING_ENTRY_MAX_WAIT_BARS: {Config.PENDING_ENTRY_MAX_WAIT_BARS}")
+
+    print("-------------------------------------------------------")
+    print("MCM")
+    print(f"  MCM_ENABLED: {Config.MCM_ENABLED}")
+    print(f"  MCM_INTERNAL_CYCLES: {Config.MCM_INTERNAL_CYCLES}")
+    print(f"  MCM_REPLAY_SCALE: {Config.MCM_REPLAY_SCALE}")
+    print(f"  MCM_COUPLING: {Config.MCM_COUPLING}")
+    print(f"  MCM_NOISE: {Config.MCM_NOISE}")
+    print(f"  MCM_PRESSURE_WEIGHT: {Config.MCM_PRESSURE_WEIGHT}")
+    print(f"  MCM_MEMORY_WEIGHT: {Config.MCM_MEMORY_WEIGHT}")
+    print(f"  MCM_REGULATION_WEIGHT: {Config.MCM_REGULATION_WEIGHT}")
 
     print("-------------------------------------------------------")
     print("COSTS")
     print(f"  FEE_RATE: {Config.FEE_RATE}")
     print(f"  FEE_PER_TRADE: {Config.FEE_PER_TRADE}")
-    print(f"  SLIPPAGE: {Config.SLIPPAGE}")
-    print(f"  SOFT_HARD_SLP: {Config.SOFT_HARD_SLP}")
 
     print("-------------------------------------------------------")
     print("SYSTEM")
     print(f"  AKTIV_ORDER: {Config.AKTIV_ORDER}")
-    print(f"  ML_MIN_WINDOW: {Config.ML_MIN_WINDOW}")
-    print(f"  MONITOR_SLEEP_SEC: {Config.MONITOR_SLEEP_SEC}")
-    print(f"  IDLE_SYNC_SEC: {Config.IDLE_SYNC_SEC}")
-    print(f"  PRICE_MATCH_TOL: {Config.PRICE_MATCH_TOL}")
-    print("=======================================================")
     # --------------------------------------------------
     # BACKTEST MODE
     # --------------------------------------------------
@@ -132,21 +123,24 @@ if __name__ == "__main__":
 
         _print_backtest_range(filepath)
 
+        '''
         print(
-            f"BACKTEST NORMAL | "
-            f"TRADES: {stats.get('trades', 0)} | "
-            f"TP: {stats.get('tp', 0)} | "
-            f"SL: {stats.get('sl', 0)} | "
-            f"PNL_NETTO: {stats.get('pnl_netto', 0.0):.4f}"
+            f"BACKTEST EXPLORATION | "
+            f"TRADES: {stats.get('exploration_trades', 0)} | "
+            f"TP: {stats.get('exploration_tp', 0)} | "
+            f"SL: {stats.get('exploration_sl', 0)} | "
+            f"CANCELS: {stats.get('exploration_cancels', 0)} | "
+            f"PNL: {stats.get('exploration_pnl', 0.0):.4f}"
         )
         '''
         print(
-            f"BACKTEST RL | "
-            f"TRADES: {rl_stats.get('trades', 0)} | "
-            f"TP: {rl_stats.get('tp', 0)} | "
-            f"SL: {rl_stats.get('sl', 0)} | "
-            f"PNL_NETTO: {rl_stats.get('pnl_netto', 0.0):.4f}"
-        )'''
+            f"BACKTEST GESAMT | "
+            f"TRADES: {stats.get('trades', 0)} | "
+            f"TP: {stats.get('tp', 0)} | "
+            f"SL: {stats.get('sl', 0)} | "
+            f"CANCELS: {stats.get('cancels', 0)} | "
+            f"PNL_NETTO: {stats.get('pnl_netto', 0.0):.4f}"
+        )
 
     # --------------------------------------------------
     # LIVE MODE (SEQUENZIELL · BACKEND-IDENTISCH)

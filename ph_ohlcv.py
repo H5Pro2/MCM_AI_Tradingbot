@@ -11,7 +11,7 @@ from datetime import datetime
 # --------------------------------------------------
 # CSV LEARN MODE (Sliding Window)
 LEARNING = bool(getattr(Config, "LEARN_MODE", False))
-CSV_OHLCV_PATH = str(getattr(Config, "CSV_OHLCV_PATH", "data/5m_SOLUSDT.csv"))
+CSV_OHLCV_PATH = str(getattr(Config, "CSV_OHLCV_PATH", "data/workspace.csv"))
 
 _CSV_BUFFER = []
 _CSV_POS = 0
@@ -349,3 +349,42 @@ def get_sufficient_balance(
 # ---------------------------------------------------
 
 
+# --------------------------------------------------
+# CANDLE STATE
+# --------------------------------------------------
+def _build_candle_state(candle, prev_close=None):
+
+    o = float(candle.get("open", 0.0) or 0.0)
+    h = float(candle.get("high", o) or o)
+    l = float(candle.get("low", o) or o)
+    c = float(candle.get("close", o) or o)
+
+    span = max(h - l, 1e-9)
+    body = c - o
+    upper_wick = max(0.0, h - max(o, c))
+    lower_wick = max(0.0, min(o, c) - l)
+
+    body_strength = max(0.0, min(abs(body) / span, 1.0))
+    upper_wick_ratio = max(0.0, min(upper_wick / span, 1.0))
+    lower_wick_ratio = max(0.0, min(lower_wick / span, 1.0))
+    wick_bias = max(-1.0, min(lower_wick_ratio - upper_wick_ratio, 1.0))
+    close_position = max(-1.0, min((((c - l) / span) * 2.0) - 1.0, 1.0))
+
+    return_intensity = 0.0
+    if prev_close is not None:
+        prev_close = float(prev_close or 0.0)
+        if prev_close > 0.0:
+            return_intensity = max(-1.0, min(((c - prev_close) / prev_close) * 20.0, 1.0))
+
+    return {
+        "open": o,
+        "high": h,
+        "low": l,
+        "close": c,
+        "body_strength": float(body_strength),
+        "upper_wick_ratio": float(upper_wick_ratio),
+        "lower_wick_ratio": float(lower_wick_ratio),
+        "wick_bias": float(wick_bias),
+        "close_position": float(close_position),
+        "return_intensity": float(return_intensity),
+    }

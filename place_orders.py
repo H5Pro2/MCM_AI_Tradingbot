@@ -55,11 +55,65 @@ def gate_debug(msg):
     dbr.dbr_gate_state(msg, "order_debug.txt")
 
 # --------------------------------------------------
-# DUMMY CONTEXT (nur damit runner/bot nicht crasht)
-# wird von ? genutzt
+# CONTEXT (zustandsbasierte Monitor-Referenz)
 # --------------------------------------------------
-def set_context(*args, **kwargs):
-    return None
+def set_context(
+    exchange=None,
+    symbol=None,
+    timeframe=None,
+    get_sufficient_balance=None,
+    get_account_value=None,
+    entry_reference=None,
+    entry_distance=None,
+    risk_reference=None,
+    entry_validity_band=None,
+):
+    try:
+        if exchange is not None:
+            of._EXCHANGE = exchange
+    except Exception:
+        pass
+
+    try:
+        if symbol is not None:
+            symbol_value = str(symbol)
+            if ':USDT' not in symbol_value:
+                symbol_value = f"{symbol_value}:USDT"
+            of._SYMBOL = symbol_value
+    except Exception:
+        pass
+
+    try:
+        of._ENTRY_REFERENCE = float(entry_reference) if entry_reference is not None else None
+    except Exception:
+        of._ENTRY_REFERENCE = None
+
+    try:
+        of._ENTRY_DISTANCE = float(entry_distance) if entry_distance is not None else None
+    except Exception:
+        of._ENTRY_DISTANCE = None
+
+    try:
+        of._RISK_REFERENCE = float(risk_reference) if risk_reference is not None else None
+    except Exception:
+        of._RISK_REFERENCE = None
+
+    band = dict(entry_validity_band or {})
+
+    try:
+        of._ENTRY_VALIDITY_CENTER = float(band.get("center")) if band.get("center") is not None else None
+    except Exception:
+        of._ENTRY_VALIDITY_CENTER = None
+
+    try:
+        of._ENTRY_VALIDITY_LOWER = float(band.get("lower")) if band.get("lower") is not None else None
+    except Exception:
+        of._ENTRY_VALIDITY_LOWER = None
+
+    try:
+        of._ENTRY_VALIDITY_UPPER = float(band.get("upper")) if band.get("upper") is not None else None
+    except Exception:
+        of._ENTRY_VALIDITY_UPPER = None
 
 # --------------------------------------------------
 # ACTIVE CHECK / SNAPSHOT (API)
@@ -107,6 +161,7 @@ def cancel_order_by_id(order_id, cause: str = None):
             of._ACTIVE_ORDER_ID = None
             of._ACTIVE_TP = None
             of._ACTIVE_SIDE = None
+            set_context()
 
         # Cancel Tracking
         of.mark_order_cancelled(order_id, cause=cause)
@@ -154,6 +209,7 @@ def _order_monitor_loop():
                 of._ACTIVE_ORDER_ID = None
                 of._ACTIVE_TP = None
                 of._ACTIVE_SIDE = None
+                set_context()
                 of._sync_with_exchange(reason="order_disappeared_sync")
                 continue
 
@@ -170,10 +226,62 @@ def _order_monitor_loop():
             side = of._ACTIVE_SIDE
 
             if tp is None or side is None:
-                # TP unbekannt (z.B. nach Restart-Übernahme) → keine Missed-TP Logik
                 gate_debug(f"🟡 Order {of._ACTIVE_ORDER_ID} aktiv | TP/Side unbekannt → nur Existenzprüfung")
                 gate_debug("---------------------------------------")
                 continue
+
+            # --------------------------------------------------
+            # MARKET SHIFT DETECTION
+            # --------------------------------------------------
+            try:
+
+                entry_reference = float(getattr(of, "_ENTRY_REFERENCE", 0.0) or 0.0)
+                entry_distance = float(getattr(of, "_ENTRY_DISTANCE", 0.0) or 0.0)
+                risk_reference = float(getattr(of, "_RISK_REFERENCE", 0.0) or 0.0)
+                entry_validity_lower = getattr(of, "_ENTRY_VALIDITY_LOWER", None)
+                entry_validity_upper = getattr(of, "_ENTRY_VALIDITY_UPPER", None)
+
+                if entry_validity_lower is not None and entry_validity_upper is not None:
+
+                    validity_lower = float(entry_validity_lower)
+                    validity_upper = float(entry_validity_upper)
+
+                    if side == "buy" and current_price > validity_upper:
+
+                        gate_debug("❌ MARKET SHIFT → LONG validity band broken")
+                        cancel_order_by_id(of._ACTIVE_ORDER_ID, cause="market_shift")
+                        continue
+
+                    if side == "sell" and current_price < validity_lower:
+
+                        gate_debug("❌ MARKET SHIFT → SHORT validity band broken")
+                        cancel_order_by_id(of._ACTIVE_ORDER_ID, cause="market_shift")
+                        continue
+
+                cancel_band = 0.0
+
+                if risk_reference > 0.0:
+                    cancel_band = risk_reference
+
+                if entry_distance > 0.0 and risk_reference > 0.0:
+                    cancel_band = max(cancel_band, entry_distance * risk_reference)
+
+                if entry_reference > 0.0 and cancel_band > 0.0:
+
+                    if side == "buy" and current_price > (entry_reference + cancel_band):
+
+                        gate_debug("❌ MARKET SHIFT → LONG invalid")
+                        cancel_order_by_id(of._ACTIVE_ORDER_ID, cause="market_shift")
+                        continue
+
+                    if side == "sell" and current_price < (entry_reference - cancel_band):
+
+                        gate_debug("❌ MARKET SHIFT → SHORT invalid")
+                        cancel_order_by_id(of._ACTIVE_ORDER_ID, cause="market_shift")
+                        continue
+
+            except Exception:
+                pass
 
             # --------------------------------------------------
             # 3. Missed-TP-Erkennung
@@ -184,6 +292,7 @@ def _order_monitor_loop():
                 of._ACTIVE_ORDER_ID = None
                 of._ACTIVE_TP = None
                 of._ACTIVE_SIDE = None
+                set_context()
                 of._sync_with_exchange(reason="missed_tp_cancel_sync")
                 continue
 
@@ -193,6 +302,7 @@ def _order_monitor_loop():
                 of._ACTIVE_ORDER_ID = None
                 of._ACTIVE_TP = None
                 of._ACTIVE_SIDE = None
+                set_context()
                 of._sync_with_exchange(reason="missed_tp_cancel_sync")
                 continue
 
@@ -314,6 +424,12 @@ def place_order(order_type, price, amount, open_orders=None, tp=None, sl=None, p
         # Params (Future TP/SL)
         # ----------------------------------------------------------------------------------------------------
         params_ = dict(params or {})
+
+        context_entry_reference = params_.pop("_entry_reference", price)
+        context_entry_distance = params_.pop("_entry_distance", 0.0)
+        context_risk_reference = params_.pop("_risk_reference", abs(float(price) - float(sl)) if sl is not None else 0.0)
+        context_entry_validity_band = dict(params_.pop("_entry_validity_band", {}) or {})
+
         if sl is not None:
             params_["stopLossPrice"] = float(sl)
         if tp is not None:
@@ -340,6 +456,16 @@ def place_order(order_type, price, amount, open_orders=None, tp=None, sl=None, p
         of._ACTIVE_ORDER_ID = order_id
         of._ACTIVE_TP = float(tp) if tp is not None else None
         of._ACTIVE_SIDE = str(order_type).lower()
+
+        # --------------------------------------------------
+        # CONTEXT TRACKING (MARKET SHIFT)
+        # --------------------------------------------------
+        set_context(
+            entry_reference=context_entry_reference,
+            entry_distance=context_entry_distance,
+            risk_reference=context_risk_reference,
+            entry_validity_band=context_entry_validity_band,
+        )
 
         if order_id is not None:
             gate_debug(

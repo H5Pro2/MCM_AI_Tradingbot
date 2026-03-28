@@ -1,335 +1,425 @@
-# MCM Trading System  
-Mental Core Matrix – Energetisches Marktmodell
+# MCM Trading Brain
 
-## Überblick
+MCM Trading Brain ist ein experimentelles Trading-System, das Marktverarbeitung nicht als direkte Reaktion auf OHLC-Daten modelliert, sondern als mehrstufigen inneren Entscheidungsprozess.
 
-Dieses Projekt implementiert ein Trading-System, das auf der **von mir entwickelten Mental Core Matrix (MCM)** basiert.
+Ziel ist eine Architektur, die dem Ablauf eines menschlichen Traders näherkommt:
 
-Die Mental Core Matrix ist ein konzeptionelles Modell zur Beschreibung dynamischer Entscheidungsprozesse in komplexen Systemen.  
-Sie wurde ursprünglich **nicht speziell für Finanzmärkte entwickelt**.
+1. **Außenwelt lesen**
+2. **innerlich verarbeiten**
+3. **metakognitiv freigeben oder blockieren**
+4. **erst danach planen und handeln**
+5. **Ergebnisse gezielt zurücklernen**
 
-Das hier vorgestellte Trading-System ist daher eine **konzeptionelle Anwendung der MCM auf Marktstrukturen**.
-
-Finanzmärkte eignen sich besonders gut für diese Anwendung, da sie ein komplexes System darstellen, in dem viele Marktteilnehmer gleichzeitig Entscheidungen treffen und dadurch kollektive Muster entstehen.
-
----
-
-# Grundidee
-
-In den meisten Trading-Systemen werden Märkte als **Preiszeitreihen** betrachtet.
-
-Aus diesen Preisen werden klassische Indikatoren berechnet, zum Beispiel:
-
-- RSI
-- Moving Average
-- MACD
-
-Dieses System verfolgt einen anderen Ansatz.
-
-Ein Marktchart wird hier nicht nur als Preisdiagramm betrachtet, sondern als **sichtbares Muster kollektiver Entscheidungen**.
-
-Jede Preisbewegung entsteht durch:
-
-- Erwartungen
-- Risikoentscheidungen
-- Reaktionen auf Informationen
-- Liquiditätsverschiebungen
-- Emotionen der Marktteilnehmer
-
-Ein Chart kann daher als **psychodynamisches Muster kollektiver Interaktion** verstanden werden.
+Der Fokus liegt damit nicht auf klassischen Indikatoren, sondern auf einer MCM-basierten Zustandsverarbeitung aus Wahrnehmung, Erleben, Denken, Regulation, Planung und Outcome-Lernen.
 
 ---
 
-# Kerzen als Flächenenergie
+## Projektidee
 
-![alt text](Kerzen_Flächenspannung.png)
+Das System behandelt den Markt nicht nur als Preisreihe, sondern als äußeres Reizfeld.
 
-Eine klassische OHLC-Kerze enthält vier Werte:
+Aus einer Kerze werden zunächst elementare Marktmerkmale abgeleitet, zum Beispiel:
 
-- Open
-- High
-- Low
-- Close
+- Kerzenspanne
+- Close-Position
+- Wick-Bias
+- Return-Intensität
+- Energie
+- Kohärenz
+- Asymmetrie
+- Kohäsionszone
 
-In diesem System wird eine Kerze nicht nur als Preisintervall interpretiert.
+Darauf aufbauend entsteht ein interner Verarbeitungsweg:
 
-Stattdessen wird sie als **energetische Fläche im Marktspannungsfeld** betrachtet.
+- **Außenbild** des Marktes
+- **Wahrnehmung** des Außenbilds
+- **Erlebenszustand**
+- **Denkzustand**
+- **Metaregulation**
+- **Trade-Plan**
+- **Ausführung / Pending / Exit**
+- **Lernen aus Outcomes**
 
-Die energetische Struktur einer Kerze entsteht aus:
-
-- der Spanne zwischen High und Low
-- der Position von Open und Close
-- der Richtung der Bewegung
-- der strukturellen Position innerhalb des Marktverlaufs
-
-Eine Kerze kann damit als **kleine Energieeinheit innerhalb des globalen Marktsystems** verstanden werden.
-
-Starke Bewegungen erzeugen höhere energetische Spannung, während ruhige Marktphasen weniger Energie enthalten.
-
----
-
-# Energetische Marktparameter
-
-Die Kerzendaten werden in energetische Zustandsgrößen transformiert.
-
-Diese Berechnung erfolgt in:
-
-```
-mcm_core_engine.py
-```
-
-:contentReference[oaicite:0]{index=0}
-
-Die wichtigsten Zustandsgrößen sind:
-
-| Parameter | Bedeutung |
-|----------|-----------|
-Energy | Intensität der Bewegung |
-Coherence | Ordnung bzw. Richtungsstabilität |
-Asymmetry | Richtungsdominanz |
-Cohesion Zone | Marktregime |
-
-Dadurch wird der Markt nicht mehr nur als Preisreihe betrachtet, sondern als **energetischer Zustandsraum**.
+Dieser Ansatz folgt der Richtung des Umsetzungsplans: Markt nicht direkt handeln, sondern erst intern verarbeiten und nur freigegebene Zustände ausführen. fileciteturn1file7
 
 ---
 
-# Trading Pipeline
+## Aktueller Architekturstand
 
-Der Bot arbeitet mit einer klar strukturierten Pipeline:
+Der aktuelle Code bildet die MCM-Architektur bereits in mehrere Ebenen auf:
 
-```
-OHLC Daten
-    ↓
-compute_tension_from_ohlc
-    ↓
-ResonanceGate
-    ↓
-StructureEntryGate
-    ↓
-Richtung über Asymmetrie
-    ↓
-Risk / RR Berechnung
-    ↓
-MCM_AI Entscheidung
-    ↓
-TradeValueGate
-    ↓
-Order Ausführung
-```
+### 1. Außenbahn
 
----
+Die Außenbahn liest nur den Markt.
 
-# Resonance Gate
+Sie besteht aktuell aus:
 
-Das **ResonanceGate** filtert Marktphasen und blockiert Rauschen.
+- `CSVFeed` für Backtest-Daten in `csv_feed.py` fileciteturn0file3
+- Live-/Exchange-Daten in `ph_ohlcv.py` fileciteturn0file6
+- Kerzenabbildung über `_build_candle_state(...)` in `ph_ohlcv.py` fileciteturn1file5
+- Spannungsberechnung über `compute_tension_from_ohlc(...)` in `mcm_core_engine.py` fileciteturn0file13
 
-Implementiert in:
+Hier entstehen unter anderem:
 
-```
-resonance_gate.py
-```
+- `candle_state`
+- `tension_state`
+- Marktvision / Stimulus
 
-:contentReference[oaicite:1]{index=1}
+### 2. Innenbahn
 
-Geprüft werden:
+Die Innenbahn verarbeitet das Außenbild intern weiter.
 
-- Resonanzstärke
-- Phasenstabilität
-- Energiegradient
-- Stabilitätsfenster
+Im aktuellen Stand existieren dafür direkt benannte Zustände in `MCM_Brain_Modell.py`:
 
-Nur wenn diese Bedingungen erfüllt sind, wird eine Strukturprüfung zugelassen.
+- `perception_state`
+- `felt_state`
+- `thought_state`
+- `meta_regulation_state` fileciteturn2file17turn2file8turn2file10
 
----
+Zusätzlich laufen darin:
 
-# Structure Entry Gate
+- Fokusprojektion
+- gefilterte Marktvision
+- neuronale Modulation
+- Signaturspeicher
+- Kontext-Cluster
+- Zustandsreifung
+- Erwartungs- und Druckmodell
+- metakognitive Freigabe oder Blockade fileciteturn0file17turn2file4turn2file16
 
-Das **StructureEntryGate** erkennt Marktstruktur.
+### 3. Exekutivbahn
 
-Implementiert in:
+Die Exekutivbahn plant nur freigegebene Trades und verwaltet deren Ausführung.
 
-```
-structure_entry_gate.py
-```
+Im aktuellen Stand:
 
-:contentReference[oaicite:2]{index=2}
+- Entry-Entscheidung über `evaluate_entry_decision(...)` in `bot_gate_funktions.py` fileciteturn0file10
+- Preisplanung über `derive_trade_plan_from_brain(...)` in `MCM_Brain_Modell.py` fileciteturn2file12turn2file15
+- ökonomische Endabsicherung über `TradeValueGate.evaluate(...)` in `trade_value_gate.py` fileciteturn0file15
+- Pending-/Positions-/Exit-Verwaltung im `Bot` aus `bot.py` fileciteturn1file6turn2file11
+- Live-Order-Handling und Monitor-Thread in `place_orders.py` und `place_orders_funktions.py` fileciteturn0file7turn1file8
 
-Erkannte Strukturen:
+### 4. Lernbahn
 
-- Higher High (HH)
-- Higher Low (HL)
-- Lower High (LH)
-- Lower Low (LL)
+Das System lernt nicht nur über TP und SL, sondern koppelt Outcomes in mehrere interne Zustände zurück.
 
-Zusätzlich werden berechnet:
+Aktuell vorhanden:
 
-- structure_strength
-- structure_age
-- structure_break (BOS / CHOCH)
+- Outcome-Stimuli über `apply_outcome_stimulus(...)` in `MCM_Brain_Modell.py` fileciteturn0file17
+- Anpassung von Erwartung, Regulation, Reife, Schutzweite und Mut über `update_experience_state(...)` fileciteturn2file10
+- Signaturgedächtnis und Kontextcluster in `MCM_Brain_Modell.py` fileciteturn2file16turn2file4
 
 ---
 
-# Richtungsbestimmung
+## Reale Pipeline im aktuellen Code
 
-Die Richtung wird nicht direkt aus einer einzelnen Kerze bestimmt.
+Die operative Pipeline sieht derzeit vereinfacht so aus:
 
-Stattdessen wird die **Asymmetrie über mehrere Kerzen gemittelt**.
-
+```text
+OHLC / Candle
+  -> candle_state
+  -> tension_state
+  -> market vision / stimulus
+  -> MCM field step
+  -> target model / neural modulation
+  -> perception_state
+  -> felt_state
+  -> thought_state
+  -> meta_regulation_state
+  -> trade_plan
+  -> TradeValueGate
+  -> pending entry / order
+  -> position / exit
+  -> outcome stimulus / learning
 ```
-asymmetry > 0 → LONG
-asymmetry < 0 → SHORT
-```
+
+Das ist näher am aktuellen Code als die alte README, die noch von `resonance_gate.py` und `structure_entry_gate.py` als Kernarchitektur sprach. Die zentrale Entry-Entscheidung läuft jetzt über `decide_mcm_brain_entry(...)` in `MCM_Brain_Modell.py`. fileciteturn2file9turn2file14
 
 ---
 
-# Risiko-Modell
+## Zentrale Dateien
 
-Das Risiko wird dynamisch aus Entrypreis und Marktenergie berechnet.
+### Kernlogik
 
-```
-risk = entry_price * risk_pct * energy_scale
-```
+- `bot.py`  
+  Hauptpipeline für Window-Verarbeitung, Pending, Position, Exit, Outcome-Kopplung. fileciteturn1file6
 
-Der Stop-Loss ergibt sich direkt aus diesem Risiko.
+- `MCM_Brain_Modell.py`  
+  Zentrale MCM-Brücke zwischen Marktreiz, innerer Zustandsbildung, Metakontrolle, Preisplanung und Lernen. fileciteturn0file17turn2file14
 
----
+- `MCM_KI_Modell.py`  
+  MCM-Feld, Clusterbildung, Memory, SelfModel, Attraktoren, Regulation. fileciteturn0file9
 
-# MCM_AI
+- `mcm_core_engine.py`  
+  Berechnet Energie, Kohärenz, Asymmetrie und Kohäsionszone aus OHLC. fileciteturn0file13
 
-Die **MCM_AI** ist die adaptive Komponente des Systems.
+### Markt- und Datenebene
 
-Sie erhält den vollständigen Marktzustand:
+- `csv_feed.py`  
+  CSV-Feed mit Sliding-Window für Backtests. fileciteturn0file3
 
-- Energy
-- Coherence
-- Asymmetry
-- Resonance
-- Strukturinformationen
-- Risiko-Parameter
+- `ph_ohlcv.py`  
+  Exchange-Zugriff, Live-Preis, Candle-State, Balance-Prüfungen, OHLCV-Fetch. fileciteturn0file6turn1file5
 
-Die AI kann:
+- `workspace.py`  
+  Schreibt Live-/Snapshot-Workspace-Dateien. fileciteturn0file11
 
-- Trades blockieren
-- das Risk-Reward Verhältnis anpassen
-- den Entry verfeinern
-- aus TP/SL Ergebnissen lernen
+### Ausführung und Absicherung
 
-Dabei gilt eine wichtige Regel:
+- `trade_value_gate.py`  
+  Ökonomische Endabsicherung für Geometrie, RR, TP-Mindestdistanz und maximale SL-Distanz. fileciteturn0file15
 
-Die AI darf den Entry **verbessern, aber nicht verschlechtern**.
+- `place_orders.py`  
+  Order-Platzierung, Marktverschiebungs-Check, Missed-TP-Handling, Monitor-Loop. fileciteturn0file7turn1file11
 
-Beispiel:
+- `place_orders_funktions.py`  
+  Exchange-Sync, aktive Order-Snapshots, Cancel-Tracking, Failsafe bei offenen Positionen. fileciteturn1file8turn2file19
 
-```
-LONG:
-entry_ai ≤ entry_structure
+- `exit_engine.py`  
+  Exit-Verarbeitung für TP/SL inklusive Trade-Debug-Daten. fileciteturn0file14
 
-SHORT:
-entry_ai ≥ entry_structure
-```
+### Statistik und GUI
 
----
+- `trade_stats.py`  
+  Persistente Trade-Statistik, Equity-CSV, Exit- und Cancel-Zählung. fileciteturn2file16turn1file13
 
-# Trade Value Gate
+- `_gui.py`  
+  Read-only GUI für Statistik, Equity-Verlauf und RL-/Memory-Heatmap. fileciteturn0file2
 
-Vor der Orderausführung wird jeder Trade ökonomisch geprüft.
+- `debug_reader.py`  
+  Zentrales Debug-Write-Backend. fileciteturn0file12
 
-Implementiert in:
-
-```
-trade_value_gate.py
-```
-
-Die Prüfung beinhaltet:
-
-- Risiko > 0
-- Gewinn > 0
-- RR über Mindestwert
-- Stop-Loss Abstand innerhalb erlaubter Grenzen
+- `runner.py`  
+  Startpunkt für Backtest und Live-Modus. fileciteturn0file4
 
 ---
 
-# Backtesting
+## Wichtige Zustände im aktuellen System
 
-Der Bot unterstützt zwei Modi:
+### Außenbezogen
 
-```
-BACKTEST
-LIVE
-```
+- `candle_state`
+- `tension_state`
+- `vision`
+- `filtered_vision`
+- `focus`
 
-Die Konfiguration erfolgt in:
+### Innenbezogen
 
-```
-config.py
-```
+- `perception_state`
+  - Fokus
+  - Unsicherheit
+  - Neuheit
+  - Signalqualität
+  - Beobachtungspriorität
 
-:contentReference[oaicite:3]{index=3}
+- `felt_state`
+  - gefühltes Risiko
+  - gefühlte Chance
+  - Konflikt
+  - Druck
+  - Stabilität
+  - Erwartung
+  - Schutzweitenregulation
+  - protective courage
 
-Backtests verwenden historische OHLC Daten über:
+- `thought_state`
+  - Long-/Short-/Wait-Hypothese
+  - Konfliktgrad
+  - Reifegrad
+  - Grübeltiefe
+  - Entscheidungsbereitschaft
 
-```
-csv_feed.py
-```
+- `meta_regulation_state`
+  - beobachten
+  - grübeln
+  - planen
+  - blockieren
+  - Ablehnungsgrund fileciteturn2file17turn2file8turn2file10
 
-:contentReference[oaicite:4]{index=4}
+### Planungsbezogen
 
----
-
-# Orderausführung
-
-Die Orderverwaltung erfolgt über:
-
-```
-place_orders.py
-```
-
-:contentReference[oaicite:5]{index=5}
-
-Funktionen:
-
-- Order Monitor Thread
-- Missed-TP Erkennung
-- Neustart-Synchronisation
-- Reconnect Handling
-- Failsafe bei offenen Positionen
-
----
-
-# Systemphilosophie
-
-Das System kombiniert zwei Ansätze:
-
-**Regelbasierte Struktur**
-
-- Marktstruktur
-- Resonanzfilter
-- Risikomanagement
-
-**Adaptive Komponente**
-
-- MCM_AI Bewertung
-- Erfahrungsbasierte Anpassung
-- Lernen aus Trade-Ergebnissen
-
-Diese Kombination ermöglicht ein System, das strukturell stabil bleibt und sich gleichzeitig an Marktveränderungen anpassen kann.
+- `entry_price`
+- `sl_price`
+- `tp_price`
+- `rr_value`
+- `entry_validity_band`
+- `target_conviction`
+- `risk_model_score`
+- `reward_model_score` fileciteturn2file14turn2file12
 
 ---
 
-# Forschungsidee
+## Was das System aktuell bereits macht
 
-Dieses Projekt untersucht die Hypothese, dass Finanzmärkte als **energetische Systeme kollektiver Entscheidungsprozesse** modelliert werden können.
+### 1. Markt lesen
 
-Indem Kerzen als Flächenenergie interpretiert werden und Marktbewegungen als Gradienten eines Spannungsfeldes betrachtet werden, entsteht eine neue Perspektive auf Marktanalyse.
+Aus jeder Kerze wird ein äußerer Zustand gebaut:
 
-Der Trading-Bot stellt somit **eine mögliche Anwendung der Mental Core Matrix auf Finanzmärkte dar**.
+- Kerzenform
+- Spannungszustand
+- Fokus- und Marktvision
+
+### 2. intern verarbeiten
+
+Das MCM-System überführt den Außenreiz in:
+
+- Feldzustand
+- Gedächtnisrückkopplung
+- Attraktorwahl
+- Wahrnehmung
+- Erleben
+- Denken
+- Metaregulation
+
+### 3. unreife Zustände blockieren
+
+Ein Trade wird nicht nur wegen RR oder SL blockiert, sondern schon vorher durch interne Zustandslogik, zum Beispiel bei:
+
+- Beobachtungsmodus
+- hoher Unsicherheit
+- hohem Konflikt
+- zu geringer Reife
+- Pause nach negativen Outcomes fileciteturn2file10
+
+### 4. Preisplanung aus innerem Zustand
+
+Entry, SL und TP werden nicht statisch gesetzt, sondern aus mehreren Zustandsgrößen abgeleitet, darunter:
+
+- Fokus
+- Signalqualität
+- Bedrohungslage
+- target conviction
+- regulation pressure
+- load bearing capacity
+- protective width regulation
+- protective courage fileciteturn2file12turn2file15
+
+### 5. externe Absicherung
+
+Vor Ausführung wird der Plan über das `TradeValueGate` final abgesichert:
+
+- Geometrie korrekt
+- Reward > 0
+- Risk > 0
+- Mindest-RR erfüllt
+- TP-Abstand groß genug
+- SL-Abstand nicht zu groß fileciteturn0file15
+
+### 6. Lernen aus Ergebnis
+
+Outcomes wie
+
+- `tp_hit`
+- `sl_hit`
+- `cancel`
+- `timeout`
+- `reward_too_small`
+- `rr_too_low`
+- `sl_distance_too_high`
+
+wirken zurück auf:
+
+- Fokusvertrauen
+- target lock
+- target drift
+- Erwartungsdruck
+- Reifung
+- Schutzweitenregulation
+- Signatur- und Kontextgedächtnis fileciteturn0file17turn2file10
 
 ---
 
-# Hinweis
+## Modus
 
-Dieses Projekt ist ein experimentelles Forschungsprojekt.
+Die Konfiguration erfolgt zentral in `config.py`. Standardmäßig ist dort aktuell `BACKTEST` aktiv. fileciteturn0file18
 
-Es stellt **keine Finanzberatung** dar.
+### BACKTEST
 
-Der Handel mit Finanzinstrumenten ist mit erheblichen Risiken verbunden.
+- Daten kommen aus CSV
+- Verarbeitung läuft sequenziell über Sliding Windows
+- Trades werden als Pending/Position simuliert
+- Statistik und Equity werden lokal geschrieben fileciteturn0file4turn2file11turn2file16
+
+### LIVE
+
+- Daten kommen über Phemex / ccxt
+- Workspace wird fortlaufend aktualisiert
+- offene Orders und Positionen werden synchronisiert
+- Marktverschiebungen können Pending-Orders ungültig machen fileciteturn0file4turn1file11
+
+---
+
+## Start
+
+### Backtest starten
+
+```bash
+python runner.py
+```
+
+### GUI starten
+
+```bash
+python _gui.py
+```
+
+Die GUI liest nur:
+
+- `debug/trade_stats.json`
+- `debug/trade_equity.csv`
+
+und startet keinen Bot. fileciteturn0file2
+
+---
+
+## Abhängigkeiten
+
+Je nach genutztem Modus werden unter anderem verwendet:
+
+- `ccxt`
+- `numpy`
+- `scikit-learn`
+- `matplotlib`
+- `tkinter`
+
+Das System ist als Forschungs- und Entwicklungsprojekt aufgebaut, nicht als fertiges Produkt.
+
+---
+
+## Stand gegenüber dem Umsetzungsplan
+
+Der aktuelle Code ist deutlich näher am Umsetzungsplan als die alte README, aber noch nicht vollständig am Endzustand.
+
+Bereits klar erkennbar umgesetzt sind:
+
+- Trennung von Außenverarbeitung und Innenverarbeitung
+- `perception_state`, `felt_state`, `thought_state`, `meta_regulation_state`
+- metakognitive Vorselektion vor Preisplanung
+- Schutzweiten- und Zielweitenlogik als Zustandsprodukt
+- Signatur- und Kontextlernen
+- Outcome-Rückkopplung in mehrere Ebenen fileciteturn1file9turn2file8turn2file10
+
+Noch nicht vollständig als streng getrennte Endarchitektur ausformuliert sind:
+
+- ein explizites persistentes `world_state`
+- eine vollständig getrennte `outcome_decomposition`
+- vollständig harte Schichttrennung zwischen allen Lernarten
+
+Der aktuelle Stand ist daher am besten als **funktionsfähige Zwischenstufe einer MCM-Zustandsarchitektur** zu verstehen, nicht als final abgeschlossene Endform.
+
+---
+
+## Hinweis
+
+Dieses Projekt ist experimentell.
+
+Es dient der Modellierung und Erforschung eines MCM-basierten Trading-Prozesses.
+
+Es ist **keine Finanzberatung**.
+
+---
+
+## Dateiname
+
+`README.md`
