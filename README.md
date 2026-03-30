@@ -14,6 +14,18 @@ Der Fokus liegt damit nicht auf klassischen Indikatoren, sondern auf einer MCM-b
 
 ---
 
+## Setup
+
+Für einen lokalen Start müssen zuerst die Python-Abhängigkeiten installiert werden:
+
+```bash
+pip install -r requirements.txt
+```
+
+Danach kann der Bot über `runner.py` im in `config.py` gesetzten Modus (`BACKTEST` oder `LIVE`) gestartet werden.
+
+---
+
 ## Projektidee
 
 Das System behandelt den Markt nicht nur als Preisreihe, sondern als äußeres Reizfeld.

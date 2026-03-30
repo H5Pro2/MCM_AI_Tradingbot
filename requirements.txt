@@ -1,0 +1,7 @@
+ccxt
+matplotlib
+numpy
+requests
+scikit-learn
+scipy
+statsmodels
