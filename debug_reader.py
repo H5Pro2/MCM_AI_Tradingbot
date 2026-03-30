@@ -64,13 +64,6 @@ def dbr_write(
 # ─────────────────────────────────────────────
 # WRAPPER (API-KOMPATIBEL)
 # ─────────────────────────────────────────────
-def dbr_debug(msg,txt="debug.txt"):
+def dbr_debug(msg,txt="debug.csv"):
     dbr_write(msg, os.path.join("debug", txt), "a", True, False)
-
-def dbr_gate_state(msg,txt):
-    dbr_write(msg, os.path.join("debug", txt), "a", True, False)
-
-def dbr_trade_debug(msg,txt):
-    dbr_write(msg, os.path.join("debug", txt), "a", True, False)
-
 # ─────────────────────────────────────────────

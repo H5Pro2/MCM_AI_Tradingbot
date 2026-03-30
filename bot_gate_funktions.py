@@ -81,7 +81,7 @@ def evaluate_entry_decision(bot, window, candle_state):
             f"observation_mode={bool(decision.get('observation_mode', False))} "
             f"long_score={float(decision.get('long_score', 0.0) or 0.0):.4f} "
             f"short_score={float(decision.get('short_score', 0.0) or 0.0):.4f}",
-            "entry_debug.txt",
+            "entry_debug.csv",
         )
 
     return {

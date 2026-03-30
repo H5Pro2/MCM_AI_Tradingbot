@@ -14,17 +14,17 @@ import numpy as np
 # --------------------------------------------------
 def _mcm_state_debug(msg):
     if bool(getattr(Config, "MCM_DEBUG", False)):
-        dbr_debug(msg, "mcm_state_debug.txt")
+        dbr_debug(msg, "mcm_state_debug.csv")
 
 
 def _mcm_decision_debug(msg):
     if bool(getattr(Config, "MCM_DEBUG", False)):
-        dbr_debug(msg, "mcm_decision_debug.txt")
+        dbr_debug(msg, "mcm_decision_debug.csv")
 
 
 def _mcm_outcome_debug(msg):
     if bool(getattr(Config, "MCM_OUTCOME_DEBUG", False)):
-        dbr_debug(msg, "mcm_outcome_debug.txt")
+        dbr_debug(msg, "mcm_outcome_debug.csv")
 
 # --------------------------------------------------
 # BRAIN FACTORY

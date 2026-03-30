@@ -1,0 +1,19 @@
+{
+  "trades": 605,
+  "tp": 195,
+  "sl": 410,
+  "cancels": 0,
+  "pnl_netto": 86.35629554298748,
+  "pnl_tp": 195.36767334150625,
+  "pnl_sl": -209.01137779851868,
+  "current_timestamp": 1772322900000000,
+  "last_outcome_decomposition": {
+    "perception_quality": 0.5882170315625144,
+    "felt_quality": 0.7486618991923696,
+    "thought_quality": 0.8190708917220902,
+    "plan_quality": 0.6799999999999999,
+    "execution_quality": 0.6799999999999999,
+    "risk_fit_quality": 0.44,
+    "reason": "tp_hit"
+  }
+}

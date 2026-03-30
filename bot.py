@@ -163,7 +163,7 @@ class Bot:
         if live_mode and self.position is None:
             if is_order_active():
                 if DEBUG:
-                    dbr_debug("EXIT: ORDER_ACTIVE_BLOCK", "live_backtest_debug.txt")
+                    dbr_debug("EXIT: ORDER_ACTIVE_BLOCK", "live_backtest_debug.csv")
                 return
 
         self.current_timestamp = window[-1].get("timestamp")
@@ -373,7 +373,7 @@ class Bot:
             value_check = self.value_gate.evaluate(entry_result)
 
             if DEBUG:
-                dbr_debug(f"VALUE_GATE: {value_check}", "value_check_debug.txt")
+                dbr_debug(f"VALUE_GATE: {value_check}", "value_check_debug.csv")
 
             if not value_check.get("trade_allowed", False):
                 apply_outcome_stimulus(
