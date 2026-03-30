@@ -635,7 +635,6 @@ def apply_outcome_stimulus(bot, outcome_reason, position=None):
 
     return snapshot
 
-
 def build_world_state(candle_state, tension_state, stimulus):
     return {
         "candle_state": dict(candle_state or {}),
@@ -645,6 +644,61 @@ def build_world_state(candle_state, tension_state, stimulus):
         "focus": dict((stimulus or {}).get("focus", {}) or {}),
     }
 
+def build_outer_visual_perception_state(world_state):
+    world = dict(world_state or {})
+    focus = dict(world.get("focus", {}) or {})
+    filtered_vision = dict(world.get("filtered_vision", {}) or {})
+    vision = dict(world.get("vision", {}) or {})
+
+    return {
+        "focus_direction": float(focus.get("focus_direction", 0.0) or 0.0),
+        "focus_strength": float(focus.get("focus_strength", 0.0) or 0.0),
+        "focus_confidence": float(focus.get("focus_confidence", 0.0) or 0.0),
+        "target_lock": float(focus.get("target_lock", 0.0) or 0.0),
+        "noise_damp": float(focus.get("noise_damp", 0.0) or 0.0),
+        "signal_relevance": float(focus.get("signal_relevance", 0.0) or 0.0),
+        "visual_target_map": float(filtered_vision.get("target_map", 0.0) or 0.0),
+        "visual_threat_map": float(filtered_vision.get("threat_map", 0.0) or 0.0),
+        "visual_optic_flow": float(filtered_vision.get("optic_flow", 0.0) or 0.0),
+        "visual_contrast": float(vision.get("vision_contrast", 0.0) or 0.0),
+    }
+
+def build_inner_field_perception_state(snapshot, bot=None):
+    snap = dict(snapshot or {})
+    prior_regulation = float(getattr(bot, "experience_regulation", 0.0) or 0.0) if bot is not None else 0.0
+    return {
+        "field_mean_energy": float(snap.get("mean_energy", 0.0) or 0.0),
+        "field_mean_motivation": float(snap.get("mean_motivation", 0.0) or 0.0),
+        "field_mean_risk": float(snap.get("mean_risk", 0.0) or 0.0),
+        "field_mean_velocity": float(snap.get("mean_velocity", 0.0) or 0.0),
+        "field_cluster_count": int(snap.get("cluster_count", 0) or 0),
+        "field_regulation_pressure": float(snap.get("regulation_pressure", 0.0) or 0.0),
+        "self_state": str(snap.get("self_state", "stable") or "stable"),
+        "attractor": str(snap.get("attractor", "neutral") or "neutral"),
+        "prior_experience_regulation": float(prior_regulation),
+    }
+
+def build_processing_state(outer_visual_perception_state, inner_field_perception_state, perception_state):
+    outer = dict(outer_visual_perception_state or {})
+    inner = dict(inner_field_perception_state or {})
+    perception = dict(perception_state or {})
+
+    signal_relevance = float(outer.get("signal_relevance", 0.0) or 0.0)
+    visual_contrast = float(outer.get("visual_contrast", 0.0) or 0.0)
+    field_risk = abs(float(inner.get("field_mean_risk", 0.0) or 0.0))
+    field_pressure = float(inner.get("field_regulation_pressure", 0.0) or 0.0)
+    uncertainty = float(perception.get("uncertainty_score", 0.0) or 0.0)
+    novelty = float(perception.get("novelty_score", 0.0) or 0.0)   
+
+    processing_load = max(0.0, min(1.0, (uncertainty * 0.35) + (novelty * 0.20) + (field_pressure * 0.20) + (field_risk * 0.15) + (visual_contrast * 0.10)))
+    processing_stability = max(0.0, min(1.0, signal_relevance * 0.45 + max(0.0, 1.0 - uncertainty) * 0.35 + max(0.0, 1.0 - min(1.0, field_risk)) * 0.20))
+    processing_readiness = max(0.0, min(1.0, (processing_stability * 0.58) + (max(0.0, 1.0 - processing_load) * 0.42)))
+
+    return {
+        "processing_load": float(processing_load),
+        "processing_stability": float(processing_stability),
+        "processing_readiness": float(processing_readiness),
+    }
 
 def build_outcome_decomposition(bot, outcome_reason, position=None, experience_state=None):
     reason = str(outcome_reason or "").strip().lower()
@@ -2494,8 +2548,16 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
     )
 
     fused_preview = resolve_fused_decision(candle_state, tension_state, snapshot, bot=bot)
+
     world_state = build_world_state(candle_state, tension_state, stimulus)
+    outer_visual_perception_state = build_outer_visual_perception_state(world_state)
+    inner_field_perception_state = build_inner_field_perception_state(snapshot, bot=bot)
     perception_state = build_perception_state(world_state, bot=bot)
+    processing_state = build_processing_state(
+        outer_visual_perception_state,
+        inner_field_perception_state,
+        perception_state,
+    )
     felt_state = build_felt_state(bot, candle_state, stimulus, snapshot, perception_state, decision=str(fused_preview.get("decision", "WAIT") or "WAIT"))
 
     state_signature = build_state_signature(candle_state, tension_state, snapshot, stimulus, bot=bot)
@@ -2512,6 +2574,9 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
     meta_regulation_state = build_meta_regulation_state(perception_state, felt_state, thought_state, fused, pause_mode=pause_mode)
 
     bot.perception_state = dict(perception_state)
+    bot.outer_visual_perception_state = dict(outer_visual_perception_state)
+    bot.inner_field_perception_state = dict(inner_field_perception_state)
+    bot.processing_state = dict(processing_state)
     bot.felt_state = dict(felt_state)
     bot.thought_state = dict(thought_state)
     bot.meta_regulation_state = dict(meta_regulation_state)
@@ -2533,6 +2598,9 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
             "filtered_vision": dict(stimulus.get("filtered_vision", {}) or {}),
             "focus": dict(stimulus.get("focus", {}) or {}),
             "world_state": dict(world_state or {}),
+            "outer_visual_perception_state": dict(outer_visual_perception_state or {}),
+            "inner_field_perception_state": dict(inner_field_perception_state or {}),
+            "processing_state": dict(processing_state or {}),
             "perception_state": dict(perception_state or {}),
             "felt_state": dict(felt_state or {}),
             "thought_state": dict(thought_state or {}),
@@ -2587,6 +2655,9 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
         "filtered_vision": dict(stimulus.get("filtered_vision", {}) or {}),
         "focus": dict(stimulus.get("focus", {}) or {}),
         "world_state": dict(world_state or {}),
+        "outer_visual_perception_state": dict(outer_visual_perception_state or {}),
+        "inner_field_perception_state": dict(inner_field_perception_state or {}),
+        "processing_state": dict(processing_state or {}),
         "perception_state": dict(perception_state or {}),
         "felt_state": dict(felt_state or {}),
         "thought_state": dict(thought_state or {}),

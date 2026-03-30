@@ -80,6 +80,9 @@ class Bot:
         self.last_signal_relevance = 0.0
 
         self.perception_state = {}
+        self.outer_visual_perception_state = {}
+        self.inner_field_perception_state = {}
+        self.processing_state = {}
         self.felt_state = {}
         self.thought_state = {}
         self.meta_regulation_state = {}
@@ -463,6 +466,9 @@ class Bot:
                     "vision": dict(entry_result.get("vision", {}) or {}),
                     "filtered_vision": dict(entry_result.get("filtered_vision", {}) or {}),
                     "world_state": dict(entry_result.get("world_state", {}) or {}),
+                    "outer_visual_perception_state": dict(entry_result.get("outer_visual_perception_state", {}) or {}),
+                    "inner_field_perception_state": dict(entry_result.get("inner_field_perception_state", {}) or {}),
+                    "processing_state": dict(entry_result.get("processing_state", {}) or {}),
                     "state_signature": dict(entry_result.get("state_signature", {}) or {}),
                     "trade_plan": {
                         "entry_validity_band": dict(entry_result.get("entry_validity_band", {}) or {}),
