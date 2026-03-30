@@ -200,7 +200,7 @@ class Bot:
             exit_signal = self.exit_engine.process(
                 window,
                 self.position,
-                "exit_trading_debug.txt",
+                "exit_trading_debug.csv",
             )
             if exit_signal is None:
                 return
