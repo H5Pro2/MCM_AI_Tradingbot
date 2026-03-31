@@ -46,6 +46,45 @@ class TradeStatsOutcomeDecompositionTests(unittest.TestCase):
             saved = json.loads(stats_path.read_text(encoding="utf-8"))
             self.assertEqual(saved.get("last_outcome_decomposition"), decomposition)
 
+    def test_on_attempt_tracks_structure_zone_and_snapshot_metrics(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            stats_path = Path(tmp) / "trade_stats.json"
+            csv_path = Path(tmp) / "trade_equity.csv"
+
+            stats = TradeStats(
+                path=str(stats_path),
+                csv_path=str(csv_path),
+                reset=True,
+            )
+
+            stats.on_attempt(
+                status="submitted",
+                context={
+                    "world_state": {
+                        "structure_perception_state": {
+                            "structure_quality": 0.81,
+                        }
+                    }
+                },
+            )
+            stats.on_attempt(
+                status="filled",
+                context={
+                    "outer_visual_perception_state": {
+                        "structure_quality": 0.20,
+                    }
+                },
+            )
+
+            snap = stats.snapshot()
+            self.assertEqual(int(snap.get("attempts", 0)), 2)
+            self.assertEqual(int(snap.get("attempts_submitted", 0)), 1)
+            self.assertEqual(int(snap.get("attempts_filled", 0)), 1)
+            self.assertEqual(int(snap.get("attempt_structure_zone", 0)), 1)
+            self.assertEqual(int(snap.get("attempt_non_structure_zone", 0)), 1)
+            self.assertAlmostEqual(float(snap.get("attempt_zone_share", -1.0)), 0.5, places=6)
+            self.assertEqual(len(snap.get("recent_attempts", [])), 2)
+
     def test_on_cancel_persists_last_outcome_decomposition(self):
         with tempfile.TemporaryDirectory() as tmp:
             stats_path = Path(tmp) / "trade_stats.json"

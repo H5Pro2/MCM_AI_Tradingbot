@@ -213,7 +213,10 @@ class Bot:
                 oid = self.position.get("order_id")
                 if oid is not None and consume_cancelled(oid):
                     apply_outcome_stimulus(self, "cancel", self.position)
-                    self._save_memory_state()
+                    self.stats.on_attempt(
+                        status="cancelled",
+                        context=dict(self.position.get("meta", {}) or {}),
+                    )
                     self.stats.on_cancel(
                         order_id=oid,
                         cause="exchange_cancel",
@@ -309,6 +312,10 @@ class Bot:
                 }
 
                 self.pending_entry = None
+                self.stats.on_attempt(
+                    status="filled",
+                    context=meta,
+                )
                 return
 
             if side == "SHORT" and (entry_touched or validity_touched):
@@ -331,6 +338,10 @@ class Bot:
                 }
 
                 self.pending_entry = None
+                self.stats.on_attempt(
+                    status="filled",
+                    context=meta,
+                )
                 return
 
             # --------------------------------------------------
@@ -339,7 +350,10 @@ class Bot:
             if (self.processed - created) > max_wait:
 
                 apply_outcome_stimulus(self, "timeout", self.pending_entry)
-                self._save_memory_state()
+                self.stats.on_attempt(
+                    status="cancelled",
+                    context=meta,
+                )
                 self.stats.on_cancel(
                     order_id=None,
                     cause="backtest_timeout",
@@ -376,6 +390,13 @@ class Bot:
                 dbr_debug(f"VALUE_GATE: {value_check}", "value_check_debug.csv")
 
             if not value_check.get("trade_allowed", False):
+                self.stats.on_attempt(
+                    status="blocked_value_gate",
+                    context={
+                        "world_state": dict(entry_result.get("world_state", {}) or {}),
+                        "outer_visual_perception_state": dict(entry_result.get("outer_visual_perception_state", {}) or {}),
+                    },
+                )
                 apply_outcome_stimulus(
                     self,
                     value_check.get("reason"),
@@ -495,6 +516,13 @@ class Bot:
                     },
                 },
             }
+            self.stats.on_attempt(
+                status="submitted",
+                context={
+                    "world_state": dict(entry_result.get("world_state", {}) or {}),
+                    "outer_visual_perception_state": dict(entry_result.get("outer_visual_perception_state", {}) or {}),
+                },
+            )
 
             self._save_memory_state()
             return
