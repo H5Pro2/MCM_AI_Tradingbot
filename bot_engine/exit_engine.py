@@ -1,4 +1,4 @@
-from debug_reader import dbr_trade_debug
+from debug_reader import dbr_debug
 from datetime import datetime
 import csv
 
@@ -80,7 +80,7 @@ class ExitEngine:
             long_score = float(signal_meta.get("long_score", 0.0) or 0.0)
             short_score = float(signal_meta.get("short_score", 0.0) or 0.0)
 
-            dbr_trade_debug(
+            dbr_debug(
                 f"EXIT {reason} | "
                 f"time={time_str} "
                 f"side={side} "
