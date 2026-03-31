@@ -2706,12 +2706,19 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
     fused_preview = resolve_fused_decision(candle_state, tension_state, snapshot, bot=bot)
 
     structure_perception_state = STRUCTURE_ENGINE.build_structure_perception_state(window)
-    world_state = build_world_state(
-        candle_state,
-        tension_state,
-        stimulus,
-        structure_perception_state=structure_perception_state,
-    )
+    try:
+        world_state = build_world_state(
+            candle_state,
+            tension_state,
+            stimulus,
+            structure_perception_state=structure_perception_state,
+        )
+    except TypeError:
+        # Backward-compatible fallback, falls lokal noch eine ältere
+        # build_world_state(candle_state, tension_state, stimulus)-Signatur aktiv ist.
+        world_state = build_world_state(candle_state, tension_state, stimulus)
+        world_state = dict(world_state or {})
+        world_state["structure_perception_state"] = dict(structure_perception_state or {})
     outer_visual_perception_state = build_outer_visual_perception_state(world_state)
     inner_field_perception_state = build_inner_field_perception_state(snapshot, bot=bot)
     perception_state = build_perception_state(world_state, bot=bot)
@@ -2721,6 +2728,7 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
         perception_state,
     )
     felt_state = build_felt_state(bot, candle_state, stimulus, snapshot, perception_state, decision=str(fused_preview.get("decision", "WAIT") or "WAIT"))
+    
     state_signature = build_state_signature(candle_state, tension_state, snapshot, stimulus, bot=bot)
 
     update_signature_memory(bot, state_signature, outcome=None)
