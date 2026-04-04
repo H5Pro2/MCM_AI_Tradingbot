@@ -16,7 +16,6 @@ from ph_ohlcv import (
 
 from place_orders import _SYMBOL, set_context, place_order, ensure_order_monitor_started
 from memory_state import save_memory_state
-
 # --------------------------------------------------
 # BACKTEST RANGE PRINT
 # --------------------------------------------------
@@ -103,6 +102,7 @@ if __name__ == "__main__":
         filepath = Config.BACKTEST_FILEPATH
 
         bot = Bot(filepath)
+        bot.start_runtime_thread()
 
         buffer = []
         bot.processed = 0
@@ -116,10 +116,9 @@ if __name__ == "__main__":
             if len(buffer) > Config.WINDOW_SIZE:
                 buffer.pop(0)
 
-            bot._process_window(buffer)
+            bot.publish_market_window(buffer)
 
-            bot.processed += 1
-
+        bot.stop_runtime_thread()
         save_memory_state(bot)
         stats = bot.stats.snapshot()
 
@@ -173,19 +172,12 @@ if __name__ == "__main__":
         symbol = Config.SYMBOL
 
         # --------------------------------------------------
-        # Dynamisches Polling-Intervall
+        # Polling-Intervall
         # --------------------------------------------------
-        tf = timeframe.lower().strip()
-
-        if tf.endswith("m"):
-            tf_seconds = int(tf[:-1]) * 60
-        elif tf.endswith("h"):
-            tf_seconds = int(tf[:-1]) * 3600
-        else:
-            tf_seconds = 60
-
-        # Polling ≈ 1/60 der Candle-Dauer (min 1s, max 15s)
-        poll_interval = max(1, min(15, tf_seconds // 60))
+        poll_interval = max(
+            0.25,
+            float(getattr(Config, "LIVE_POLL_INTERVAL_SECONDS", 1.0) or 1.0),
+        )
 
         exchange = create_exchange()
 
@@ -199,6 +191,7 @@ if __name__ == "__main__":
         ensure_order_monitor_started()
 
         bot = Bot(None)
+        bot.start_runtime_thread()
 
         last_processed_ts = None
         buffer = []
@@ -252,7 +245,9 @@ if __name__ == "__main__":
                     for ts, o, h, l, c, v in init_slice
                 ]
 
+                bot.publish_market_window(buffer)
                 last_processed_ts = buffer[-1]["timestamp"]
+                time.sleep(poll_interval)
                 continue
 
             # --------------------------------------------------
@@ -264,6 +259,7 @@ if __name__ == "__main__":
             ]
 
             if not new_candles:
+                time.sleep(poll_interval)
                 continue
 
             # --------------------------------------------------
@@ -288,8 +284,8 @@ if __name__ == "__main__":
                 if len(buffer) > Config.WINDOW_SIZE:
                     buffer.pop(0)
 
-                bot._process_window(buffer)
+                bot.publish_market_window(buffer)
 
                 last_processed_ts = int(ts)
-                
+
             time.sleep(poll_interval)

@@ -244,6 +244,13 @@ def build_memory_state(bot) -> dict:
             "last_signature_context": None,
             "last_context_cluster_id": None,
             "last_context_cluster_key": None,
+            "mcm_runtime_snapshot": {},
+            "mcm_runtime_decision_state": {},
+            "mcm_runtime_brain_snapshot": {},
+            "mcm_runtime_market_ticks": 0,
+            "mcm_decision_episode": {},
+            "mcm_experience_space": {},
+            "mcm_last_observe_timestamp": None,
             "mcm_memory": [],
             "mcm_last_attractor": None,
             "mcm_last_action": None,
@@ -294,6 +301,14 @@ def build_memory_state(bot) -> dict:
         "thought_state": normalize_json_state(getattr(bot, "thought_state", {})),
         "meta_regulation_state": normalize_json_state(getattr(bot, "meta_regulation_state", {})),
         "last_outcome_decomposition": normalize_json_state(getattr(bot, "last_outcome_decomposition", {})),
+        "mcm_runtime_snapshot": normalize_json_state(getattr(bot, "mcm_runtime_snapshot", {})),
+        "mcm_runtime_decision_state": normalize_json_state(getattr(bot, "mcm_runtime_decision_state", {})),
+        "mcm_runtime_brain_snapshot": normalize_json_state(getattr(bot, "mcm_runtime_brain_snapshot", {})),
+        "mcm_runtime_market_ticks": max(0, _to_int(getattr(bot, "mcm_runtime_market_ticks", 0), 0)),
+        "mcm_decision_episode": normalize_json_state(getattr(bot, "mcm_decision_episode", {})),
+        "mcm_decision_episode_internal": normalize_json_state(getattr(bot, "mcm_decision_episode_internal", {})),
+        "mcm_experience_space": normalize_json_state(getattr(bot, "mcm_experience_space", {})),
+        "mcm_last_observe_timestamp": getattr(bot, "mcm_last_observe_timestamp", None),
         "mcm_memory": mcm_memory,
         "mcm_last_attractor": _to_str(getattr(bot, "mcm_last_attractor", None), None),
         "mcm_last_action": _to_str(getattr(bot, "mcm_last_action", None), None),
@@ -347,6 +362,14 @@ def apply_memory_state(bot, state: dict | None) -> dict:
     bot.thought_state = normalize_json_state(payload.get("thought_state", {}))
     bot.meta_regulation_state = normalize_json_state(payload.get("meta_regulation_state", {}))
     bot.last_outcome_decomposition = normalize_json_state(payload.get("last_outcome_decomposition", {}))
+    bot.mcm_runtime_snapshot = normalize_json_state(payload.get("mcm_runtime_snapshot", {}))
+    bot.mcm_runtime_decision_state = normalize_json_state(payload.get("mcm_runtime_decision_state", {}))
+    bot.mcm_runtime_brain_snapshot = normalize_json_state(payload.get("mcm_runtime_brain_snapshot", {}))
+    bot.mcm_runtime_market_ticks = max(0, _to_int(payload.get("mcm_runtime_market_ticks", 0), 0))
+    bot.mcm_decision_episode = normalize_json_state(payload.get("mcm_decision_episode", {}))
+    bot.mcm_decision_episode_internal = normalize_json_state(payload.get("mcm_decision_episode_internal", {}))
+    bot.mcm_experience_space = normalize_json_state(payload.get("mcm_experience_space", {}))
+    bot.mcm_last_observe_timestamp = payload.get("mcm_last_observe_timestamp", None)
     bot.mcm_last_attractor = _to_str(payload.get("mcm_last_attractor"), None)
     bot.mcm_last_action = _to_str(payload.get("mcm_last_action"), None)
 
@@ -366,66 +389,64 @@ def read_memory_state(path: str | None = None) -> dict:
 
     filepath = _memory_state_path(path)
 
+    default_state = {
+        "signature_memory": {},
+        "context_clusters": {},
+        "context_cluster_seq": 0,
+        "last_signature_key": None,
+        "last_signature_outcome": None,
+        "last_signature_context": None,
+        "last_context_cluster_id": None,
+        "last_context_cluster_key": None,
+        "focus_point": 0.0,
+        "focus_confidence": 0.0,
+        "target_lock": 0.0,
+        "target_drift": 0.0,
+        "entry_expectation": 0.0,
+        "target_expectation": 0.0,
+        "approach_pressure": 0.0,
+        "pressure_release": 0.0,
+        "experience_regulation": 0.0,
+        "reflection_maturity": 0.0,
+        "load_bearing_capacity": 0.0,
+        "protective_width_regulation": 0.0,
+        "protective_courage": 0.0,
+        "inhibition_level": 0.0,
+        "habituation_level": 0.0,
+        "competition_bias": 0.0,
+        "observation_mode": False,
+        "last_signal_relevance": 0.0,
+        "structure_perception_state": {},
+        "perception_state": {},
+        "outer_visual_perception_state": {},
+        "inner_field_perception_state": {},
+        "processing_state": {},
+        "expectation_state": {},
+        "felt_state": {},
+        "thought_state": {},
+        "meta_regulation_state": {},
+        "last_outcome_decomposition": {},
+        "mcm_runtime_snapshot": {},
+        "mcm_runtime_decision_state": {},
+        "mcm_runtime_brain_snapshot": {},
+        "mcm_runtime_market_ticks": 0,
+        "mcm_decision_episode": {},
+        "mcm_decision_episode_internal": {},
+        "mcm_experience_space": {},
+        "mcm_last_observe_timestamp": None,
+        "mcm_memory": [],
+        "mcm_last_attractor": None,
+        "mcm_last_action": None,
+    }
+
     if not os.path.exists(filepath):
-        return {
-            "signature_memory": {},
-            "context_clusters": {},
-            "context_cluster_seq": 0,
-            "last_signature_key": None,
-            "last_signature_outcome": None,
-            "last_signature_context": None,
-            "last_context_cluster_id": None,
-            "last_context_cluster_key": None,
-            "focus_point": 0.0,
-            "focus_confidence": 0.0,
-            "target_lock": 0.0,
-            "target_drift": 0.0,
-            "entry_expectation": 0.0,
-            "target_expectation": 0.0,
-            "approach_pressure": 0.0,
-            "pressure_release": 0.0,
-            "experience_regulation": 0.0,
-            "reflection_maturity": 0.0,
-            "load_bearing_capacity": 0.0,
-            "protective_width_regulation": 0.0,
-            "protective_courage": 0.0,
-            "inhibition_level": 0.0,
-            "habituation_level": 0.0,
-            "competition_bias": 0.0,
-            "observation_mode": False,
-            "last_signal_relevance": 0.0,
-            "structure_perception_state": {},
-            "perception_state": {},
-            "outer_visual_perception_state": {},
-            "inner_field_perception_state": {},
-            "processing_state": {},
-            "expectation_state": {},
-            "felt_state": {},
-            "thought_state": {},
-            "meta_regulation_state": {},
-            "last_outcome_decomposition": {},
-            "mcm_memory": [],
-            "mcm_last_attractor": None,
-            "mcm_last_action": None,
-        }
+        return dict(default_state)
 
     try:
         with open(filepath, "r", encoding="utf-8") as f:
             raw = json.load(f)
     except Exception:
-        return '''{
-            "signature_memory": {},
-            "context_clusters": {},
-            "context_cluster_seq": 0,
-            "last_signature_key": None,
-            "last_signature_outcome": None,
-            "last_signature_context": None,
-            "last_context_cluster_id": None,
-            "last_context_cluster_key": None,
-            "mcm_memory": [],
-            "mcm_last_attractor": None,
-            "mcm_last_action": None,
-        }'''
+        return dict(default_state)
 
     return {
         "signature_memory": normalize_signature_memory((raw or {}).get("signature_memory", {})),
@@ -464,6 +485,14 @@ def read_memory_state(path: str | None = None) -> dict:
         "thought_state": normalize_json_state((raw or {}).get("thought_state", {})),
         "meta_regulation_state": normalize_json_state((raw or {}).get("meta_regulation_state", {})),
         "last_outcome_decomposition": normalize_json_state((raw or {}).get("last_outcome_decomposition", {})),
+        "mcm_runtime_snapshot": normalize_json_state((raw or {}).get("mcm_runtime_snapshot", {})),
+        "mcm_runtime_decision_state": normalize_json_state((raw or {}).get("mcm_runtime_decision_state", {})),
+        "mcm_runtime_brain_snapshot": normalize_json_state((raw or {}).get("mcm_runtime_brain_snapshot", {})),
+        "mcm_runtime_market_ticks": max(0, _to_int((raw or {}).get("mcm_runtime_market_ticks", 0), 0)),
+        "mcm_decision_episode": normalize_json_state((raw or {}).get("mcm_decision_episode", {})),
+        "mcm_decision_episode_internal": normalize_json_state((raw or {}).get("mcm_decision_episode_internal", {})),
+        "mcm_experience_space": normalize_json_state((raw or {}).get("mcm_experience_space", {})),
+        "mcm_last_observe_timestamp": (raw or {}).get("mcm_last_observe_timestamp", None),
         "mcm_memory": normalize_mcm_memory((raw or {}).get("mcm_memory", [])),
         "mcm_last_attractor": _to_str((raw or {}).get("mcm_last_attractor"), None),
         "mcm_last_action": _to_str((raw or {}).get("mcm_last_action"), None),

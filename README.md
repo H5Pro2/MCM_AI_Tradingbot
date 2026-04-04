@@ -97,3 +97,131 @@ Mit Fokus auf:
 4. Overtrade-Reduktion durch adaptive Regulation
 5. Erfahrungslernen für bessere Struktur-Trades
 6. Messbarkeit über KPIs
+
+
+# --------------------------------------------------
+# Thread 1
+# --------------------------------------------------
+
+## Chart-Ablauf / Informationen
+
+### Aufgabe
+
+- OHLCV lesen
+- Workspace / Buffer pflegen
+- reine Marktinformationen berechnen:
+  - Candle-State
+  - Energy
+  - Coherence
+  - Asymmetry
+  - HH
+  - LL
+  - Struktur
+- nur Stimulus-/Info-Paket erzeugen
+- niemals entscheiden
+- niemals Memory ändern
+- niemals Order / Pending / Position anfassen
+
+### Gehört dahin
+
+- `runner.py` Feed-/Polling-Ablauf
+- `csv_feed.py` / `ph_ohlcv.py` / `workspace.py` Datenpfad
+- `mcm_core_engine.py` Spannungs-/Chartinfos wie Energy / Coherence / Asymmetry
+- `strukture_engine.py` reine Struktur-Wahrnehmung ohne Handelsfreigabe
+
+### Output von Thread 1
+
+Nur ein neutrales Paket, zum Beispiel:
+
+- `timestamp`
+- `window_ref` oder `window_snapshot`
+- `candle_state`
+- `tension_state`
+- `structure_perception_state`
+
+# --------------------------------------------------
+# Thread 2
+# --------------------------------------------------
+
+## Wahrnehmung / Denken / Memory / Handeln
+
+### Aufgabe
+
+- Stimulus von Thread 1 konsumieren
+- Runtime permanent fortschreiben
+- Wahrnehmung / Verarbeitung / Gefühl / Denken / Meta / Erwartung bilden
+- Experience / Episode / Memory pflegen
+- Entscheidungstendenz bilden:
+  - `act`
+  - `observe`
+  - `hold`
+  - `replan`
+- danach technische Handlung ausführen:
+  - Pending
+  - Entry
+  - Position
+  - Exit
+
+### Gehört dahin
+
+- `MCMBrainRuntime` und Runtime-Fortschreibung in `MCM_Brain_Modell.py`
+- Entscheidungsbahn `build_runtime_decision_tendency(...)` / `decide_mcm_brain_entry(...)`
+- Episoden-/Erfahrungsraum / Review / Memory in `MCM_Brain_Modell.py` und `memory_state.py`
+- Handlungsbahn in `bot.py`:
+  - `_handle_active_position(...)`
+  - `_handle_pending_entry(...)`
+  - `_handle_entry_attempt(...)`
+
+# --------------------------------------------------
+# Harte Regel der Trennung
+# --------------------------------------------------
+
+## Harte Regel der Trennung
+
+### Thread 1 schreibt nie
+
+- `mcm_runtime_snapshot`
+- `mcm_runtime_decision_state`
+- `mcm_runtime_brain_snapshot`
+- `mcm_decision_episode`
+- `mcm_decision_episode_internal`
+- `mcm_experience_space`
+- `position`
+- `pending_entry`
+
+### Grundregeln
+
+- Thread 2 liest Chartdaten nur als Input, erzeugt aber selbst keine OHLCV-Beschaffung.
+- Handlung darf nur noch aus Thread 2 kommen.
+- Thread 1 kennt keine Orderlogik.
+
+# --------------------------------------------------
+# Was dafür konkret weg muss
+# --------------------------------------------------
+
+## Was dafür konkret weg muss
+
+- `runner.py` darf nicht mehr direkt Logik + Brain + Handlung in einem Ablauf treiben. Es darf nur Marktpakete liefern.
+- `bot._process_window(...)` ist in der jetzigen Form noch zu breit, weil dort Runtime und Handlung zusammen laufen.
+- `step_mcm_runtime_idle(...)` darf nicht mehr vom Chartpfad als Ersatz für den Innenprozess benutzt werden, sondern muss in den permanenten Loop von Thread 2 wandern.
+
+# --------------------------------------------------
+# Zielbild
+# --------------------------------------------------
+
+## Zielbild
+
+### Thread 1
+
+- fetch/read market
+- normalize
+- build chart-info packet
+- publish to thread 2
+
+### Thread 2
+
+- consume packet
+- runtime tick
+- perception/thinking/memory
+- decision tendency
+- handle pending/entry/position/exit

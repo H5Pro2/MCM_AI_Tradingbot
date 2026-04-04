@@ -4,18 +4,637 @@
 # ==================================================
 from config import Config
 from debug_reader import dbr_debug
-try:
-    from bot_engine.mcm_core_engine import build_tension_state_from_window
-except ModuleNotFoundError:
-    from bot_engine.mcm_core_engine import build_tension_state_from_window
-
+from bot_engine.mcm_core_engine import build_tension_state_from_window
 from MCM_KI_Modell import MCMField, ClusterDetector, Memory, SelfModel, AttractorSystem, RegulationLayer
-try:
-    from bot_engine.strukture_engine import StructureEngine
-except ModuleNotFoundError:
-    from bot_engine.strukture_engine import StructureEngine
+from bot_engine.strukture_engine import StructureEngine
 import numpy as np
 
+
+# --------------------------------------------------
+class MCMBrainRuntime:
+
+    def __init__(self, bot=None):
+        self.bot = bot
+        self.window = []
+        self.candle_state = {}
+        self.timestamp = None
+        self.runtime_tick_seq = 0
+        self.last_result = None
+        self.last_impulse = {}
+        self.pending_impulse = None
+        self.brain_snapshot = {}
+        self._market_tick_pending = False
+
+    def restore_from_bot(self):
+
+        if self.bot is None:
+            return None
+
+        runtime_snapshot = dict(getattr(self.bot, "mcm_runtime_snapshot", {}) or {})
+        runtime_decision_state = dict(getattr(self.bot, "mcm_runtime_decision_state", {}) or {})
+        runtime_brain_snapshot = dict(getattr(self.bot, "mcm_runtime_brain_snapshot", {}) or {})
+
+        self.timestamp = runtime_snapshot.get("timestamp", None)
+        self.runtime_tick_seq = int(runtime_snapshot.get("runtime_tick_seq", 0) or 0)
+        self.last_result = dict(runtime_decision_state.get("entry_result", {}) or {})
+        self.brain_snapshot = dict(runtime_brain_snapshot or {})
+        self.pending_impulse = None
+        self._market_tick_pending = False
+
+        world_state = dict(runtime_brain_snapshot.get("world_state", {}) or {})
+        impulse_candle_state = dict(world_state.get("candle_state", {}) or {})
+
+        if impulse_candle_state:
+            self.last_impulse = {
+                "timestamp": self.timestamp,
+                "window": [],
+                "candle_state": dict(impulse_candle_state),
+            }
+        else:
+            self.last_impulse = {}
+
+        return self.read_snapshot()
+
+    def has_impulse(self):
+
+        pending_impulse = dict(self.pending_impulse or {})
+        last_impulse = dict(self.last_impulse or {})
+
+        if pending_impulse:
+            return True
+
+        if list(last_impulse.get("window", []) or []):
+            return True
+
+        if dict(last_impulse.get("candle_state", {}) or {}):
+            return True
+
+        return False
+
+    def ingest_market_impulse(self, window, candle_state):
+
+        self.window = [dict(item or {}) for item in list(window or []) if isinstance(item, dict)]
+        self.candle_state = dict(candle_state or {})
+
+        next_timestamp = (self.window[-1] or {}).get("timestamp") if self.window else None
+        self._market_tick_pending = bool(next_timestamp != self.timestamp)
+        self.timestamp = next_timestamp
+
+        impulse = {
+            "timestamp": self.timestamp,
+            "window": [dict(item or {}) for item in list(self.window or []) if isinstance(item, dict)],
+            "candle_state": dict(self.candle_state or {}),
+        }
+
+        self.pending_impulse = dict(impulse)
+        self.last_impulse = dict(impulse)
+        return dict(impulse)
+
+    def tick(self):
+
+        if self.bot is None:
+            return None
+
+        impulse = dict(self.pending_impulse or self.last_impulse or {})
+        window = [dict(item or {}) for item in list(impulse.get("window", []) or []) if isinstance(item, dict)]
+        candle_state = dict(impulse.get("candle_state", {}) or {})
+
+        if not window:
+            return None
+
+        runtime_result, decision_tendency, timestamp = _compute_runtime_result(
+            window,
+            candle_state,
+            bot=self.bot,
+        )
+
+        if runtime_result is None:
+            return None
+
+        self.runtime_tick_seq = int(self.runtime_tick_seq or 0) + 1
+        result = _apply_runtime_result(
+            self.bot,
+            runtime_result,
+            decision_tendency,
+            timestamp,
+            runtime_tick_seq=self.runtime_tick_seq,
+            market_tick_advanced=self._market_tick_pending,
+        )
+
+        self._market_tick_pending = False
+        self.pending_impulse = None
+        self.last_result = dict(result or {})
+        self.brain_snapshot = dict(getattr(self.bot, "mcm_runtime_brain_snapshot", {}) or {})
+        return dict(result or {})
+
+    def advance(self, cycles=1):
+
+        last_result = None
+        for _ in range(max(1, int(cycles or 1))):
+            last_result = self.tick()
+            if last_result is None:
+                break
+        return last_result
+
+    def advance_idle(self, cycles=1):
+
+        if not self.has_impulse():
+            return None
+
+        return self.advance(cycles=cycles)
+
+    def read_snapshot(self):
+        return {
+            "timestamp": self.timestamp,
+            "runtime_tick_seq": int(self.runtime_tick_seq or 0),
+            "market_tick_pending": bool(self._market_tick_pending),
+            "last_impulse_timestamp": dict(self.last_impulse or {}).get("timestamp", None),
+            "brain_snapshot": dict(self.brain_snapshot or {}),
+            "last_result": dict(self.last_result or {}),
+        }
+    
+# --------------------------------------------------
+def step_mcm_runtime_idle(bot=None, cycles=1):
+
+    if bot is None:
+        return None
+
+    runtime = getattr(bot, "mcm_runtime", None)
+
+    if runtime is None:
+        return None
+
+    return runtime.advance_idle(
+        cycles=max(1, int(cycles or 1)),
+    )
+
+# --------------------------------------------------
+def create_mcm_runtime(bot=None):
+    runtime = MCMBrainRuntime(bot=bot)
+    runtime.restore_from_bot()
+    return runtime
+
+# --------------------------------------------------
+# RUNTIME HELPERS
+# --------------------------------------------------
+def _build_runtime_hold_decision(bot, candle_state=None, tension_state=None, decision_tendency="hold", reason="runtime_hold"):
+
+    candle = dict(candle_state or {})
+    tension = dict(tension_state or {})
+    snapshot = dict(getattr(bot, "mcm_snapshot", {}) or {}) if bot is not None else {}
+    expectation_state = dict(getattr(bot, "expectation_state", {}) or {}) if bot is not None else {}
+    structure_perception_state = dict(getattr(bot, "structure_perception_state", {}) or {}) if bot is not None else {}
+    outer_visual_perception_state = dict(getattr(bot, "outer_visual_perception_state", {}) or {}) if bot is not None else {}
+    inner_field_perception_state = dict(getattr(bot, "inner_field_perception_state", {}) or {}) if bot is not None else {}
+    processing_state = dict(getattr(bot, "processing_state", {}) or {}) if bot is not None else {}
+    perception_state = dict(getattr(bot, "perception_state", {}) or {}) if bot is not None else {}
+    felt_state = dict(getattr(bot, "felt_state", {}) or {}) if bot is not None else {}
+    thought_state = dict(getattr(bot, "thought_state", {}) or {}) if bot is not None else {}
+    meta_regulation_state = dict(getattr(bot, "meta_regulation_state", {}) or {}) if bot is not None else {}
+    state_signature = dict(getattr(bot, "last_signature_context", {}) or {}) if bot is not None else {}
+
+    strongest_memory = dict(snapshot.get("strongest_memory", {}) or {})
+    proposed_decision = str(meta_regulation_state.get("decision", "WAIT") or "WAIT").upper().strip()
+
+    return {
+        "decision": "WAIT",
+        "entry_price": 0.0,
+        "sl_price": 0.0,
+        "tp_price": 0.0,
+        "rr_value": 0.0,
+        "entry_validity_band": {},
+        "target_conviction": 0.0,
+        "risk_model_score": 0.0,
+        "reward_model_score": 0.0,
+        "energy": float(tension.get("energy", 0.0) or 0.0),
+        "coherence": float(tension.get("coherence", 0.0) or 0.0),
+        "asymmetry": int(tension.get("asymmetry", 0) or 0),
+        "coh_zone": float(tension.get("coh_zone", 0.0) or 0.0),
+        "self_state": str(snapshot.get("self_state", getattr(bot, "mcm_last_action", "stable") if bot is not None else "stable") or "stable"),
+        "attractor": str(snapshot.get("attractor", getattr(bot, "mcm_last_attractor", "neutral") if bot is not None else "neutral") or "neutral"),
+        "memory_center": float(strongest_memory.get("center", 0.0) or 0.0),
+        "memory_strength": int(strongest_memory.get("strength", 0) or 0),
+        "vision": {},
+        "filtered_vision": {},
+        "focus": {
+            "focus_direction": float(getattr(bot, "focus_point", 0.0) or 0.0) if bot is not None else 0.0,
+            "focus_strength": 0.0,
+            "focus_confidence": float(getattr(bot, "focus_confidence", 0.0) or 0.0) if bot is not None else 0.0,
+            "target_lock": float(getattr(bot, "target_lock", 0.0) or 0.0) if bot is not None else 0.0,
+            "noise_damp": 0.0,
+            "signal_relevance": float(getattr(bot, "last_signal_relevance", 0.0) or 0.0) if bot is not None else 0.0,
+        },
+        "world_state": {
+            "candle_state": dict(candle or {}),
+            "tension_state": dict(tension or {}),
+            "structure_perception_state": dict(structure_perception_state or {}),
+        },
+        "structure_perception_state": dict(structure_perception_state or {}),
+        "outer_visual_perception_state": dict(outer_visual_perception_state or {}),
+        "inner_field_perception_state": dict(inner_field_perception_state or {}),
+        "processing_state": dict(processing_state or {}),
+        "perception_state": dict(perception_state or {}),
+        "felt_state": dict(felt_state or {}),
+        "thought_state": dict(thought_state or {}),
+        "meta_regulation_state": dict(meta_regulation_state or {}),
+        "expectation_state": dict(expectation_state or {}),
+        "state_signature": dict(state_signature or {}),
+        "signature_bias": 0.0,
+        "signature_block": False,
+        "signature_quality": 0.0,
+        "signature_distance": 0.0,
+        "context_cluster_id": "-",
+        "context_cluster_bias": 0.0,
+        "context_cluster_quality": 0.0,
+        "context_cluster_distance": 0.0,
+        "context_cluster_block": False,
+        "inhibition_level": float(getattr(bot, "inhibition_level", 0.0) or 0.0) if bot is not None else 0.0,
+        "habituation_level": float(getattr(bot, "habituation_level", 0.0) or 0.0) if bot is not None else 0.0,
+        "competition_bias": float(getattr(bot, "competition_bias", 0.0) or 0.0) if bot is not None else 0.0,
+        "observation_mode": bool(getattr(bot, "observation_mode", False)) if bot is not None else False,
+        "long_score": 0.0,
+        "short_score": 0.0,
+        "decision_tendency": str(decision_tendency or "hold"),
+        "proposed_decision": str(proposed_decision or "WAIT"),
+        "rejection_reason": str(reason or "runtime_hold"),
+    }
+
+# --------------------------------------------------
+def step_mcm_runtime(window, candle_state, bot=None):
+
+    if bot is None or not window:
+        return None
+
+    runtime = getattr(bot, "mcm_runtime", None)
+
+    if runtime is None:
+        runtime_result, decision_tendency, timestamp = _compute_runtime_result(
+            window,
+            candle_state,
+            bot=bot,
+        )
+
+        if runtime_result is None:
+            return None
+
+        return _apply_runtime_result(
+            bot,
+            runtime_result,
+            decision_tendency,
+            timestamp,
+            runtime_tick_seq=int(getattr(bot, "mcm_runtime_market_ticks", 0) or 0) + 1,
+            market_tick_advanced=True,
+        )
+
+    runtime.ingest_market_impulse(window, candle_state)
+    runtime_cycles = int(getattr(Config, "MCM_RUNTIME_TICKS_PER_WINDOW", 3) or 3)
+    return runtime.advance(runtime_cycles)
+
+# --------------------------------------------------
+def _experience_reward_delta(summary):
+
+    item = dict(summary or {})
+    event_name = str(item.get("event_name", "") or "").strip().lower()
+    outcome_reason = str(item.get("outcome_reason", "") or "").strip().lower()
+    plan_quality = float(item.get("plan_quality", 0.0) or 0.0)
+    execution_quality = float(item.get("execution_quality", 0.0) or 0.0)
+    risk_fit_quality = float(item.get("risk_fit_quality", 0.0) or 0.0)
+
+    if outcome_reason == "tp_hit":
+        return float(0.85 + (plan_quality * 0.10) + (execution_quality * 0.10))
+
+    if outcome_reason == "sl_hit":
+        return float(-0.85 - ((1.0 - risk_fit_quality) * 0.15))
+
+    if outcome_reason in ("cancel", "timeout", "reward_too_small", "rr_too_low", "sl_distance_too_high"):
+        return float(-0.35 - ((1.0 - max(plan_quality, execution_quality)) * 0.10))
+
+    if event_name in ("observed_only", "withheld", "replanned", "abandoned"):
+        return -0.12
+
+    if event_name == "submitted":
+        return 0.08
+
+    if event_name == "filled":
+        return 0.12
+
+    return 0.0
+
+# --------------------------------------------------
+def _refresh_experience_space(bot, timestamp=None, decision_tendency=None, event_name=None):
+
+    if bot is None:
+        return None
+
+    experience_space = dict(getattr(bot, "mcm_experience_space", {}) or {})
+    summary = _build_experience_episode_summary(
+        bot,
+        timestamp=timestamp,
+        decision_tendency=decision_tendency,
+        event_name=event_name,
+    )
+
+    experience_space["market_ticks"] = int(getattr(bot, "mcm_runtime_market_ticks", 0) or 0)
+    experience_space["runtime_tick_seq"] = int(((getattr(bot, "mcm_runtime_snapshot", {}) or {}).get("runtime_tick_seq", 0)) or 0)
+    experience_space["last_timestamp"] = summary.get("timestamp", None)
+    experience_space["last_episode_id"] = str(summary.get("episode_id", "") or "")
+    experience_space["last_proposed_decision"] = str(summary.get("proposed_decision", "WAIT") or "WAIT")
+    experience_space["last_self_state"] = str(summary.get("self_state", "stable") or "stable")
+    experience_space["last_attractor"] = str(summary.get("attractor", "neutral") or "neutral")
+
+    if decision_tendency is not None:
+        tendency_key = str(decision_tendency or "hold").strip().lower() or "hold"
+        experience_space["runtime_internal_ticks"] = int(experience_space.get("runtime_internal_ticks", 0) or 0) + 1
+        experience_space[f"tendency_{tendency_key}"] = int(experience_space.get(f"tendency_{tendency_key}", 0) or 0) + 1
+
+    if event_name is not None:
+        normalized_event = str(event_name or "runtime_event").strip().lower() or "runtime_event"
+        experience_space[f"event_{normalized_event}"] = int(experience_space.get(f"event_{normalized_event}", 0) or 0) + 1
+        experience_space["last_event"] = str(normalized_event)
+        experience_space["last_event_timestamp"] = summary.get("timestamp", None)
+
+    if summary.get("non_action_type"):
+        experience_space["last_non_action_type"] = str(summary.get("non_action_type") or "")
+
+    if str(summary.get("outcome_reason", "-") or "-") != "-":
+        experience_space["last_outcome_reason"] = str(summary.get("outcome_reason", "-") or "-")
+
+    experience_space = _append_experience_episode(experience_space, summary)
+    experience_space = _update_experience_link_bucket(experience_space, "signature_links", summary.get("signature_key"), summary)
+    experience_space = _update_experience_link_bucket(experience_space, "context_links", summary.get("context_cluster_id"), summary)
+    experience_space = _update_experience_link_bucket(
+        experience_space,
+        "decision_links",
+        f"{str(summary.get('decision_tendency', 'hold') or 'hold')}::{str(summary.get('proposed_decision', 'WAIT') or 'WAIT')}",
+        summary,
+    )
+
+    non_action_type = summary.get("non_action_type", None)
+    if non_action_type:
+        experience_space = _update_experience_link_bucket(experience_space, "non_action_links", non_action_type, summary)
+
+    bot.mcm_experience_space = dict(experience_space)
+    return dict(experience_space)
+
+# --------------------------------------------------
+def _update_experience_link_bucket(space, bucket_name, link_key, summary):
+
+    experience_space = dict(space or {})
+    normalized_key = str(link_key or "").strip()
+
+    if not normalized_key or normalized_key == "-":
+        return dict(experience_space)
+
+    bucket = dict(experience_space.get(bucket_name, {}) or {})
+    item = dict(bucket.get(normalized_key, {}) or {})
+    summary_item = dict(summary or {})
+    delta = float(_experience_reward_delta(summary_item) or 0.0)
+
+    previous_context = str(item.get("last_context_cluster_id", "-") or "-")
+    current_context = str(summary_item.get("context_cluster_id", "-") or "-")
+    previous_self_state = str(item.get("last_self_state", "-") or "-")
+    current_self_state = str(summary_item.get("self_state", "stable") or "stable")
+
+    relocation_count = int(item.get("relocation_count", 0) or 0)
+
+    if previous_context not in ("", "-") and current_context not in ("", "-") and previous_context != current_context:
+        relocation_count += 1
+
+    if previous_self_state not in ("", "-") and current_self_state not in ("", "-") and previous_self_state != current_self_state:
+        relocation_count += 1
+
+    drift_value = float(item.get("drift", 0.0) or 0.0)
+    drift_input = abs(float(summary_item.get("competition_bias", 0.0) or 0.0))
+
+    if summary_item.get("non_action_type"):
+        drift_input += 0.12
+
+    drift_value = float((drift_value * 0.74) + drift_input)
+
+    reinforcement = float(item.get("reinforcement", 0.0) or 0.0)
+    attenuation = float(item.get("attenuation", 0.0) or 0.0)
+
+    if delta >= 0.0:
+        reinforcement = float((reinforcement * 0.88) + delta)
+        attenuation = float(attenuation * 0.94)
+    else:
+        reinforcement = float(reinforcement * 0.94)
+        attenuation = float((attenuation * 0.82) + abs(delta))
+
+    episodes = list(item.get("episodes", []) or [])
+    episodes.append({
+        "episode_id": str(summary_item.get("episode_id", "") or ""),
+        "timestamp": summary_item.get("timestamp", None),
+        "event_name": str(summary_item.get("event_name", "-") or "-"),
+        "decision_tendency": str(summary_item.get("decision_tendency", "hold") or "hold"),
+        "outcome_reason": str(summary_item.get("outcome_reason", "-") or "-"),
+        "non_action_type": summary_item.get("non_action_type", None),
+    })
+
+    item["link_key"] = str(normalized_key)
+    item["seen"] = int(item.get("seen", 0) or 0) + 1
+    item["last_episode_id"] = str(summary_item.get("episode_id", "") or "")
+    item["last_timestamp"] = summary_item.get("timestamp", None)
+    item["last_event"] = str(summary_item.get("event_name", "-") or "-")
+    item["last_decision_tendency"] = str(summary_item.get("decision_tendency", "hold") or "hold")
+    item["last_outcome_reason"] = str(summary_item.get("outcome_reason", "-") or "-")
+    item["last_context_cluster_id"] = str(current_context)
+    item["last_self_state"] = str(current_self_state)
+    item["last_attractor"] = str(summary_item.get("attractor", "neutral") or "neutral")
+    item["drift"] = float(drift_value)
+    item["reinforcement"] = float(reinforcement)
+    item["attenuation"] = float(attenuation)
+    item["relocation_count"] = int(relocation_count)
+    item["episodes"] = list(episodes[-12:])
+
+    outcome_reason = str(summary_item.get("outcome_reason", "-") or "-").strip().lower()
+
+    if outcome_reason == "tp_hit":
+        item["tp"] = int(item.get("tp", 0) or 0) + 1
+    elif outcome_reason == "sl_hit":
+        item["sl"] = int(item.get("sl", 0) or 0) + 1
+    elif outcome_reason == "cancel":
+        item["cancel"] = int(item.get("cancel", 0) or 0) + 1
+    elif outcome_reason == "timeout":
+        item["timeout"] = int(item.get("timeout", 0) or 0) + 1
+
+    if summary_item.get("non_action_type"):
+        item["non_action"] = int(item.get("non_action", 0) or 0) + 1
+
+    bucket[str(normalized_key)] = dict(item)
+    experience_space[str(bucket_name)] = dict(bucket)
+    return dict(experience_space)
+
+# --------------------------------------------------
+def _append_experience_episode(space, summary):
+
+    experience_space = dict(space or {})
+    history = list(experience_space.get("episode_links", []) or [])
+    history.append({
+        "episode_id": str((summary or {}).get("episode_id", "") or ""),
+        "timestamp": (summary or {}).get("timestamp", None),
+        "event_name": str((summary or {}).get("event_name", "-") or "-"),
+        "decision_tendency": str((summary or {}).get("decision_tendency", "hold") or "hold"),
+        "proposed_decision": str((summary or {}).get("proposed_decision", "WAIT") or "WAIT"),
+        "signature_key": str((summary or {}).get("signature_key", "-") or "-"),
+        "context_cluster_id": str((summary or {}).get("context_cluster_id", "-") or "-"),
+        "outcome_reason": str((summary or {}).get("outcome_reason", "-") or "-"),
+        "non_action_type": (summary or {}).get("non_action_type", None),
+    })
+    experience_space["episode_links"] = list(history[-32:])
+    return dict(experience_space)
+
+# --------------------------------------------------
+def _build_experience_episode_summary(bot, timestamp=None, decision_tendency=None, event_name=None):
+
+    episode = dict(getattr(bot, "mcm_decision_episode", {}) or {}) if bot is not None else {}
+    episode_internal = dict(getattr(bot, "mcm_decision_episode_internal", {}) or {}) if bot is not None else {}
+    outcome_decomposition = dict(getattr(bot, "last_outcome_decomposition", {}) or {}) if bot is not None else {}
+
+    signal = dict(episode_internal.get("signal", {}) or {})
+    inner_field = dict(episode_internal.get("inner_field_perception_state", {}) or {})
+    focus = dict(episode_internal.get("focus", {}) or {})
+    state_signature = dict(episode.get("state_signature", {}) or {})
+    last_payload = dict(episode_internal.get("last_payload", episode.get("last_payload", {})) or {})
+
+    summary_timestamp = timestamp
+    if summary_timestamp is None:
+        summary_timestamp = episode.get("timestamp", episode_internal.get("timestamp", None))
+
+    summary_event_name = str(event_name or episode_internal.get("last_event", episode.get("last_event", "-")) or "-").strip().lower() or "-"
+    summary_decision_tendency = str(decision_tendency or episode.get("decision_tendency", (getattr(bot, "mcm_runtime_decision_state", {}) or {}).get("decision_tendency", "hold")) or "hold").strip().lower()
+    summary_outcome_reason = str(outcome_decomposition.get("reason", last_payload.get("reason", "-")) or "-").strip().lower() or "-"
+
+    if summary_outcome_reason == "blocked_value_gate":
+        summary_outcome_reason = str(last_payload.get("reason", "blocked_value_gate") or "blocked_value_gate").strip().lower()
+
+    return {
+        "episode_id": str(episode.get("episode_id", "") or ""),
+        "visible_episode_id": str(episode_internal.get("visible_episode_id", episode.get("episode_id", "")) or ""),
+        "timestamp": summary_timestamp,
+        "event_name": str(summary_event_name),
+        "decision_tendency": str(summary_decision_tendency),
+        "proposed_decision": str(episode.get("proposed_decision", (getattr(bot, "mcm_runtime_decision_state", {}) or {}).get("proposed_decision", "WAIT")) or "WAIT"),
+        "signature_key": str(state_signature.get("signature_key", getattr(bot, "last_signature_key", None) if bot is not None else None) or "-"),
+        "context_cluster_id": str(signal.get("context_cluster_id", getattr(bot, "last_context_cluster_id", None) if bot is not None else None) or "-"),
+        "self_state": str(inner_field.get("self_state", getattr(bot, "mcm_last_action", "stable") if bot is not None else "stable") or "stable"),
+        "attractor": str(inner_field.get("attractor", getattr(bot, "mcm_last_attractor", "neutral") if bot is not None else "neutral") or "neutral"),
+        "focus_confidence": float(focus.get("focus_confidence", getattr(bot, "focus_confidence", 0.0) if bot is not None else 0.0) or 0.0),
+        "competition_bias": float(signal.get("competition_bias", getattr(bot, "competition_bias", 0.0) if bot is not None else 0.0) or 0.0),
+        "non_action_type": str(episode_internal.get("non_action_type", "") or "").strip().lower() or None,
+        "outcome_reason": str(summary_outcome_reason),
+        "perception_quality": float(outcome_decomposition.get("perception_quality", 0.0) or 0.0),
+        "felt_quality": float(outcome_decomposition.get("felt_quality", 0.0) or 0.0),
+        "thought_quality": float(outcome_decomposition.get("thought_quality", 0.0) or 0.0),
+        "plan_quality": float(outcome_decomposition.get("plan_quality", 0.0) or 0.0),
+        "execution_quality": float(outcome_decomposition.get("execution_quality", 0.0) or 0.0),
+        "risk_fit_quality": float(outcome_decomposition.get("risk_fit_quality", 0.0) or 0.0),
+    }
+
+# --------------------------------------------------
+def mark_runtime_episode_event(bot, event_name, payload=None):
+
+    if bot is None:
+        return None
+
+    event_key = str(event_name or "").strip().lower() or "runtime_event"
+    payload_dict = dict(payload or {})
+    timestamp = getattr(bot, "current_timestamp", None)
+
+    episode = dict(getattr(bot, "mcm_decision_episode", {}) or {})
+    episode_internal = dict(getattr(bot, "mcm_decision_episode_internal", {}) or {})
+
+    if not episode:
+        bot.mcm_episode_seq = int(getattr(bot, "mcm_episode_seq", 0) or 0) + 1
+        episode = {
+            "episode_id": f"ep_{int(getattr(bot, 'mcm_episode_seq', 0) or 0)}",
+            "timestamp": timestamp,
+            "lifecycle_state": "event_only",
+            "action_status": "open",
+            "decision_tendency": str(((getattr(bot, "mcm_runtime_decision_state", {}) or {}).get("decision_tendency", "hold") or "hold")),
+            "proposed_decision": str(((getattr(bot, "mcm_runtime_decision_state", {}) or {}).get("proposed_decision", "WAIT") or "WAIT")),
+            "events": [],
+        }
+
+    if not episode_internal:
+        episode_internal = {
+            "episode_id": str(episode.get("episode_id", "") or ""),
+            "visible_episode_id": str(episode.get("episode_id", "") or ""),
+            "timestamp": timestamp,
+            "learning_state": "open",
+            "internal_events": [],
+            "review_notes": {},
+        }
+
+    status_map = {
+        "submitted": ("submitted", "submitted"),
+        "blocked_value_gate": ("blocked", "blocked_value_gate"),
+        "observed_only": ("observed_only", "observed_only"),
+        "withheld": ("withheld", "withheld"),
+        "replanned": ("replanned", "replanned"),
+        "abandoned": ("abandoned", "abandoned"),
+        "cancelled": ("cancelled", "cancelled"),
+        "filled": ("filled", "filled"),
+        "timeout": ("timeout", "timeout"),
+        "resolved": ("resolved", "resolved"),
+        "reviewed": ("reviewed", "reviewed"),
+    }
+
+    action_status, lifecycle_state = status_map.get(event_key, (event_key, event_key))
+
+    events = list(episode.get("events", []) or [])
+    events.append({
+        "event": str(event_key),
+        "timestamp": timestamp,
+        "payload": dict(payload_dict or {}),
+    })
+
+    internal_events = list(episode_internal.get("internal_events", []) or [])
+    internal_events.append({
+        "event": str(event_key),
+        "timestamp": timestamp,
+        "payload": dict(payload_dict or {}),
+    })
+
+    episode["timestamp"] = timestamp
+    episode["action_status"] = str(action_status)
+    episode["lifecycle_state"] = str(lifecycle_state)
+    episode["last_event"] = str(event_key)
+    episode["last_payload"] = dict(payload_dict or {})
+    episode["events"] = list(events[-24:])
+    episode[f"{event_key}_at"] = timestamp
+
+    episode_internal["episode_id"] = str(episode.get("episode_id", "") or "")
+    episode_internal["visible_episode_id"] = str(episode.get("episode_id", "") or "")
+    episode_internal["timestamp"] = timestamp
+    episode_internal["learning_state"] = "ready_for_review" if event_key in ("resolved", "cancelled", "timeout", "blocked_value_gate", "observed_only", "withheld", "replanned", "abandoned") else str(episode_internal.get("learning_state", "open") or "open")
+    episode_internal["last_event"] = str(event_key)
+    episode_internal["last_payload"] = dict(payload_dict or {})
+    episode_internal["internal_events"] = list(internal_events[-24:])
+    episode_internal[f"{event_key}_at"] = timestamp
+
+    if event_key in ("observed_only", "withheld", "replanned", "abandoned"):
+        episode_internal["non_action_type"] = str(event_key)
+
+    if event_key in ("blocked_value_gate", "observed_only", "withheld", "replanned", "abandoned", "cancelled", "timeout", "resolved", "reviewed"):
+        episode_internal["review_notes"] = _build_episode_review_notes(
+            bot,
+            episode=episode,
+            episode_internal=episode_internal,
+            event_name=event_key,
+            timestamp=timestamp,
+        )
+
+    bot.mcm_decision_episode = dict(episode)
+    bot.mcm_decision_episode_internal = dict(episode_internal)
+
+    _refresh_experience_space(
+        bot,
+        timestamp=timestamp,
+        event_name=event_key,
+    )
+
+    return dict(episode)
 
 # --------------------------------------------------
 # DEBUG
@@ -194,7 +813,6 @@ def build_focus_projection(candle_state, tension_state, vision, pause_mode=False
     }
 
 
-# --------------------------------------------------
 def apply_focus_filter(candle_state, tension_state, vision, focus, pause_mode=False):
 
     left_eye_field = float(vision.get("left_eye_field", 0.0) or 0.0)
@@ -260,7 +878,6 @@ def apply_focus_filter(candle_state, tension_state, vision, focus, pause_mode=Fa
     }
 
 
-# --------------------------------------------------
 def build_mcm_stimulus(candle_state, tension_state, pause_mode=False, bot=None):
 
     vision = build_market_vision(candle_state, tension_state)
@@ -286,7 +903,6 @@ def build_mcm_stimulus(candle_state, tension_state, pause_mode=False, bot=None):
     }
 
 
-# --------------------------------------------------
 def build_neural_modulation(bot, stimulus):
 
     if bot is None:
@@ -1719,7 +2335,6 @@ def classify_state_cluster(bot, state_signature):
 
 
 # --------------------------------------------------
-# --------------------------------------------------
 def merge_similar_signatures(bot):
 
     if bot is None:
@@ -1801,7 +2416,7 @@ def merge_similar_signatures(bot):
     bot.context_clusters = merged_clusters
     return merged_clusters
 
-# --------------------------------------------------
+
 # --------------------------------------------------
 def split_unstable_cluster(bot):
 
@@ -1878,7 +2493,8 @@ def split_unstable_cluster(bot):
 
     bot.context_clusters = updated_clusters
     return updated_clusters
-# --------------------------------------------------
+
+
 # --------------------------------------------------
 def update_context_cluster_outcome(bot, cluster_id, outcome=None):
 
@@ -1953,7 +2569,8 @@ def update_context_cluster_outcome(bot, cluster_id, outcome=None):
         "radius": float(cluster.get("radius", 0.0) or 0.0),
         "last_outcome": cluster.get("last_outcome"),
     }
-# --------------------------------------------------
+
+
 # --------------------------------------------------
 def lookup_context_cluster(bot, state_signature):
 
@@ -2643,12 +3260,10 @@ def commit_pending_learning_context(bot, outcome=None):
 # --------------------------------------------------
 # ENTRY API
 # --------------------------------------------------
-def decide_mcm_brain_entry(window, candle_state, bot=None):
+def _compute_runtime_entry_result(window, candle_state, bot=None):
 
     if not window:
         return None
-
-    last = window[-1]
 
     tension_state = build_tension_state_from_window(window)
 
@@ -2726,7 +3341,7 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
         decision=str(fused_preview.get("decision", "WAIT") or "WAIT"),
         expectation_state=expectation_state,
     )
-    
+
     state_signature = build_state_signature(candle_state, tension_state, snapshot, stimulus, bot=bot)
 
     register_pending_learning_context(
@@ -2829,7 +3444,7 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
         "outer_visual_perception_state": dict(outer_visual_perception_state or {}),
         "inner_field_perception_state": dict(inner_field_perception_state or {}),
         "processing_state": dict(processing_state or {}),
-        "perception_state": dict(perception_state or {}),        
+        "perception_state": dict(perception_state or {}),
         "felt_state": dict(felt_state or {}),
         "thought_state": dict(thought_state or {}),
         "meta_regulation_state": dict(meta_regulation_state or {}),
@@ -2850,4 +3465,472 @@ def decide_mcm_brain_entry(window, candle_state, bot=None):
         "observation_mode": bool(neural_state.get("observation_mode", False)),
         "long_score": float(fused.get("long_score", 0.0) or 0.0),
         "short_score": float(fused.get("short_score", 0.0) or 0.0),
+    }
+
+# --------------------------------------------------
+def decide_mcm_brain_entry(window, candle_state, bot=None):
+
+    if bot is None or not window:
+        return None
+
+    timestamp = (window[-1] or {}).get("timestamp")
+    decision_state = dict(getattr(bot, "mcm_runtime_decision_state", {}) or {})
+
+    if decision_state.get("timestamp") != timestamp:
+        return None
+
+    entry_result = dict(decision_state.get("entry_result", {}) or {})
+
+    if not entry_result:
+        return None
+
+    decision = str(entry_result.get("decision", "WAIT") or "WAIT").upper().strip()
+
+    if decision not in ("LONG", "SHORT"):
+        return dict(entry_result)
+
+    return dict(entry_result)
+
+# --------------------------------------------------
+def build_runtime_decision_tendency(window, candle_state, bot=None):
+
+    if bot is None or not window:
+        return None
+
+    timestamp = (window[-1] or {}).get("timestamp")
+    decision_state = dict(getattr(bot, "mcm_runtime_decision_state", {}) or {})
+    brain_snapshot = dict(getattr(bot, "mcm_runtime_brain_snapshot", {}) or {})
+
+    if decision_state.get("timestamp") != timestamp:
+        tension_state = build_tension_state_from_window(window)
+        hold_result = _build_runtime_hold_decision(
+            bot,
+            candle_state=candle_state,
+            tension_state=tension_state,
+            decision_tendency="hold",
+            reason="runtime_timestamp_miss",
+        )
+
+        return {
+            "timestamp": timestamp,
+            "runtime_tick_seq": int(decision_state.get("runtime_tick_seq", 0) or 0),
+            "decision_tendency": str(hold_result.get("decision_tendency", "hold") or "hold"),
+            "proposed_decision": str(hold_result.get("proposed_decision", "WAIT") or "WAIT"),
+            "allow_plan": bool((hold_result.get("meta_regulation_state", {}) or {}).get("allow_plan", False)),
+            "observation_mode": bool(hold_result.get("observation_mode", False)),
+            "self_state": str(hold_result.get("self_state", "stable") or "stable"),
+            "attractor": str(hold_result.get("attractor", "neutral") or "neutral"),
+            "focus": dict(hold_result.get("focus", {}) or {}),
+            "world_state": dict(hold_result.get("world_state", {}) or {}),
+            "structure_perception_state": dict(hold_result.get("structure_perception_state", {}) or {}),
+            "outer_visual_perception_state": dict(hold_result.get("outer_visual_perception_state", {}) or {}),
+            "inner_field_perception_state": dict(hold_result.get("inner_field_perception_state", {}) or {}),
+            "perception_state": dict(hold_result.get("perception_state", {}) or {}),
+            "processing_state": dict(hold_result.get("processing_state", {}) or {}),
+            "felt_state": dict(hold_result.get("felt_state", {}) or {}),
+            "thought_state": dict(hold_result.get("thought_state", {}) or {}),
+            "meta_regulation_state": dict(hold_result.get("meta_regulation_state", {}) or {}),
+            "expectation_state": dict(hold_result.get("expectation_state", {}) or {}),
+            "state_signature": dict(hold_result.get("state_signature", {}) or {}),
+            "signature_bias": float(hold_result.get("signature_bias", 0.0) or 0.0),
+            "signature_block": bool(hold_result.get("signature_block", False)),
+            "signature_quality": float(hold_result.get("signature_quality", 0.0) or 0.0),
+            "signature_distance": float(hold_result.get("signature_distance", 0.0) or 0.0),
+            "context_cluster_id": str(hold_result.get("context_cluster_id", "-") or "-"),
+            "context_cluster_bias": float(hold_result.get("context_cluster_bias", 0.0) or 0.0),
+            "context_cluster_quality": float(hold_result.get("context_cluster_quality", 0.0) or 0.0),
+            "context_cluster_distance": float(hold_result.get("context_cluster_distance", 0.0) or 0.0),
+            "context_cluster_block": bool(hold_result.get("context_cluster_block", False)),
+            "inhibition_level": float(hold_result.get("inhibition_level", 0.0) or 0.0),
+            "habituation_level": float(hold_result.get("habituation_level", 0.0) or 0.0),
+            "competition_bias": float(hold_result.get("competition_bias", 0.0) or 0.0),
+            "long_score": float(hold_result.get("long_score", 0.0) or 0.0),
+            "short_score": float(hold_result.get("short_score", 0.0) or 0.0),
+            "rejection_reason": str(hold_result.get("rejection_reason", "runtime_timestamp_miss") or "runtime_timestamp_miss"),
+        }
+
+    entry_result = dict(decision_state.get("entry_result", {}) or {})
+    signal_state = dict(brain_snapshot.get("signal", {}) or {})
+    focus_state = dict(brain_snapshot.get("focus", {}) or {})
+    world_state = dict(brain_snapshot.get("world_state", {}) or {})
+
+    return {
+        "timestamp": timestamp,
+        "runtime_tick_seq": int(decision_state.get("runtime_tick_seq", 0) or 0),
+        "decision_tendency": str(decision_state.get("decision_tendency", entry_result.get("decision_tendency", "hold")) or "hold"),
+        "proposed_decision": str(decision_state.get("proposed_decision", entry_result.get("proposed_decision", entry_result.get("decision", "WAIT"))) or "WAIT"),
+        "allow_plan": bool(decision_state.get("allow_plan", False)),
+        "observation_mode": bool(signal_state.get("observation_mode", entry_result.get("observation_mode", False))),
+        "self_state": str(brain_snapshot.get("self_state", entry_result.get("self_state", "stable")) or "stable"),
+        "attractor": str(brain_snapshot.get("attractor", entry_result.get("attractor", "neutral")) or "neutral"),
+        "focus": dict(focus_state or {}),
+        "world_state": dict(world_state or entry_result.get("world_state", {}) or {}),
+        "structure_perception_state": dict(brain_snapshot.get("structure_perception_state", entry_result.get("structure_perception_state", {})) or {}),
+        "outer_visual_perception_state": dict(brain_snapshot.get("outer_visual_perception_state", entry_result.get("outer_visual_perception_state", {})) or {}),
+        "inner_field_perception_state": dict(brain_snapshot.get("inner_field_perception_state", entry_result.get("inner_field_perception_state", {})) or {}),
+        "perception_state": dict(brain_snapshot.get("perception_state", entry_result.get("perception_state", {})) or {}),
+        "processing_state": dict(brain_snapshot.get("processing_state", entry_result.get("processing_state", {})) or {}),
+        "felt_state": dict(brain_snapshot.get("felt_state", entry_result.get("felt_state", {})) or {}),
+        "thought_state": dict(brain_snapshot.get("thought_state", entry_result.get("thought_state", {})) or {}),
+        "meta_regulation_state": dict(brain_snapshot.get("meta_regulation_state", entry_result.get("meta_regulation_state", {})) or {}),
+        "expectation_state": dict(brain_snapshot.get("expectation_state", entry_result.get("expectation_state", {})) or {}),
+        "state_signature": dict(brain_snapshot.get("state_signature", entry_result.get("state_signature", {})) or {}),
+        "signature_bias": float(signal_state.get("signature_bias", entry_result.get("signature_bias", 0.0)) or 0.0),
+        "signature_block": bool(signal_state.get("signature_block", entry_result.get("signature_block", False))),
+        "signature_quality": float(signal_state.get("signature_quality", entry_result.get("signature_quality", 0.0)) or 0.0),
+        "signature_distance": float(signal_state.get("signature_distance", entry_result.get("signature_distance", 0.0)) or 0.0),
+        "context_cluster_id": str(signal_state.get("context_cluster_id", entry_result.get("context_cluster_id", "-")) or "-"),
+        "context_cluster_bias": float(signal_state.get("context_cluster_bias", entry_result.get("context_cluster_bias", 0.0)) or 0.0),
+        "context_cluster_quality": float(signal_state.get("context_cluster_quality", entry_result.get("context_cluster_quality", 0.0)) or 0.0),
+        "context_cluster_distance": float(signal_state.get("context_cluster_distance", entry_result.get("context_cluster_distance", 0.0)) or 0.0),
+        "context_cluster_block": bool(signal_state.get("context_cluster_block", entry_result.get("context_cluster_block", False))),
+        "inhibition_level": float(signal_state.get("inhibition_level", entry_result.get("inhibition_level", 0.0)) or 0.0),
+        "habituation_level": float(signal_state.get("habituation_level", entry_result.get("habituation_level", 0.0)) or 0.0),
+        "competition_bias": float(signal_state.get("competition_bias", entry_result.get("competition_bias", 0.0)) or 0.0),
+        "long_score": float(signal_state.get("long_score", entry_result.get("long_score", 0.0)) or 0.0),
+        "short_score": float(signal_state.get("short_score", entry_result.get("short_score", 0.0)) or 0.0),
+        "rejection_reason": str(entry_result.get("rejection_reason", "runtime_tendency_only") or "runtime_tendency_only"),
+    }
+
+# --------------------------------------------------
+def _build_runtime_brain_snapshot(bot, runtime_result, decision_tendency, timestamp, runtime_tick_seq=0):
+
+    result = dict(runtime_result or {})
+
+    return {
+        "timestamp": timestamp,
+        "runtime_tick_seq": int(runtime_tick_seq or 0),
+        "decision_tendency": str(decision_tendency or "hold"),
+        "proposed_decision": str(result.get("proposed_decision", result.get("decision", "WAIT")) or "WAIT"),
+        "self_state": str(result.get("self_state", getattr(bot, "mcm_last_action", "stable") if bot is not None else "stable") or "stable"),
+        "attractor": str(result.get("attractor", getattr(bot, "mcm_last_attractor", "neutral") if bot is not None else "neutral") or "neutral"),
+        "world_state": dict(result.get("world_state", {}) or {}),
+        "structure_perception_state": dict(result.get("structure_perception_state", {}) or {}),
+        "outer_visual_perception_state": dict(result.get("outer_visual_perception_state", {}) or {}),
+        "inner_field_perception_state": dict(result.get("inner_field_perception_state", {}) or {}),
+        "processing_state": dict(result.get("processing_state", {}) or {}),
+        "perception_state": dict(result.get("perception_state", {}) or {}),
+        "felt_state": dict(result.get("felt_state", {}) or {}),
+        "thought_state": dict(result.get("thought_state", {}) or {}),
+        "meta_regulation_state": dict(result.get("meta_regulation_state", {}) or {}),
+        "expectation_state": dict(result.get("expectation_state", {}) or {}),
+        "state_signature": dict(result.get("state_signature", {}) or {}),
+        "focus": dict(result.get("focus", {}) or {}),
+        "signal": {
+            "signature_bias": float(result.get("signature_bias", 0.0) or 0.0),
+            "signature_block": bool(result.get("signature_block", False)),
+            "signature_quality": float(result.get("signature_quality", 0.0) or 0.0),
+            "signature_distance": float(result.get("signature_distance", 0.0) or 0.0),
+            "context_cluster_id": str(result.get("context_cluster_id", "-") or "-"),
+            "context_cluster_bias": float(result.get("context_cluster_bias", 0.0) or 0.0),
+            "context_cluster_quality": float(result.get("context_cluster_quality", 0.0) or 0.0),
+            "context_cluster_distance": float(result.get("context_cluster_distance", 0.0) or 0.0),
+            "context_cluster_block": bool(result.get("context_cluster_block", False)),
+            "inhibition_level": float(result.get("inhibition_level", 0.0) or 0.0),
+            "habituation_level": float(result.get("habituation_level", 0.0) or 0.0),
+            "competition_bias": float(result.get("competition_bias", 0.0) or 0.0),
+            "observation_mode": bool(result.get("observation_mode", False)),
+            "long_score": float(result.get("long_score", 0.0) or 0.0),
+            "short_score": float(result.get("short_score", 0.0) or 0.0),
+        },
+    }
+
+# --------------------------------------------------
+def _compute_runtime_result(window, candle_state, bot=None):
+
+    if bot is None or not window:
+        return None, None, None
+
+    timestamp = (window[-1] or {}).get("timestamp")
+    tension_state = build_tension_state_from_window(window)
+    active_position = bool(getattr(bot, "position", None))
+    active_pending = bool(getattr(bot, "pending_entry", None))
+
+    runtime_result = None
+    decision_tendency = "hold"
+
+    if active_position or active_pending:
+        if bool(getattr(bot, "observation_mode", False)):
+            decision_tendency = "observe"
+        runtime_result = _build_runtime_hold_decision(
+            bot,
+            candle_state=candle_state,
+            tension_state=tension_state,
+            decision_tendency=decision_tendency,
+            reason="runtime_active_trade",
+        )
+    else:
+        runtime_result = _compute_runtime_entry_result(
+            window=window,
+            candle_state=candle_state,
+            bot=bot,
+        )
+
+        if runtime_result is None:
+            if bool(getattr(bot, "observation_mode", False)):
+                decision_tendency = "observe"
+            runtime_result = _build_runtime_hold_decision(
+                bot,
+                candle_state=candle_state,
+                tension_state=tension_state,
+                decision_tendency=decision_tendency,
+                reason="runtime_no_plan",
+            )
+        else:
+            proposed_decision = str(runtime_result.get("decision", "WAIT") or "WAIT").upper().strip()
+            if proposed_decision in ("LONG", "SHORT"):
+                decision_tendency = "act"
+            elif bool(runtime_result.get("observation_mode", False)):
+                decision_tendency = "observe"
+            else:
+                decision_tendency = "hold"
+
+            runtime_result["decision_tendency"] = str(decision_tendency)
+            runtime_result["proposed_decision"] = str(proposed_decision or "WAIT")
+
+    return runtime_result, decision_tendency, timestamp
+
+# --------------------------------------------------
+def _apply_runtime_result(bot, runtime_result, decision_tendency, timestamp, runtime_tick_seq=0, market_tick_advanced=True):
+
+    brain_snapshot = _build_runtime_brain_snapshot(
+        bot,
+        runtime_result,
+        decision_tendency,
+        timestamp,
+        runtime_tick_seq=runtime_tick_seq,
+    )
+
+    snapshot = {
+        "timestamp": timestamp,
+        "market_ticks": int(getattr(bot, "mcm_runtime_market_ticks", 0) or 0) + (1 if bool(market_tick_advanced) else 0),
+        "runtime_tick_seq": int(runtime_tick_seq or 0),
+        "market_tick_advanced": bool(market_tick_advanced),
+        "decision_tendency": str(decision_tendency or "hold"),
+        "proposed_decision": str(runtime_result.get("proposed_decision", runtime_result.get("decision", "WAIT")) or "WAIT"),
+        "self_state": str(runtime_result.get("self_state", getattr(bot, "mcm_last_action", "stable") or "stable") or "stable"),
+        "attractor": str(runtime_result.get("attractor", getattr(bot, "mcm_last_attractor", "neutral") or "neutral") or "neutral"),
+        "focus_confidence": float(((runtime_result.get("focus", {}) or {}).get("focus_confidence", getattr(bot, "focus_confidence", 0.0)) or 0.0)),
+        "observation_mode": bool(runtime_result.get("observation_mode", False)),
+        "allow_plan": bool(((runtime_result.get("meta_regulation_state", {}) or {}).get("allow_plan", False))),
+        "brain_snapshot_ready": bool(brain_snapshot),
+    }
+
+    decision_state = {
+        "timestamp": timestamp,
+        "runtime_tick_seq": int(runtime_tick_seq or 0),
+        "decision_tendency": str(decision_tendency or "hold"),
+        "proposed_decision": str(runtime_result.get("proposed_decision", runtime_result.get("decision", "WAIT")) or "WAIT"),
+        "allow_plan": bool(((runtime_result.get("meta_regulation_state", {}) or {}).get("allow_plan", False))),
+        "entry_price": float(runtime_result.get("entry_price", 0.0) or 0.0),
+        "tp_price": float(runtime_result.get("tp_price", 0.0) or 0.0),
+        "sl_price": float(runtime_result.get("sl_price", 0.0) or 0.0),
+        "rr_value": float(runtime_result.get("rr_value", 0.0) or 0.0),
+        "entry_validity_band": dict(runtime_result.get("entry_validity_band", {}) or {}),
+        "entry_result": dict(runtime_result or {}),
+    }
+
+    bot.mcm_runtime_market_ticks = int(snapshot.get("market_ticks", 0) or 0)
+    bot.mcm_runtime_snapshot = dict(snapshot)
+    bot.mcm_runtime_decision_state = dict(decision_state)
+    bot.mcm_runtime_brain_snapshot = dict(brain_snapshot)
+
+    if decision_tendency == "observe":
+        bot.mcm_last_observe_timestamp = timestamp
+
+    episode = dict(getattr(bot, "mcm_decision_episode", {}) or {})
+    episode_internal = dict(getattr(bot, "mcm_decision_episode_internal", {}) or {})
+    episode_timestamp = episode.get("timestamp")
+
+    if episode_timestamp != timestamp:
+        bot.mcm_episode_seq = int(getattr(bot, "mcm_episode_seq", 0) or 0) + 1
+        episode = {
+            "episode_id": f"ep_{int(getattr(bot, 'mcm_episode_seq', 0) or 0)}",
+            "timestamp": timestamp,
+            "runtime_tick_seq": int(runtime_tick_seq or 0),
+            "lifecycle_state": "tendency_formed",
+            "action_status": "open",
+            "perceived_at": timestamp,
+            "internally_processed_at": timestamp,
+            "tendency_formed_at": timestamp,
+            "decision_tendency": str(decision_tendency or "hold"),
+            "proposed_decision": str(decision_state.get("proposed_decision", "WAIT") or "WAIT"),
+            "world_state": dict((runtime_result.get("world_state", {}) or {})),
+            "perception_state": dict((runtime_result.get("perception_state", {}) or {})),
+            "processing_state": dict((runtime_result.get("processing_state", {}) or {})),
+            "felt_state": dict((runtime_result.get("felt_state", {}) or {})),
+            "thought_state": dict((runtime_result.get("thought_state", {}) or {})),
+            "meta_regulation_state": dict((runtime_result.get("meta_regulation_state", {}) or {})),
+            "expectation_state": dict((runtime_result.get("expectation_state", {}) or {})),
+            "state_signature": dict((runtime_result.get("state_signature", {}) or {})),
+            "events": [],
+        }
+    else:
+        episode["runtime_tick_seq"] = int(runtime_tick_seq or 0)
+        episode["perceived_at"] = episode.get("perceived_at", timestamp)
+        episode["internally_processed_at"] = episode.get("internally_processed_at", timestamp)
+        episode["tendency_formed_at"] = timestamp
+        episode["decision_tendency"] = str(decision_tendency or "hold")
+        episode["proposed_decision"] = str(decision_state.get("proposed_decision", "WAIT") or "WAIT")
+
+        locked_action_status = str(episode.get("action_status", "open") or "open")
+        locked_lifecycle_state = str(episode.get("lifecycle_state", "tendency_formed") or "tendency_formed")
+        episode_state_locked = locked_action_status not in ("", "open") or locked_lifecycle_state not in ("", "event_only", "tendency_formed")
+
+        if not episode_state_locked:
+            episode["lifecycle_state"] = "tendency_formed"
+            episode["world_state"] = dict((runtime_result.get("world_state", {}) or {}))
+            episode["perception_state"] = dict((runtime_result.get("perception_state", {}) or {}))
+            episode["processing_state"] = dict((runtime_result.get("processing_state", {}) or {}))
+            episode["felt_state"] = dict((runtime_result.get("felt_state", {}) or {}))
+            episode["thought_state"] = dict((runtime_result.get("thought_state", {}) or {}))
+            episode["meta_regulation_state"] = dict((runtime_result.get("meta_regulation_state", {}) or {}))
+            episode["expectation_state"] = dict((runtime_result.get("expectation_state", {}) or {}))
+            episode["state_signature"] = dict((runtime_result.get("state_signature", {}) or {}))
+
+    episode_internal = _build_internal_episode_state(
+        bot,
+        runtime_result,
+        decision_tendency,
+        timestamp,
+        runtime_tick_seq=runtime_tick_seq,
+    )
+    episode_internal["episode_id"] = str(episode.get("episode_id", "") or "")
+    episode_internal["visible_episode_id"] = str(episode.get("episode_id", "") or "")
+    episode_internal["learning_state"] = str((episode_internal.get("learning_state", "open") or "open"))
+    episode_internal["internal_events"] = list((dict(getattr(bot, "mcm_decision_episode_internal", {}) or {}).get("internal_events", []) or [])[-24:])
+
+    bot.mcm_decision_episode = dict(episode)
+    bot.mcm_decision_episode_internal = dict(episode_internal)
+
+    _refresh_experience_space(
+        bot,
+        timestamp=timestamp,
+        decision_tendency=decision_tendency,
+    )
+
+    return dict(runtime_result or {})
+
+# --------------------------------------------------
+def _build_internal_episode_state(bot, runtime_result, decision_tendency, timestamp, runtime_tick_seq=0):
+
+    result = dict(runtime_result or {})
+    previous_internal = dict(getattr(bot, "mcm_decision_episode_internal", {}) or {}) if bot is not None else {}
+    focus = dict(result.get("focus", {}) or {})
+    signal = {
+        "signature_bias": float(result.get("signature_bias", 0.0) or 0.0),
+        "signature_block": bool(result.get("signature_block", False)),
+        "signature_quality": float(result.get("signature_quality", 0.0) or 0.0),
+        "signature_distance": float(result.get("signature_distance", 0.0) or 0.0),
+        "context_cluster_id": str(result.get("context_cluster_id", "-") or "-"),
+        "context_cluster_bias": float(result.get("context_cluster_bias", 0.0) or 0.0),
+        "context_cluster_quality": float(result.get("context_cluster_quality", 0.0) or 0.0),
+        "context_cluster_distance": float(result.get("context_cluster_distance", 0.0) or 0.0),
+        "context_cluster_block": bool(result.get("context_cluster_block", False)),
+        "inhibition_level": float(result.get("inhibition_level", 0.0) or 0.0),
+        "habituation_level": float(result.get("habituation_level", 0.0) or 0.0),
+        "competition_bias": float(result.get("competition_bias", 0.0) or 0.0),
+        "observation_mode": bool(result.get("observation_mode", False)),
+        "long_score": float(result.get("long_score", 0.0) or 0.0),
+        "short_score": float(result.get("short_score", 0.0) or 0.0),
+    }
+
+    return {
+        "episode_id": str((getattr(bot, "mcm_decision_episode", {}) or {}).get("episode_id", "") or ""),
+        "timestamp": timestamp,
+        "runtime_tick_seq": int(runtime_tick_seq or 0),
+        "learning_state": str(previous_internal.get("learning_state", "open") or "open"),
+        "decision_tendency": str(decision_tendency or "hold"),
+        "proposed_decision": str(result.get("proposed_decision", result.get("decision", "WAIT")) or "WAIT"),
+        "world_state": dict(result.get("world_state", {}) or {}),
+        "structure_perception_state": dict(result.get("structure_perception_state", {}) or {}),
+        "outer_visual_perception_state": dict(result.get("outer_visual_perception_state", {}) or {}),
+        "inner_field_perception_state": dict(result.get("inner_field_perception_state", {}) or {}),
+        "processing_state": dict(result.get("processing_state", {}) or {}),
+        "perception_state": dict(result.get("perception_state", {}) or {}),
+        "felt_state": dict(result.get("felt_state", {}) or {}),
+        "thought_state": dict(result.get("thought_state", {}) or {}),
+        "meta_regulation_state": dict(result.get("meta_regulation_state", {}) or {}),
+        "expectation_state": dict(result.get("expectation_state", {}) or {}),
+        "state_signature": dict(result.get("state_signature", {}) or {}),
+        "focus": dict(focus or {}),
+        "signal": dict(signal or {}),
+        "last_event": str(previous_internal.get("last_event", "") or ""),
+        "last_payload": dict(previous_internal.get("last_payload", {}) or {}),
+        "non_action_type": previous_internal.get("non_action_type", None),
+        "internal_events": list(previous_internal.get("internal_events", []) or [])[-24:],
+        "review_notes": dict(previous_internal.get("review_notes", {}) or {}),
+        "visible_episode_id": str((getattr(bot, "mcm_decision_episode", {}) or {}).get("episode_id", "") or ""),
+    }
+
+# --------------------------------------------------
+def _build_episode_review_notes(bot, episode=None, episode_internal=None, event_name=None, timestamp=None):
+
+    visible_episode = dict(episode or {})
+    internal_episode = dict(episode_internal or {})
+    outcome_decomposition = dict(getattr(bot, "last_outcome_decomposition", {}) or {}) if bot is not None else {}
+
+    thought_state = dict(internal_episode.get("thought_state", visible_episode.get("thought_state", {})) or {})
+    meta_regulation_state = dict(internal_episode.get("meta_regulation_state", visible_episode.get("meta_regulation_state", {})) or {})
+    expectation_state = dict(internal_episode.get("expectation_state", visible_episode.get("expectation_state", {})) or {})
+    signal = dict(internal_episode.get("signal", {}) or {})
+
+    plan_quality = float(outcome_decomposition.get("plan_quality", 0.0) or 0.0)
+    execution_quality = float(outcome_decomposition.get("execution_quality", 0.0) or 0.0)
+    risk_fit_quality = float(outcome_decomposition.get("risk_fit_quality", 0.0) or 0.0)
+    readiness = float(meta_regulation_state.get("readiness", 0.0) or 0.0)
+    maturity = float(meta_regulation_state.get("maturity", thought_state.get("maturity", 0.0)) or 0.0)
+    uncertainty = float(thought_state.get("uncertainty", 0.0) or 0.0)
+    conflict = float(thought_state.get("conflict", 0.0) or 0.0)
+    context_cluster_quality = float(signal.get("context_cluster_quality", 0.0) or 0.0)
+    signature_quality = float(signal.get("signature_quality", 0.0) or 0.0)
+    expectation_alignment = float(expectation_state.get("experience_regulation", 0.0) or 0.0)
+
+    review_score = (
+        (plan_quality * 0.18)
+        + (execution_quality * 0.22)
+        + (risk_fit_quality * 0.18)
+        + (readiness * 0.16)
+        + (maturity * 0.14)
+        + (context_cluster_quality * 0.06)
+        + (signature_quality * 0.06)
+        + (expectation_alignment * 0.06)
+        - (uncertainty * 0.12)
+        - (conflict * 0.08)
+    )
+    review_score = float(max(0.0, min(1.0, review_score)))
+
+    outcome_reason = str(outcome_decomposition.get("reason", (internal_episode.get("last_payload", {}) or {}).get("reason", "-")) or "-").strip().lower() or "-"
+    event_key = str(event_name or internal_episode.get("last_event", visible_episode.get("last_event", "-")) or "-").strip().lower() or "-"
+
+    if outcome_reason == "tp_hit":
+        review_label = "reinforce"
+    elif outcome_reason in ("sl_hit", "cancel", "timeout", "rr_too_low", "reward_too_small", "sl_distance_too_high"):
+        review_label = "caution"
+    elif event_key in ("observed_only", "withheld", "replanned", "abandoned", "blocked_value_gate"):
+        review_label = "observe"
+    elif review_score >= 0.62:
+        review_label = "stabilize"
+    else:
+        review_label = "reconsider"
+
+    return {
+        "review_timestamp": timestamp,
+        "review_event": str(event_key),
+        "review_label": str(review_label),
+        "review_score": float(review_score),
+        "outcome_reason": str(outcome_reason),
+        "decision_tendency": str(internal_episode.get("decision_tendency", visible_episode.get("decision_tendency", "hold")) or "hold"),
+        "proposed_decision": str(internal_episode.get("proposed_decision", visible_episode.get("proposed_decision", "WAIT")) or "WAIT"),
+        "non_action_type": internal_episode.get("non_action_type", None),
+        "readiness": float(readiness),
+        "maturity": float(maturity),
+        "uncertainty": float(uncertainty),
+        "conflict": float(conflict),
+        "plan_quality": float(plan_quality),
+        "execution_quality": float(execution_quality),
+        "risk_fit_quality": float(risk_fit_quality),
+        "signature_quality": float(signature_quality),
+        "context_cluster_quality": float(context_cluster_quality),
+        "observation_mode": bool(signal.get("observation_mode", False)),
     }

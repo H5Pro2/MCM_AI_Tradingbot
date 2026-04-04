@@ -12,9 +12,14 @@ import os
 from config import Config
 
 class TradeStats:
-    def __init__(self, path="debug/trade_stats.json", csv_path="debug/trade_equity.csv", attempt_path="debug/attempt_records.jsonl", outcome_path="debug/outcome_records.jsonl", reset=True):
-        from ph_ohlcv import create_exchange, get_account_value
-
+    def __init__(
+        self,
+        path="debug/trade_stats.json",
+        csv_path="debug/trade_equity.csv",
+        attempt_path="debug/attempt_records.jsonl",
+        outcome_path="debug/outcome_records.jsonl",
+        reset=True,
+    ):
         self.path = path
         self.csv_path = csv_path
         self.attempt_path = attempt_path
@@ -22,6 +27,8 @@ class TradeStats:
 
         if str(getattr(Config, "MODE", "LIVE")).upper() == "LIVE":
             try:
+                from ph_ohlcv import create_exchange, get_account_value
+
                 exchange = create_exchange()
                 start_equity = float(get_account_value(exchange, Config.USDT))
             except Exception:
@@ -49,8 +56,11 @@ class TradeStats:
             "current_timestamp": None,
             "last_outcome_decomposition": {},
             "recent_attempts": [],
-            "attempt_records": [],
-            "outcome_records": [],
+            "exploration_trades": 0,
+            "exploration_tp": 0,
+            "exploration_sl": 0,
+            "exploration_cancels": 0,
+            "exploration_pnl": 0.0,
             "equity_peak": start_equity,
             "max_drawdown_abs": 0.0,
             "max_drawdown_pct": 0.0,
@@ -90,8 +100,10 @@ class TradeStats:
         try:
             with open(self.path, "r", encoding="utf-8") as f:
                 obj = json.load(f)
-                if isinstance(obj, dict):
-                    self.data.update(obj)
+            if isinstance(obj, dict):
+                self.data.update(obj)
+                self.data.pop("attempt_records", None)
+                self.data.pop("outcome_records", None)
         except Exception:
             pass
     # ─────────────────────────────────────────────
@@ -113,12 +125,6 @@ class TradeStats:
         return str(value)
 
     # ─────────────────────────────────────────────
-    def _append_record(self, key: str, record: dict, limit: int = 40):
-        records = list(self.data.get(key, []) or [])
-        records.append(dict(record or {}))
-        self.data[key] = records[-max(1, int(limit or 1)):]
-
-    # ─────────────────────────────────────────────
     def _append_record_file(self, path: str, record: dict):
         try:
             os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -126,6 +132,35 @@ class TradeStats:
                 f.write(json.dumps(dict(record or {}), ensure_ascii=False) + "\n")
         except Exception:
             pass
+
+    # ─────────────────────────────────────────────
+    def _read_record_file(self, path: str, limit: int | None = None) -> list[dict]:
+        records = []
+
+        try:
+            if not os.path.exists(path):
+                return records
+
+            with open(path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = str(line or "").strip()
+                    if not line:
+                        continue
+
+                    try:
+                        item = json.loads(line)
+                    except Exception:
+                        continue
+
+                    if isinstance(item, dict):
+                        records.append(item)
+        except Exception:
+            return []
+
+        if limit is not None:
+            return records[-max(1, int(limit or 1)):]
+
+        return records
 
     # ─────────────────────────────────────────────
     def _structure_band(self, structure_quality: float) -> str:
@@ -159,7 +194,8 @@ class TradeStats:
 
         attempt_feedback = self.get_attempt_feedback()
 
-        outcomes = list(self.data.get("outcome_records", []) or [])
+        outcomes = self._read_record_file(self.outcome_path)
+
         band_stats = {
             "high": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0},
             "mid": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0},
@@ -406,7 +442,7 @@ class TradeStats:
         }
 
     # ─────────────────────────────────────────────
-    def on_attempt(self, *, status: str, context: dict = None):
+    def on_attempt(self, *, status: str, context: dict = None): 
         status_key = str(status or "").strip().lower()
         normalized_context = self._normalize_record_value(context or {})
 
@@ -448,13 +484,24 @@ class TradeStats:
             }
         )
         self.data["recent_attempts"] = recent[-80:]
-        self._append_record("attempt_records", attempt_record, limit=40)
         self._append_record_file(self.attempt_path, attempt_record)
         self._rebuild_kpi_summary()
         self._save()
 
     # ─────────────────────────────────────────────
-    def on_exit(self, *, entry: float, tp: float, sl: float, reason: str, side: str = None, amount: float = 1.0, exploration_trade: bool = False, outcome_decomposition: dict = None, context: dict = None):
+    def on_exit(
+        self,
+        *,
+        entry: float,
+        tp: float,
+        sl: float,
+        reason: str,
+        side: str = None,
+        amount: float = 1.0,
+        exploration_trade: bool = False,
+        outcome_decomposition: dict = None,
+        context: dict = None,
+    ):
         pnl = 0.0
 
         side = str(side).upper().strip() if side is not None else "LONG"
@@ -539,7 +586,6 @@ class TradeStats:
             "context": compact_context,
         }
 
-        self._append_record("outcome_records", outcome_record, limit=40)
         self._append_record_file(self.outcome_path, outcome_record)
 
         equity_peak = max(
@@ -619,6 +665,9 @@ class TradeStats:
         kpi_summary = dict(self.data.get("kpi_summary", {}) or {})
         proof = dict(kpi_summary.get("proof", {}) or {})
 
+        data.pop("attempt_records", None)
+        data.pop("outcome_records", None)
+
         data.update({
             "avg_win": avg_win,
             "avg_loss": avg_loss,
@@ -677,7 +726,6 @@ class TradeStats:
                     "context": compact_context,
                 }
 
-            self._append_record("outcome_records", outcome_record, limit=40)
             self._append_record_file(self.outcome_path, outcome_record)
             self._rebuild_kpi_summary()
             self._save()

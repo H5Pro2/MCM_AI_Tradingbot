@@ -27,7 +27,7 @@ class Config:
     TIMEFRAME = "5m"
     MECHANIK = "swap"
     ORDER_SIZE = 0.5
-
+    LIVE_POLL_INTERVAL_SECONDS = 1.0
     # ==================================================
     # WORKSPACE
     # ==================================================
@@ -101,6 +101,8 @@ class Config:
     MCM_PLAN_GATE_ALIGN = 0.92
     MCM_PROTECTIVE_WIDTH_GAIN = 0.95
     MCM_STRESS_WIDTH_GAIN = 0.34
+    MCM_RUNTIME_TICKS_PER_WINDOW = 3
+    MCM_RUNTIME_IDLE_TICKS = 1
     MCM_MEMORY_STATE_PATH = "bot_memory/memory_state.json"
 
     # ==================================================

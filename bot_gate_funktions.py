@@ -4,15 +4,60 @@
 # ==================================================
 from config import Config
 from debug_reader import dbr_debug
-from MCM_Brain_Modell import decide_mcm_brain_entry
+from MCM_Brain_Modell import build_runtime_decision_tendency, decide_mcm_brain_entry
+
 
 DEBUG = True
 # --------------------------------------------------
 def evaluate_entry_decision(bot, window, candle_state):
 
-    # --------------------------------------------------
-    # MCM BRAIN ENTRY
-    # --------------------------------------------------
+    tendency_state = build_runtime_decision_tendency(
+        window=window,
+        candle_state=candle_state,
+        bot=bot,
+    )
+
+    if tendency_state is None:
+        return None
+
+    decision_tendency = str(tendency_state.get("decision_tendency", "hold") or "hold").strip().lower()
+
+    if decision_tendency != "act":
+        return {
+            "decision_tendency": str(decision_tendency or "hold"),
+            "proposed_decision": str(tendency_state.get("proposed_decision", "WAIT") or "WAIT"),
+            "self_state": str(tendency_state.get("self_state", "stable") or "stable"),
+            "attractor": str(tendency_state.get("attractor", "neutral") or "neutral"),
+            "focus": dict(tendency_state.get("focus", {}) or {}),
+            "world_state": dict(tendency_state.get("world_state", {}) or {}),
+            "structure_perception_state": dict(tendency_state.get("structure_perception_state", {}) or {}),
+            "outer_visual_perception_state": dict(tendency_state.get("outer_visual_perception_state", {}) or {}),
+            "inner_field_perception_state": dict(tendency_state.get("inner_field_perception_state", {}) or {}),
+            "perception_state": dict(tendency_state.get("perception_state", {}) or {}),
+            "processing_state": dict(tendency_state.get("processing_state", {}) or {}),
+            "felt_state": dict(tendency_state.get("felt_state", {}) or {}),
+            "thought_state": dict(tendency_state.get("thought_state", {}) or {}),
+            "meta_regulation_state": dict(tendency_state.get("meta_regulation_state", {}) or {}),
+            "expectation_state": dict(tendency_state.get("expectation_state", {}) or {}),
+            "state_signature": dict(tendency_state.get("state_signature", {}) or {}),
+            "signature_bias": float(tendency_state.get("signature_bias", 0.0) or 0.0),
+            "signature_block": bool(tendency_state.get("signature_block", False)),
+            "signature_quality": float(tendency_state.get("signature_quality", 0.0) or 0.0),
+            "signature_distance": float(tendency_state.get("signature_distance", 0.0) or 0.0),
+            "context_cluster_id": str(tendency_state.get("context_cluster_id", "-") or "-"),
+            "context_cluster_bias": float(tendency_state.get("context_cluster_bias", 0.0) or 0.0),
+            "context_cluster_quality": float(tendency_state.get("context_cluster_quality", 0.0) or 0.0),
+            "context_cluster_distance": float(tendency_state.get("context_cluster_distance", 0.0) or 0.0),
+            "context_cluster_block": bool(tendency_state.get("context_cluster_block", False)),
+            "inhibition_level": float(tendency_state.get("inhibition_level", 0.0) or 0.0),
+            "habituation_level": float(tendency_state.get("habituation_level", 0.0) or 0.0),
+            "competition_bias": float(tendency_state.get("competition_bias", 0.0) or 0.0),
+            "observation_mode": bool(tendency_state.get("observation_mode", False)),
+            "long_score": float(tendency_state.get("long_score", 0.0) or 0.0),
+            "short_score": float(tendency_state.get("short_score", 0.0) or 0.0),
+            "rejection_reason": str(tendency_state.get("rejection_reason", "runtime_non_action") or "runtime_non_action"),
+        }
+
     decision = decide_mcm_brain_entry(
         window=window,
         candle_state=candle_state,
@@ -20,7 +65,40 @@ def evaluate_entry_decision(bot, window, candle_state):
     )
 
     if decision is None:
-        return None
+        return {
+            "decision_tendency": "replan",
+            "proposed_decision": str(tendency_state.get("proposed_decision", "WAIT") or "WAIT"),
+            "self_state": str(tendency_state.get("self_state", "stable") or "stable"),
+            "attractor": str(tendency_state.get("attractor", "neutral") or "neutral"),
+            "focus": dict(tendency_state.get("focus", {}) or {}),
+            "world_state": dict(tendency_state.get("world_state", {}) or {}),
+            "structure_perception_state": dict(tendency_state.get("structure_perception_state", {}) or {}),
+            "outer_visual_perception_state": dict(tendency_state.get("outer_visual_perception_state", {}) or {}),
+            "inner_field_perception_state": dict(tendency_state.get("inner_field_perception_state", {}) or {}),
+            "perception_state": dict(tendency_state.get("perception_state", {}) or {}),
+            "processing_state": dict(tendency_state.get("processing_state", {}) or {}),
+            "felt_state": dict(tendency_state.get("felt_state", {}) or {}),
+            "thought_state": dict(tendency_state.get("thought_state", {}) or {}),
+            "meta_regulation_state": dict(tendency_state.get("meta_regulation_state", {}) or {}),
+            "expectation_state": dict(tendency_state.get("expectation_state", {}) or {}),
+            "state_signature": dict(tendency_state.get("state_signature", {}) or {}),
+            "signature_bias": float(tendency_state.get("signature_bias", 0.0) or 0.0),
+            "signature_block": bool(tendency_state.get("signature_block", False)),
+            "signature_quality": float(tendency_state.get("signature_quality", 0.0) or 0.0),
+            "signature_distance": float(tendency_state.get("signature_distance", 0.0) or 0.0),
+            "context_cluster_id": str(tendency_state.get("context_cluster_id", "-") or "-"),
+            "context_cluster_bias": float(tendency_state.get("context_cluster_bias", 0.0) or 0.0),
+            "context_cluster_quality": float(tendency_state.get("context_cluster_quality", 0.0) or 0.0),
+            "context_cluster_distance": float(tendency_state.get("context_cluster_distance", 0.0) or 0.0),
+            "context_cluster_block": bool(tendency_state.get("context_cluster_block", False)),
+            "inhibition_level": float(tendency_state.get("inhibition_level", 0.0) or 0.0),
+            "habituation_level": float(tendency_state.get("habituation_level", 0.0) or 0.0),
+            "competition_bias": float(tendency_state.get("competition_bias", 0.0) or 0.0),
+            "observation_mode": bool(tendency_state.get("observation_mode", False)),
+            "long_score": float(tendency_state.get("long_score", 0.0) or 0.0),
+            "short_score": float(tendency_state.get("short_score", 0.0) or 0.0),
+            "rejection_reason": "decision_plan_missing",
+        }
 
     side = str(decision.get("decision", "")).upper().strip()
     entry_price = float(decision.get("entry_price", 0.0) or 0.0)
@@ -89,6 +167,7 @@ def evaluate_entry_decision(bot, window, candle_state):
         )
 
     return {
+        "decision_tendency": "act",
         "decision": side,
         "entry_price": entry_price,
         "tp_price": tp_price,
