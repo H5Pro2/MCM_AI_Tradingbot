@@ -196,16 +196,6 @@ Nur ein neutrales Paket, zum Beispiel:
 - Thread 1 kennt keine Orderlogik.
 
 # --------------------------------------------------
-# Was dafür konkret weg muss
-# --------------------------------------------------
-
-## Was dafür konkret weg muss
-
-- `runner.py` darf nicht mehr direkt Logik + Brain + Handlung in einem Ablauf treiben. Es darf nur Marktpakete liefern.
-- `bot._process_window(...)` ist in der jetzigen Form noch zu breit, weil dort Runtime und Handlung zusammen laufen.
-- `step_mcm_runtime_idle(...)` darf nicht mehr vom Chartpfad als Ersatz für den Innenprozess benutzt werden, sondern muss in den permanenten Loop von Thread 2 wandern.
-
-# --------------------------------------------------
 # Zielbild
 # --------------------------------------------------
 
