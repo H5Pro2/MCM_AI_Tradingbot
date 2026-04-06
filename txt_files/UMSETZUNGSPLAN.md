@@ -881,3 +881,229 @@ sondern die eigene Handlungsfähigkeit zu erhalten und weiterzuentwickeln.
 
 Damit wird der Trading-Bot nicht als starre Signallogik,
 sondern als MCM-basiertes Wahrnehmungs-, Verarbeitungs-, Regulations- und Entwicklungssystem aufgebaut.
+
+---
+
+# --------------------------------------------------
+# ERWEITERUNG für die – 
+# VISUALISIERUNG (AUßEN / INNEN)
+# --------------------------------------------------
+
+## Ziel
+
+Erweiterung des Systems um eine visuelle Trennung zwischen:
+
+- äußerer Wahrnehmung (Markt / Chart)
+- innerer Verarbeitung (Wahrnehmung → Zustand → Denken)
+
+Ziel ist Sichtbarkeit von:
+
+- was der Bot sieht
+- wie der Bot es intern verarbeitet
+
+---
+
+# --------------------------------------------------
+# 1. Grundprinzip
+# --------------------------------------------------
+
+Der Bot arbeitet nicht mit echten Bilddaten.
+
+Er sieht den Markt als:
+
+- `window` (OHLCV-Daten)
+- daraus abgeleitete Zustände:
+  - `candle_state`
+  - `tension_state`
+  - `visual_market_state`
+  - `structure_perception_state`
+
+Die GUI erzeugt daraus visuelle Darstellungen.
+
+---
+
+# --------------------------------------------------
+# 2. Architektur-Prinzip
+# --------------------------------------------------
+
+Strikte Trennung:
+
+- GUI = READ ONLY
+- Bot = schreibt Daten
+- Kommunikation nur über Dateien
+
+Keine Nutzung von:
+
+- workspace
+- trade_stats
+- outcome logs
+- memory_state
+
+Diese gehören zu anderen Ebenen.
+
+---
+
+# --------------------------------------------------
+# 3. Snapshot-Struktur
+# --------------------------------------------------
+
+## 3.1 Außen-Snapshot
+
+Datei:
+
+`bot_visual_snapshot.json`
+
+Inhalt:
+
+- timestamp
+- window
+- candle_state
+- tension_state
+- visual_market_state
+- structure_perception_state
+
+Bedeutung:
+
+= vollständiges Außenbild (Rohwahrnehmung)
+
+---
+
+## 3.2 Innen-Snapshot
+
+Datei:
+
+`bot_inner_snapshot.json`
+
+Inhalt:
+
+- timestamp
+- outer_visual_perception_state
+- inner_field_perception_state
+- perception_state
+- processing_state
+- felt_state
+- thought_state
+- meta_regulation_state
+- expectation_state
+
+optional:
+
+- field_density
+- field_stability
+- regulatory_load
+- action_capacity
+- recovery_need
+- survival_pressure
+
+Bedeutung:
+
+= intern verarbeitete Wahrnehmung
+
+---
+
+## 3.3 Schreiblogik
+
+- kein Logging
+- immer überschreiben
+- immer nur letzter Zustand
+
+Schreibzeitpunkt:
+
+- nach Verarbeitung eines Marktfensters
+
+---
+
+# --------------------------------------------------
+# 4. GUI-Visualisierung
+# --------------------------------------------------
+
+## 4.1 Aufbau
+
+Zwei Hauptbereiche:
+
+---
+
+### LINKS – Außenbild (Chart)
+
+Darstellung:
+
+- Candlestick Chart aus `window`
+- entspricht exakt der Außenwahrnehmung
+
+---
+
+### RECHTS – Innenbild
+
+Darstellung:
+
+kein identisches Chart
+
+sondern transformierte Sicht:
+
+- Fokus
+- Relevanz
+- Struktur
+- Spannung
+- Orientierung
+- Bedrohung / Ziel
+
+---
+
+# --------------------------------------------------
+# 5. Fachliche Bedeutung
+# --------------------------------------------------
+
+Die Visualisierung zeigt:
+
+- Unterschied zwischen Reiz und Verarbeitung
+- Fokus-Setzung
+- Verzerrung der Wahrnehmung
+- regulatorische Zustände
+- Handlung vs Nicht-Handlung
+
+---
+
+# --------------------------------------------------
+# 6. Einordnung in Architektur
+# --------------------------------------------------
+
+Ebene 1:
+
+- äußeres Wahrnehmen sichtbar
+
+Ebene 2:
+
+- inneres Wahrnehmen / Denken sichtbar
+
+Ebene 3:
+
+- spätere Analyse möglich (Wahrnehmung vs Entscheidung)
+
+---
+
+# --------------------------------------------------
+# 7. Zielzustand
+# --------------------------------------------------
+
+GUI zeigt nicht nur:
+
+- Trades
+- Performance
+
+sondern:
+
+- Wahrnehmung
+- Zustand
+- Entscheidungsbasis
+
+System wird:
+
+- nachvollziehbar
+- debugbar
+- entwickelbar
+
+---
+
+# --------------------------------------------------
+# ENDE
+# --------------------------------------------------
