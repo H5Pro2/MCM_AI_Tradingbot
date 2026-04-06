@@ -1,158 +1,542 @@
-# Umsetzungsplan (offen) – Ebenen-Trennung, MCM-Zustandsraum, Selbstregulation
+# ==================================================
+# UMSETZUNGSPLAN – MCM TRADING BRAIN SYSTEMBAUPLAN
+# ==================================================
 
-Dieses Dokument enthält **nur noch offene Punkte**.
-Bereits umgesetzte Basisbausteine wurden entfernt.
+Dieses Dokument ist der **Bauplan des Systems**.
 
----
+Es beschreibt:
 
-WICHTIG !
+- was die **Mental Core Matrix (MCM)** in diesem Projekt bedeutet
+- wie daraus ein **MCM-KI-Agentensystem** im Trading entsteht
+- wie Außenwelt, Innenwelt, Handlung und Entwicklung zusammenhängen
+- welche Zielarchitektur aufgebaut wird
+- in welche Richtung das System langfristig ausgebaut wird
 
-# --------------------------------------------------
-# Leitbild
-# --------------------------------------------------
+Dieses Dokument ist **nicht nur eine To-Do-Liste**.
 
-## Ziel der offenen Erweiterung
-
-Ziel ist ein System, das einem menschlichen Trader strukturell näher kommt.
-
-Es gibt dabei drei klar getrennte Ebenen:
-
-- **Ebene 1** = äußeres Wahrnehmen
-- **Ebene 2** = inneres Wahrnehmen / Denken / Handeln
-- **Ebene 3** = Entwicklung aus Erfahrung / Selbstregulation
-
-Handlung ist dabei **nicht** der Mittelpunkt.
-Handlung ist nur ein möglicher Ausdruck des aktuellen Innenzustands.
-
-Der Bot soll nicht lernen, permanent weiter zu versuchen.
-Der Bot soll lernen, **handlungsfähig zu bleiben**.
-
-Das zentrale Ziel ist daher:
-
-- regulatorisches Gleichgewicht halten
-- Überlebensfähigkeit im Markt erhalten
-- Profitabilität als Existenzgrundlage abbilden
-- Beobachtung / Pause / Sammlung als wertvolle Reaktion lernen
-- Druck nach Fehlphasen abbauen statt weiter zu eskalieren
-- gezielter und tragfähiger mit Erfahrungswerten und Umgebung interagieren
+Es ist das architektonische Kernpapier des Systems und wird mit dem Projekt weiterentwickelt.
 
 ---
 
 # --------------------------------------------------
-# Ebene 1
+# 1. Leitbild
 # --------------------------------------------------
 
-## Äußeres Wahrnehmen
+## Ziel des Systems
 
-### Aufgabe
+Ziel ist **nicht** ein klassischer Trading-Bot mit festen Regeln, Signalen und Gates.
 
-- OHLCV lesen
-- Workspace / Buffer pflegen
-- reine Marktinformationen berechnen:
-  - Candle-State
-  - Energy
-  - Coherence
-  - Asymmetry
-  - HH
-  - LL
-  - Struktur
-- neutrales Stimulus-/Informationspaket erzeugen
-- niemals denken
-- niemals entscheiden
-- niemals Memory ändern
-- niemals Order / Pending / Position anfassen
+Ziel ist ein System, das einem menschlicheren Trader **strukturell** näher kommt:
 
-### Gehört dahin
+- es nimmt zuerst die Außenwelt wahr
+- es verarbeitet diese Außenwelt intern
+- es entwickelt daraus innere Zustände
+- es bildet daraus Handlungstendenzen
+- es lernt langfristig aus Erfahrung
+- es versucht nicht nur zu traden, sondern **handlungsfähig zu bleiben**
 
-- `runner.py` Feed-/Polling-Ablauf
-- `csv_feed.py` / `ph_ohlcv.py` / `workspace.py` Datenpfad
-- `mcm_core_engine.py` Spannungs-/Chartinfos wie Energy / Coherence / Asymmetry
-- `strukture_engine.py` reine Struktur-Wahrnehmung ohne Handelsfreigabe
+Handlung ist dabei **nicht** das Zentrum des Systems.
 
-### Output von Ebene 1
+Handlung ist nur ein möglicher Ausdruck dessen, was das System
+im aktuellen Zustand tragen kann.
 
-Nur ein neutrales Paket, zum Beispiel:
+Das System soll also nicht lernen:
 
-- `timestamp`
-- `window_ref` oder `window_snapshot`
-- `candle_state`
-- `tension_state`
-- `structure_perception_state`
+- möglichst oft zu handeln
+- möglichst aggressiv Signale umzusetzen
+- Fehlphasen durch noch mehr Aktion zu kompensieren
+
+Sondern es soll lernen:
+
+- die eigene innere Tragfähigkeit zu erhalten
+- Überlast zu erkennen
+- unter Druck nicht zu eskalieren
+- Beobachtung, Sammlung, Pause und Nicht-Handlung als sinnvolle Reaktion zu nutzen
+- tragfähige Handlung von hektischer Handlung zu unterscheiden
+- aus Erfahrung seine innere Verarbeitung zu verändern
 
 ---
 
 # --------------------------------------------------
-# Ebene 2
+# 2. Was ist die MCM in diesem Projekt?
 # --------------------------------------------------
 
-## Inneres Wahrnehmen / Denken / Handeln
+## Grundidee der Mental Core Matrix
 
-### Aufgabe
+Die **Mental Core Matrix (MCM)** ist in diesem Projekt kein klassisches neuronales Netz,
+kein klassisches Reinforcement Learning und kein starres Regelwerk.
 
-- Stimulus von Ebene 1 konsumieren
-- Runtime permanent fortschreiben
-- Wahrnehmung / Verarbeitung / Gefühl / Denken / Meta / Erwartung bilden
-- MCM-Raum fortschreiben
-- Zustandsbild des MCM-Raums sichtbar halten
-- Entscheidungstendenz bilden:
+Sie ist ein **dynamisches Systemmodell**.
+
+Ihr Kern besteht aus vier Grundprinzipien:
+
+- **Zentrum**
+- **Abweichung**
+- **Varianz**
+- **Rückführung**
+
+### Zentrum
+Das Zentrum beschreibt den tragfähigen Grundzustand des Systems.
+
+Es ist kein fixer Zahlenwert,
+sondern der aktuell regulierte Referenzraum,
+von dem aus das System wahrnimmt, verarbeitet und handeln kann.
+
+### Abweichung
+Abweichung bedeutet:
+
+- Markt wirkt auf das System ein
+- das System gerät in Bewegung
+- innere Zustände verändern sich
+- Orientierung, Motivation, Risiko, Unsicherheit und Druck verschieben sich
+
+### Varianz
+Varianz beschreibt den Spielraum und die Verteilung möglicher Zustände.
+
+Sie zeigt:
+
+- wie eng oder weit das Feld verteilt ist
+- wie stabil oder instabil das System ist
+- ob es in Verdichtung, Drift, Konflikt oder Übererregung gerät
+
+### Rückführung
+Rückführung ist der regulatorische Mechanismus.
+
+Er sorgt dafür, dass das System nicht nur reagiert,
+sondern sich selbst wieder in einen tragfähigen Zustand bringen kann.
+
+Dazu gehören:
+
+- Dämpfung
+- Sammlung
+- Entlastung
+- Orientierung
+- Reifung
+- Beobachtung statt Aktion
+- Pause statt Eskalation
+
+---
+
+## MCM im Trading-Kontext
+
+Im Trading-Bot bedeutet die MCM:
+
+Der Markt wird **nicht direkt** zu einer Order.
+
+Der Markt wird zuerst zu:
+
+- Wahrnehmung
+- innerer Aktivierung
+- Feldbewegung
+- Konflikt oder Orientierung
+- regulatorischer Last
+- Handlungsfähigkeit oder Nicht-Handlungsfähigkeit
+
+Die MCM ist damit die **innere Dynamikschicht** des Systems.
+
+Sie beantwortet nicht nur:
+
+- „Long oder Short?“
+
+Sondern vor allem:
+
+- Was macht der Markt mit dem System?
+- Wie wirkt dieser Reiz auf den Innenraum?
+- Ist das System tragfähig oder überlastet?
+- Ist Beobachtung sinnvoller als Handlung?
+- Ist ein Impuls reif genug für Aktion oder noch nicht?
+
+---
+
+# --------------------------------------------------
+# 3. Was ist die MCM-KI in diesem Projekt?
+# --------------------------------------------------
+
+## Grundverständnis
+
+Die MCM-KI ist kein Bot, der bloß Signale ausführt.
+
+Sie ist ein **Agentensystem im MCM-Raum**.
+
+Das bedeutet:
+
+- mehrere innere Teilkräfte wirken gleichzeitig
+- diese Teilkräfte bilden zusammen den Innenzustand
+- der Innenzustand ist nicht binär, sondern verteilt
+- Handlung entsteht aus dem Zustand des Gesamtfeldes
+
+Die KI ist also nicht:
+
+- eine Ja/Nein-Maschine
+- kein simples Entry-Modell
+- keine starre Signalmaschine
+
+Sondern:
+
+- ein System aus Wahrnehmung
+- innerer Feldverarbeitung
+- Konkurrenz, Hemmung, Gewöhnung, Orientierung
+- regulatorischer Selbstführung
+- episodischem Lernen
+- Entwicklungsdynamik
+
+---
+
+# --------------------------------------------------
+# 4. Die Agenten des Systems
+# --------------------------------------------------
+
+## Was mit Agenten gemeint ist
+
+Die Agenten in diesem Projekt sind keine Chat-Agents und keine voneinander losgelösten Subprogramme.
+
+Die Agenten sind **dynamische Teilträger im MCM-Feld**.
+
+Sie bilden zusammen den Innenraum des Systems.
+
+Jeder Agent trägt nur einen kleinen Teil des Gesamtsystems,
+aber aus ihrer Wechselwirkung entsteht:
+
+- Aktivierung
+- Drift
+- Verdichtung
+- Stabilisierung
+- Konflikt
+- Regulierung
+- Handlungstendenz
+
+---
+
+## Rolle der Agenten
+
+Die Agenten sind zuständig für:
+
+- Aufnahme von Impulsen
+- lokale Reaktion auf Wahrnehmung
+- Kopplung mit Nachbarzuständen
+- Konkurrenz und Abstimmung
+- Verstärkung oder Abschwächung von Tendenzen
+- Tragen von Feldzuständen über Zeit
+- Mitbildung des Gesamtzustands
+
+Dadurch entsteht kein einzelnes zentrales „Signal“,
+sondern ein **verteiltes Innenfeld**.
+
+---
+
+## Was die Agenten nicht sind
+
+Die Agenten sind nicht:
+
+- feste Regelcontainer
+- fertige LONG-/SHORT-Entscheider
+- starre Gate-Bausteine
+- voneinander isolierte Logikmodule
+
+Sie sind Teile eines dynamischen Innenraums.
+
+---
+
+## Ziel der Agentenlogik
+
+Die Agenten sollen zusammen ermöglichen, dass das System:
+
+- Reize differenziert verarbeitet
+- nicht sofort in Aktion kippt
+- innere Konflikte abbildet
+- Überlast und Tragfähigkeit unterscheiden kann
+- regulatorisch reagieren kann
+- aus Erfahrung seine Feldreaktionen verändert
+
+---
+
+# --------------------------------------------------
+# 5. Grundprinzip des Trading-Systems
+# --------------------------------------------------
+
+## Kein klassischer Regelbot
+
+Dieses System soll **nicht** nach dem Muster arbeiten:
+
+- Signal erkannt
+- Bedingung erfüllt
+- Order senden
+
+Das wäre ein klassischer Regelbot.
+
+Stattdessen gilt:
+
+- Markt liefert Reiz
+- Reiz wird wahrgenommen
+- Wahrnehmung wird intern verarbeitet
+- der Innenraum verändert sich
+- aus dem Innenraum entsteht eine Handlungstendenz
+- diese kann sein:
   - `act`
   - `observe`
   - `hold`
   - `replan`
-- danach technische Handlung ausführen:
-  - Pending
-  - Entry
-  - Position
-  - Exit
 
-### Gehört dahin
+Erst **danach** folgt eine technische Handelsumsetzung.
 
-- `MCMBrainRuntime` und Runtime-Fortschreibung in `MCM_Brain_Modell.py`
-- Entscheidungsbahn `build_runtime_decision_tendency(...)` / `decide_mcm_brain_entry(...)`
-- Handlungsbahn in `bot.py`:
-  - `_handle_active_position(...)`
-  - `_handle_pending_entry(...)`
-  - `_handle_entry_attempt(...)`
+---
+
+## Trading als Ausdruck innerer Tragfähigkeit
+
+Trading ist im Zielsystem kein Selbstzweck.
+
+Ein Trade soll nur dann entstehen,
+wenn die innere Lage des Systems ihn trägt.
+
+Das bedeutet:
+
+- Handlung muss zur Situation passen
+- Handlung muss zur inneren Reife passen
+- Handlung darf den Zustand nicht blind verschlimmern
+- Nicht-Handlung kann hochwertiger sein als Aktion
 
 ---
 
 # --------------------------------------------------
-# Ebene 3
+# 6. Zielarchitektur des Systems
 # --------------------------------------------------
 
-## Entwicklung aus Erfahrung / Selbstregulation
+Das Zielsystem besteht aus **drei klar getrennten Ebenen**.
 
-### Aufgabe
+---
 
-- Experience / Episode / Review / Memory pflegen
-- Nicht-Handlung als echte Erfahrung speichern
+# --------------------------------------------------
+# 6.1 Ebene 1 – äußeres Wahrnehmen
+# --------------------------------------------------
+
+## Rolle
+
+Ebene 1 ist das **Sehen**.
+
+Diese Ebene nimmt die Außenwelt auf,
+ohne sie bereits in Handlung umzuwandeln.
+
+Sie ist zuständig für:
+
+- OHLCV
+- Candle-Struktur
+- Spannungszustände
+- numerische räumliche Marktwahrnehmung
+- Kontext- und Strukturhinweise
+
+Sie erzeugt nur ein **neutrales Wahrnehmungspaket**.
+
+---
+
+## Aufgabe
+
+Ebene 1 soll:
+
+- OHLCV lesen
+- Workspace / Buffer pflegen
+- `candle_state` erzeugen
+- `tension_state` erzeugen
+- `visual_market_state` erzeugen
+- `structure_perception_state` erzeugen
+- Reize neutral bereitstellen
+
+---
+
+## Wichtige Regel
+
+Ebene 1 darf **niemals**:
+
+- denken
+- interpretieren im Sinn von Handlung
+- Memory schreiben
+- Episode schreiben
+- Pending / Position / Order verändern
+- Innenzustände pflegen
+
+Sie liefert nur Wahrnehmung.
+
+---
+
+## Bedeutung von `visual_market_state`
+
+`visual_market_state` ist die zentrale Wahrnehmungsbasis
+für die äußere Marktform.
+
+Es ist:
+
+- kein Bild
+- kein CNN
+- keine Pixelverarbeitung
+
+Sondern:
+
+- ein numerisches räumliches Wahrnehmungsfeld aus RAW-OHLCV
+- eine primäre Außenbeschreibung des Marktes
+- eine reichere Wahrnehmungsbasis als nur HH/LL oder einzelne Signale
+
+Strukturwahrnehmung wie Swing / HH / LL bleibt erhalten,
+aber nicht mehr als alleinige Hauptbasis,
+sondern als ergänzende Strukturwahrnehmung.
+
+---
+
+# --------------------------------------------------
+# 6.2 Ebene 2 – inneres Wahrnehmen / Denken / Handeln
+# --------------------------------------------------
+
+## Rolle
+
+Ebene 2 ist das eigentliche **Innenleben** des Systems.
+
+Hier wird der Reiz aus Ebene 1 aufgenommen und intern verarbeitet.
+
+Das ist die Ebene von:
+
+- Wahrnehmung
+- innerer Feldbewegung
+- Gefühl
+- Denken
+- Meta-Regulation
+- Erwartung
+- Entscheidungstendenz
+- technischer Handlung
+
+---
+
+## Aufgabe
+
+Ebene 2 soll:
+
+- Reize aus Ebene 1 konsumieren
+- den MCM-Raum fortschreiben
+- Zustände über Zeit weitertragen
+- Konflikt, Reife, Orientierung, Unsicherheit und Druck abbilden
+- Handlungstendenzen bilden
+- technische Handelsausführung anstoßen, wenn `act` entsteht
+
+---
+
+## Zustandskette
+
+Die innere Zustandskette soll ausgebaut und lesbar gehalten werden.
+
+Dazu gehören insbesondere:
+
+- `outer_visual_perception_state`
+- `inner_field_perception_state`
+- `perception_state`
+- `processing_state`
+- `felt_state`
+- `thought_state`
+- `meta_regulation_state`
+- `expectation_state`
+
+Diese Zustände sind keine Deko,
+sondern die explizite Lesbarkeit der inneren Verarbeitungsbahn.
+
+---
+
+## Entscheidungstendenz
+
+Ebene 2 soll **keine rohe Orderfreigabe** erzeugen,
+sondern zunächst eine Tendenz:
+
+- `act`
+- `observe`
+- `hold`
+- `replan`
+
+Damit wird Handlung vom Innenzustand her gedacht
+und nicht nur von externer Logik.
+
+---
+
+## Handlungsbahn
+
+Erst wenn `act` tragfähig ist,
+dürfen technische Schritte folgen:
+
+- Pending
+- Entry
+- Position
+- Exit
+
+Die technische Handlung bleibt damit nachgeordnet.
+
+---
+
+# --------------------------------------------------
+# 6.3 Ebene 3 – Entwicklung aus Erfahrung / Selbstregulation
+# --------------------------------------------------
+
+## Rolle
+
+Ebene 3 ist die **Entwicklungsebene**.
+
+Hier wird aus Episoden, Reviews, Outcome-Strukturen und Kontexten gelernt.
+
+Diese Ebene soll nicht nur Treffer speichern,
+sondern den **ganzen Entscheidungsverlauf** bewerten.
+
+---
+
+## Aufgabe
+
+Ebene 3 soll:
+
+- Episoden speichern
+- Reviews erzeugen
+- Experience-Space pflegen
+- Kontext-Cluster pflegen
+- Signature-Memory pflegen
+- Nicht-Handlung als echte Erfahrung führen
 - Fehlphasen als regulatorische Information verwerten
-- Beobachtung / Sammlung / Pause als entlastende Erfahrung bewerten
-- tragfähige Handlung von hektischer Handlung unterscheiden lernen
-- langfristig verändern, wie Ebene 2 künftig wahrnimmt, verarbeitet und reguliert
+- langfristig die Innenverarbeitung von Ebene 2 verändern
 
-### Gehört dahin
+---
 
-- Episoden-/Erfahrungsraum / Review / Memory in `MCM_Brain_Modell.py`
-- Persistenz und Zustandsspeicherung in `memory_state.py`
-- KPI-/Nachweis-Pfad in `trade_stats.py`
+## Warum diese Ebene wichtig ist
+
+Ein klassischer Bot lernt oft nur:
+
+- TP gut
+- SL schlecht
+
+Das reicht hier nicht.
+
+Dieses System soll lernen:
+
+- war die Handlung tragfähig?
+- war die Handlung hektisch?
+- war Nicht-Handlung sinnvoller?
+- war der Zustand überlastet?
+- war Beobachtung reifer als Aktion?
+- wie verändert Erfahrung künftig Wahrnehmung, Regulation und Handlung?
 
 ---
 
 # --------------------------------------------------
-# Harte Regel der Trennung
+# 7. Harte Regel der Trennung
 # --------------------------------------------------
 
-## Grundregeln
+## Grundsatz
 
-- Ebene 1 liest Markt und erzeugt nur Wahrnehmungspakete.
-- Ebene 2 konsumiert diese Pakete und bildet daraus Innenzustände.
-- Ebene 3 bewertet Erfahrung und verändert langfristig die Innenbahn.
-- Handlung darf nur noch aus Ebene 2 kommen.
-- Ebene 1 kennt keine Orderlogik.
-- Ebene 1 schreibt niemals Innenzustände.
+Die drei Ebenen dürfen fachlich nicht vermischt werden.
 
-### Ebene 1 schreibt nie
+### Ebene 1
+liest nur Markt und erzeugt Wahrnehmung.
+
+### Ebene 2
+verarbeitet Wahrnehmung und erzeugt Innenzustände sowie Handlungstendenzen.
+
+### Ebene 3
+bewertet Erfahrung und verändert langfristig die Innenbahn.
+
+---
+
+## Konsequenz
+
+Ebene 1 darf niemals direkt schreiben in:
 
 - `mcm_runtime_snapshot`
 - `mcm_runtime_decision_state`
@@ -163,345 +547,337 @@ Nur ein neutrales Paket, zum Beispiel:
 - `position`
 - `pending_entry`
 
-### Ebene 2 liest Chartdaten nur als Input
+Ebene 2 darf Markt nicht selbst beschaffen,
+sondern nur als Input konsumieren.
 
-- keine eigene OHLCV-Beschaffung
-- keine Vermischung mit Feed-Logik
-- keine implizite Rückverlagerung von Handlungslogik in Ebene 1
-
----
-
-# --------------------------------------------------
-# Was dafür konkret weg muss
-# --------------------------------------------------
-
-## Noch offene strukturelle Altmischung
-
-- `runner.py` darf nicht mehr direkt Logik + Brain + Handlung in einem Ablauf treiben.
-- `bot._process_window(...)` darf nicht dauerhaft die breite Mischstelle bleiben.
-- `step_mcm_runtime_idle(...)` darf nicht vom Chartpfad als Ersatz für den Innenprozess benutzt werden, sondern muss vollständig in den permanenten Innenloop von Ebene 2 gehören.
+Ebene 3 darf nicht zur technischen Sofortlogik degenerieren,
+sondern muss Entwicklungsebene bleiben.
 
 ---
 
 # --------------------------------------------------
-# MCM-Basis des Zustandsraums
+# 8. Der MCM-Zustandsraum im Trading-System
 # --------------------------------------------------
 
-## Fachliche Grundlage
+## Grundsatz
 
-Der Zustandsraum bleibt auf der **Mental Core Matrix** aufgebaut.
+Neue Zustände dürfen nicht als fremde starre Zusatzlogik auf das System gesetzt werden.
 
-Neue Zustandsgrößen dürfen **nicht** als fremde starre Zusatzlogik neben das System gesetzt werden.
-Sie müssen aus dem MCM-Raum selbst abgeleitet werden.
+Sie müssen **aus dem MCM-Raum selbst** lesbar werden.
 
-Das bedeutet:
+Der Zustandsraum soll deshalb explizit sichtbar gemacht werden.
 
-- Zentrum
-- Abweichung
-- Varianz
-- Rückführung
+---
 
-bleiben die Grundstruktur.
+## Zentrale Ableitungen des Innenraums
 
-Darauf aufbauend wird der Raum lesbarer gemacht.
+Der MCM-Raum soll insbesondere als folgende lesbare Zustandsachsen erscheinen:
 
-### Ziel
+- `field_density`
+- `field_stability`
+- `regulatory_load`
+- `action_capacity`
+- `recovery_need`
+- `survival_pressure`
 
-Nicht MCM ersetzen,
-sondern den **laufenden MCM-Raum explizit als Zustandswiedergabe sichtbar machen**.
+Diese Zustände sind keine externen Verbote.
+
+Sie sind Lesarten des aktuellen Innenraums.
+
+---
+
+## Bedeutung der Zustände
+
+### `field_density`
+Wie stark das Innenfeld verdichtet ist.
+
+### `field_stability`
+Wie tragfähig oder instabil das Feld aktuell ist.
+
+### `regulatory_load`
+Wie hoch der innere Regulationsaufwand ist.
+
+### `action_capacity`
+Wie viel tragfähige Handlung aktuell möglich ist.
+
+### `recovery_need`
+Wie stark das System Erholung braucht.
+
+### `survival_pressure`
+Wie stark Profitabilität, Drawdown, Verlustserien und Belastung
+als existenzielle Zielspannung auf das System wirken.
 
 ---
 
 # --------------------------------------------------
-# Phase A – MCM-Zustandswiedergabe des gesamten Raums
+# 9. Permanenter Innenprozess
 # --------------------------------------------------
 
 ## Ziel
 
-Der Nettozustand des MCM-Feldes muss als eigene Größe sichtbar und nutzbar werden.
+Das Gehirn des Systems darf nicht nur einmal pro Candle-Schritt „aufgerufen“ werden.
 
-## Offene Umsetzungspunkte
+Es soll als **laufender Innenprozess** existieren.
 
-- Feldverdichtung / Felddichte als eigene Ableitung aus dem MCM-Raum einführen.
-- Nicht nur lokale Teilsignale, sondern Gesamtzustand des Feldes zusammenführen.
-- Zustandsachsen aus dem MCM-Raum ableiten, z. B.:
-  - `field_density`
-  - `field_stability`
-  - `regulatory_load`
-  - `action_capacity`
-  - `recovery_need`
-- Nettozustand des MCM-Raums als explizite Zustandswiedergabe in Snapshots aufnehmen.
-- Snapshot-/Debug-/GUI-Ausgabe für diese Größen ergänzen.
-- Sicherstellen, dass diese Größen **aus dem MCM-Raum** kommen und nicht aus harten Handelsregeln.
+---
 
-## Ergebnis
+## Bedeutung
 
-Der Bot besitzt eine explizite Lesbarkeit seines gesamten Innenraums,
-nicht nur einzelner Teilwerte.
+Das heißt:
+
+- Außenreiz und Innenverarbeitung werden zeitlich entkoppelt
+- Markt liefert Impulse
+- Innenraum verarbeitet diese Impulse fortlaufend
+- Runtime ist kein Einmalaufruf, sondern eine Laufzeitschicht
+
+---
+
+## Zielbild
+
+- Backtest soll auf dasselbe Modell hinauslaufen
+- Live-Modus ebenfalls
+- Innenprozess bleibt dauerhaft aktiv
+- technische Monitor-Threads bleiben Hilfsschichten, nicht das Gehirn selbst
 
 ---
 
 # --------------------------------------------------
-# Phase B – Permanenter Innenprozess
+# 10. Selbstregulation als eigentliches Lernziel
+# --------------------------------------------------
+
+## Zentrale Idee
+
+Das System soll nicht primär lernen,
+möglichst viele profitable Trades zu erzeugen.
+
+Es soll lernen,
+seinen inneren Zustand **tragfähig** zu halten.
+
+---
+
+## Das bedeutet
+
+Lernen heißt hier:
+
+- Überlast erkennen
+- Fehlphasen regulatorisch verarbeiten
+- Beobachtung und Sammlung als gute Reaktion verstehen
+- hektische Handlung von tragfähiger Handlung unterscheiden
+- innere Reife vor Aktion stellen
+
+---
+
+## Konsequenz
+
+Outcomes allein reichen nicht.
+
+Auch diese Dinge müssen bewertet werden:
+
+- regulatorische Tragfähigkeit
+- Reife der Entscheidung
+- Umgang mit Unsicherheit
+- Qualität der Beobachtung
+- Korrekturqualität
+- Erholungsfähigkeit
+
+---
+
+# --------------------------------------------------
+# 11. Profitabilität als innere Zielspannung
+# --------------------------------------------------
+
+## Grundsatz
+
+Profitabilität wird nicht als starres Schalter-System eingebaut.
+
+Sie wird als **Existenzgrundlage** des Systems in den Innenraum integriert.
+
+---
+
+## Bedeutung
+
+Verluste, Drawdown und Fehlserien wirken als Belastung
+auf die Handlungsfähigkeit des Systems.
+
+Positive Stabilisierung und tragfähige Outcomes entlasten das System.
+
+Daraus entsteht:
+
+- bei hoher Belastung mehr Schutz, Beobachtung und Sammlung
+- bei tragfähiger Stabilisierung wieder mehr echte Handlungsfähigkeit
+
+Das System soll also nicht mechanisch stoppen,
+sondern seinen Zustand natürlich verschieben.
+
+---
+
+# --------------------------------------------------
+# 12. Beobachtung / Pause / Sammlung als echte Bahn
 # --------------------------------------------------
 
 ## Ziel
 
-Das Gehirn darf nicht nur beim Candle-Schritt aufgerufen werden.
-Denken und innere Fortschreibung sollen als eigener permanenter Prozess laufen.
+Nicht-Handlung darf kein leerer Restzustand sein.
 
-## Offene Umsetzungspunkte
+Sie muss zu einer echten inneren Zustandsbahn werden.
 
-- `MCMBrainRuntime` als dauerhafte Laufzeitschicht weiter vervollständigen.
-- Reizübergabe entkoppeln:
-  - Marktdatenpfad erzeugt nur Stimulus-/Perception-Impulse
-  - Innenprozess konsumiert Impulse unabhängig vom Orderpfad
-- Zustandsfortschreibung in kleinen Ticks statt nur einmal pro Marktfenster
-- aktuellen Brain-Snapshot separat bereitstellen:
-  - lesbar für Entscheidungsbahn
-  - lesbar für GUI/Debug
-  - schreibgeschützt außerhalb der Brain-Runtime
-- Backtest und Live auf dasselbe Laufzeitmodell bringen:
-  - Backtest = deterministische Tick-Fortschreibung
-  - Live = permanenter Innenloop + technische Monitor-Threads
+---
 
-## Ergebnis
+## Bedeutung
 
-Außenreiz und innere Verarbeitung sind zeitlich entkoppelt.
-Das Gehirn läuft kontinuierlich, nicht nur als Funktionsaufruf im Candle-Loop.
+Wenn der Druck steigt,
+soll das System nicht zwanghaft weiterprobieren.
+
+Es soll:
+
+- beobachten
+- ausharren
+- sammeln
+- reifen
+- Druck abbauen
+- Tragfähigkeit wiederherstellen
+
+---
+
+## Relevante Zustände
+
+- `observe`
+- `hold`
+- `replan`
+
+sind deshalb nicht schwache Nebenformen,
+sondern wichtige Regenerations- und Reifungszustände.
 
 ---
 
 # --------------------------------------------------
-# Phase C – Selbstregulation als eigentliches Lernziel
+# 13. Entscheidungsepisode als zentrales Lernobjekt
 # --------------------------------------------------
 
 ## Ziel
 
-Lernen bedeutet nicht nur, Outcomes zu speichern.
-Lernen bedeutet, den eigenen inneren Zustand regulatorisch tragfähig zu halten.
+Nicht der einzelne Trade ist das zentrale Lernobjekt,
+sondern die **ganze Entscheidungsepisode**.
 
-## Offene Umsetzungspunkte
+---
 
-- Selbstregulation als zentrale Lernrichtung im Erfahrungsraum verankern.
-- Fehlphasen nicht nur als Trade-Misserfolg, sondern als Überlastungsinformation behandeln.
-- Beobachtung / Sammlung / Pause als entlastende und sinnvolle Reaktion bewerten.
-- Handlung nicht nur nach Erfolgsquote, sondern nach regulatorischer Tragfähigkeit bewerten.
-- Bewertung ergänzen für:
-  - hektische Handlung
-  - tragfähige Handlung
-  - korrektes Nicht-Handeln
-  - regulatorische Erholung
-- Outcome-Decomposition und Review stärker an Selbstregulation koppeln.
+## Eine Episode umfasst
 
-## Ergebnis
+- äußeren Reiz
+- innere Wahrnehmung
+- Feldzustand
+- Entscheidungstendenz
+- Handlung oder Nicht-Handlung
+- Pending-Verlauf
+- Positionsverlauf
+- Outcome
+- Review
+- Rückkopplung in Experience und Memory
 
-Der Bot lernt nicht nur, was TP oder SL war,
-sondern ob sein innerer Zustand tragfähig oder überlastet war.
+---
+
+## Warum das wichtig ist
+
+So lernt das System nicht nur aus Endpunkten,
+sondern aus vollständigen inneren Verläufen.
 
 ---
 
 # --------------------------------------------------
-# Phase D – Überlebensdruck / Profitabilität als innere Zielspannung
+# 14. In-Trade-Beobachtung
 # --------------------------------------------------
 
 ## Ziel
 
-Profitabilität wird nicht als starre Regel,
-sondern als Existenzgrundlage des Systems abgebildet.
+Auch während Pending und Position bleibt das System ein wahrnehmendes und lernendes System.
 
-## Offene Umsetzungspunkte
+---
 
-- PnL / Drawdown / Verlustserie als Innenreiz an den MCM-Raum koppeln.
-- `survival_pressure` oder äquivalente Größe als laufenden Zustand ergänzen.
-- Verluste als Belastung der Existenzbasis interpretieren.
-- Gewonnene Stabilität und positive Outcomes als Entlastung interpretieren.
-- Handlungsdrang bei hoher Existenzbelastung natürlicherweise dämpfen.
-- Erholung und wiedergewonnene Stabilität natürlicherweise zu neuer Handlungsfähigkeit führen.
-- Keine harte Regel wie `wenn pnl < x dann stop`.
-- Stattdessen: Überlebensdruck als systemischer Reiz,
-der Beobachtung, Sammlung und Schutzbreite attraktiver macht.
+## Bedeutung
 
-## Ergebnis
+Während eines laufenden Trades sollen weiter beobachtet werden:
 
-Profitabilität wird zur inneren Zielspannung des Systems,
-nicht zu einem starren externen Schalter.
+- Druck
+- Drift
+- Unsicherheit
+- Stabilität
+- Tragfähigkeit
+- Handlungsbelastung
+
+Die Positionsphase ist damit nicht nur Ausführung,
+sondern Teil des Lernraums.
 
 ---
 
 # --------------------------------------------------
-# Phase E – Beobachtung / Pause / Sammlung als echte Zustandsbahn
+# 15. Messbarkeit und Nachweis
 # --------------------------------------------------
 
 ## Ziel
 
-Wird der Druck zu hoch,
-soll der Bot nicht einfach weiter probieren,
-sondern ausharren, beobachten, verstehen und sich wieder sammeln.
+Die Architektur soll nicht nur gedacht,
+sondern auch sichtbar, lesbar und überprüfbar werden.
 
-## Offene Umsetzungspunkte
+---
 
-- Pause nicht nur als technisches Nach-SL-Verhalten,
-  sondern als allgemeine regulatorische Zustandsbahn ausbauen.
-- Beobachtung als aktiv wertvolle Reaktion modellieren.
-- Druckabbau über Zeit, Ruhe und stabile Wahrnehmung fortschreiben.
-- Wiederanlaufen von Handlung an zurückgewonnene Handlungsfähigkeit koppeln.
-- `observe`, `hold` und `replan` als echte Regenerations- und Reifungszustände vertiefen.
-- Review bewerten lassen, ob Nicht-Handlung in der Situation besser war als Aktion.
+## Deshalb braucht das System
 
-## Ergebnis
+- Snapshot-Ausgaben
+- Debug-Ausgaben
+- GUI-Lesbarkeit
+- KPI-/Nachweis-Ebene
+- Tests für zentrale Zustandsachsen und Bahnlogiken
 
-Nicht-Handlung wird kein leerer Zustand,
-sondern ein echter Teil der Reifung und Selbstregulation.
+So wird sichtbar,
+ob die Architektur nur behauptet oder tatsächlich getragen wird.
 
 ---
 
 # --------------------------------------------------
-# Phase F – Harte Bahntrennung in der Runtime vervollständigen
+# 16. Offene Ausbaurichtung
 # --------------------------------------------------
 
-## Ziel
+Der Bauplan ist langfristig.
 
-Die vorhandene Zustandskette soll auch architektonisch vollständig getrennt werden.
+Die offene Ausbaurichtung liegt vor allem in:
 
-## Offene Umsetzungspunkte
+- weiterer Härtung der Ebenen-Trennung
+- permanenter Runtime als echter Innenprozess
+- Ausbau der MCM-Zustandsachsen
+- weiterer Vertiefung von Episode / Review / Experience
+- Ausbau von Nicht-Handlung und regulatorischer Erholung
+- Ausbau der In-Trade-Beobachtung
+- Ausbau von KPI / Debug / GUI / Tests
 
-- Wahrnehmungsbahn festziehen:
-  - nur Markt-/Struktur-/Kontextimpulse
-  - keine Orderfreigabe
-- Innenbahn festziehen:
-  - verarbeitet Impulse
-  - pflegt Feld, Regulation, Drift, Konflikt, Reife, Unsicherheit
-  - erzeugt nur Zustandsfortschreibung
-- Entscheidungsbahn abtrennen:
-  - liest Brain-Snapshot
-  - erzeugt nur Entscheidungstendenz: `act`, `observe`, `hold`, `replan`
-- Handlungsbahn abtrennen:
-  - Pending / Entry / Position / Exit technisch ausführen
-  - keine direkte Feldmutation
-- In-Trade-Beobachtungsbahn ergänzen:
-  - läuft während `pending_entry` und `position`
-  - blockiert nicht durch Exit-/Ordertechnik
-
-## Ergebnis
-
-Wahrnehmung, Innenverarbeitung, Entscheidung und technische Handlung sind nicht mehr ineinander verschachtelt.
+Diese offenen Punkte verändern **nicht das Zielbild**,
+sondern führen das Zielbild weiter aus.
 
 ---
 
 # --------------------------------------------------
-# Phase G – Entscheidungsepisode als zentrales Lernobjekt
+# 17. Kompakte Zieldefinition
 # --------------------------------------------------
 
-## Ziel
+Die MCM Trading Brain Architektur ist ein System mit:
 
-Nicht der einzelne Trade allein,
-sondern die gesamte Entscheidungsepisode soll das zentrale Lernobjekt sein.
+- getrennter Außenwelt
+- dynamischer Innenwelt
+- langfristiger Entwicklungsebene
 
-## Offene Umsetzungspunkte
+Der Markt liefert Reize.
 
-- Episode klar als vollständigen Verlauf behandeln:
-  - äußerer Reiz
-  - Innenzustand
-  - Entscheidungstendenz
-  - Handlung oder Nicht-Handlung
-  - In-Trade-Verlauf
-  - Outcome
-  - Review
-- Nicht-Handlung vollständig in Episodenlogik aufnehmen.
-- Bewertungsachsen ausbauen für:
-  - regulatorische Tragfähigkeit
-  - Entscheidungsreife
-  - Unsicherheitsverarbeitung
-  - Beobachtungsqualität
-  - Korrekturqualität
-- Episoden stärker als Lernträger im Experience-Space verankern.
+Die Innenwelt verarbeitet diese Reize als MCM-Raum weiter.
 
-## Ergebnis
+Dieser MCM-Raum wird über Agenten, Feldzustände, Regulation, Orientierung, Unsicherheit, Tragfähigkeit und Erfahrung organisiert.
 
-Das System lernt aus ganzen inneren Entscheidungsverläufen,
-nicht nur aus TP/SL-Endpunkten.
+Handlung entsteht nur dann,
+wenn die innere Lage des Systems sie trägt.
 
----
+Nicht-Handlung, Beobachtung, Sammlung und Pause sind echte Funktionen des Systems.
 
-# --------------------------------------------------
-# Phase H – In-Trade-Beobachtung und laufende Innenveränderung vertiefen
-# --------------------------------------------------
+Lernen bedeutet,
+unter Marktbelastung nicht einfach weiter zu reagieren,
+sondern die eigene Handlungsfähigkeit zu erhalten und weiterzuentwickeln.
 
-## Ziel
-
-Auch während Pending und Position soll der Innenprozess weiterlaufen und lernen.
-
-## Offene Umsetzungspunkte
-
-- Pending-Phase als eigene Beobachtungs- und Bewertungsphase vertiefen.
-- Positionsphase als fortlaufende Innenbeobachtung ausbauen.
-- In-Trade-Verlauf auf Druck, Stabilität, Drift, Unsicherheit und Tragfähigkeit abbilden.
-- In-Trade-Ereignisse stärker in Review und Experience-Space einbeziehen.
-- prüfen, wie sich laufende Marktveränderungen auf inneren Zustand und spätere Reifung auswirken.
-
-## Ergebnis
-
-Der Bot bleibt auch während eines laufenden Handels ein wahrnehmendes und lernendes System.
-
----
-
-# --------------------------------------------------
-# Phase I – Messbarkeit und Nachweis der offenen Architektur ergänzen
-# --------------------------------------------------
-
-## Ziel
-
-Die neue Architektur muss nach außen nachvollziehbar werden.
-
-## Offene Umsetzungspunkte
-
-- KPI-/Nachweis-Ebene für neue Zustände ergänzen:
-  - Felddichte
-  - regulatorische Last
-  - Überlebensdruck
-  - Handlungsfähigkeit
-  - Erholungsbedarf
-  - Beobachtungsanteil
-  - Pause-/Sammlungsanteil
-- GUI-/Debug-Ausgabe für diese Zustände ergänzen.
-- Teststand für neue Zustandsachsen ergänzen.
-- dedizierte Tests ergänzen für:
-  - `bot_gate_funktions.py`
-  - `mcm_core_engine.py`
-  - neue MCM-Gesamtzustandsachsen
-  - regulatorische Pausen-/Beobachtungsdynamik
-
-## Ergebnis
-
-Der offene Architekturfortschritt ist nicht nur konzeptionell,
-sondern auch messbar und testbar sichtbar.
-
----
-
-# --------------------------------------------------
-# Kompakte Zieldefinition
-# --------------------------------------------------
-
-Die MCM-KI soll als System mit getrennter Außenwelt-, Innenwelt- und Entwicklungsebene aufgebaut werden.
-
-Der Markt liefert nur Reize.
-Die Innenwelt verarbeitet diese Reize permanent weiter und bildet eine explizite Zustandswiedergabe des gesamten MCM-Raums.
-
-Diese Zustandswiedergabe enthält insbesondere:
-
-- Feldverdichtung
-- regulatorische Last
-- Überlebensdruck
-- aktuelle Handlungsfähigkeit
-- Erholungsbedarf
-
-Lernen bedeutet, unter Druck nicht einfach weiter zu handeln,
-sondern regulatorisch tragfähig zu bleiben.
-
-Profitabilität wird als Existenzgrundlage des Systems als innere Zielspannung geführt.
-
-Beobachtung, Sammlung, Pause und korrektes Nicht-Handeln werden als echte Erfahrung und als Teil der Reifung behandelt.
-
-Neue Zustandswerte entstehen nicht als fremde starre Zusatzlogik,
-sondern als explizite Lesbarkeit des laufenden Mental-Core-Matrix-Raums.
+Damit wird der Trading-Bot nicht als starre Signallogik,
+sondern als MCM-basiertes Wahrnehmungs-, Verarbeitungs-, Regulations- und Entwicklungssystem aufgebaut.
