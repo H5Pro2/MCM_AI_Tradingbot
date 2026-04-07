@@ -24,9 +24,19 @@ Das bedeutet:
 - äußere Reize werden nicht direkt zu Regeln oder Orders
 - der innere Zustand ist nicht nur Nebenprodukt, sondern Architekturzentrum
 - Erfahrung verändert langfristig Wahrnehmung, Regulation und Handlung
+- das System bewertet Situationen nach Tragfähigkeit, nicht nach bloßem Ergebnis
 
 Das System soll nicht lernen, einfach immer weiter zu traden.
 Das System soll lernen, **handlungsfähig zu bleiben**.
+
+Lernen bedeutet in diesem Projekt daher nicht:
+- möglichst oft richtig zu liegen
+- möglichst aggressiv Profit zu maximieren
+
+Sondern:
+- mit Situationen effizient umgehen zu können
+- bei geringer regulatorischer Last handlungsfähig zu bleiben
+- tragfähige Handlung von hektischer Handlung zu unterscheiden
 
 ---
 
@@ -41,7 +51,18 @@ Das Ziel ist, dass sich Regeln, Präferenzen und regulatorische Reaktionen aus E
 - Outcomes und Denkverläufe rückkoppeln
 - daraus langfristig Wahrnehmung, Regulation und Handlung verändern
 
-Dadurch soll der Bot mit der Zeit überwiegend dort handeln, wo der Kontext robust ist, statt durch harte if/else-Regeln gesteuert zu sein.
+Das System bewertet dabei nicht primär:
+- Profit
+- Gewinnrate
+- Drawdown
+
+Sondern:
+- Tragfähigkeit einer Situation
+- Belastung und Entlastung
+- Handlungsfähigkeit unter Reiz
+- Kohärenz zwischen Innenzustand und Umwelt
+
+Dadurch soll der Bot mit der Zeit überwiegend dort handeln, wo der Kontext tragfähig ist, statt durch harte if/else-Regeln gesteuert zu sein.
 
 ---
 
@@ -56,7 +77,7 @@ Dazu gehört:
 - explizite Wiedergabe des MCM-Raums als laufender Innenzustand
 - Felddichte als Ausdruck der Verdichtung des Gesamtfeldes
 - regulatorische Last als Ausdruck von innerem Druck und Instabilität
-- Survival-Pressure als Rückkopplung aus Profitabilität, Drawdown, Fehlserien und Überlastung
+- Survival-Pressure als Ausdruck von Überlast, Unsicherheit, Fehlserien und verminderter Tragfähigkeit
 - Handlungsfähigkeit als Ergebnis von Regulation, Erholung und Feldstabilität
 
 Diese Größen sollen **nicht** als starre Verbote eingebaut werden.
@@ -65,6 +86,14 @@ Sie sollen aus dem MCM-Raum selbst entstehen und die Entscheidungstendenz natür
 - sinkender Druck -> wieder mehr tragfähige Handlung
 - positive Erfahrung -> Entlastung und Stabilisierung
 - Fehlhandlungen -> Verdichtung, Unsicherheit, Rückzug in Beobachtung
+
+Zusätzlich wird die Entwicklungsebene weiter geschärft:
+
+- Lernen bedeutet Umgangsfähigkeit mit Situationen
+- Erfahrungsräume werden als Cluster ähnlicher Struktur-Zustands-Wirkungen verstanden
+- Outcome wirkt nicht primär als Geldzahl, sondern als Zustandsveränderung
+- Kohärenz reduziert regulatorische Last und Energieverbrauch
+- Profit ist nicht das Ziel des Systems, sondern ein mögliches Nebenprodukt stabiler Kohärenz
 
 ---
 
@@ -84,6 +113,11 @@ Der Modus wird in `config.py` gesetzt (`BACKTEST` oder `LIVE`).
 
 ---
 
+
+--------------------------------------------------
+NEU-Ausschnitt
+--------------------------------------------------
+```md
 ## Zielarchitektur
 
 ```text
@@ -91,6 +125,7 @@ Ebene 1: sehen / äußeres Wahrnehmen
   -> OHLC/Marktdaten
   -> candle_state
   -> tension_state
+  -> visual_market_state
   -> structure_perception_state
   -> neutrales Stimulus-/Informationspaket
 
@@ -111,6 +146,8 @@ Ebene 3: Entwicklung aus Erfahrung / Verarbeitung / Wahrnehmung
   -> review
   -> outcome_decomposition
   -> experience_space
+  -> signature_memory
+  -> context_clusters
   -> adaptive Veränderung der Innenbahn
 
 Systemerweiterung:
@@ -118,7 +155,9 @@ Systemerweiterung:
   -> field_density / Felddichte
   -> regulatory_load / Regulationslast
   -> survival_pressure / Überlebensdruck
-  -> action_readiness / Handlungsfähigkeit
+  -> action_capacity / Handlungsfähigkeit
+  -> learning as coping ability
+  -> cluster-based experience of structural bearing capacity
 ```
 --------------------------------------------------
 ## Architektur auf einen Blick

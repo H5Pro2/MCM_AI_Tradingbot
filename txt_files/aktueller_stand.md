@@ -4,15 +4,14 @@
 
 Dieses Dokument beschreibt den **aktuellen realen Ist-Zustand** des Systems.
 
-Es ist **nicht** der Bauplan.
-Der Bauplan steht in `UMSETZUNGSPLAN.md`.
+Es trennt sauber zwischen:
 
-Hier steht:
+- **bereits fix im Code umgesetzt**
+- **fachlich ausgearbeitet, aber noch nicht vollständig im Code verhärtet**
+- **nächsten konkreten Ausbauschritten**
 
-- was bereits real im Code umgesetzt ist
-- was bereits strukturell angelegt ist
-- was nur teilweise verhärtet ist
-- was als Architektur-Endausbau noch offen bleibt
+Der Bauplan steht weiter in `UMSETZUNGSPLAN.md`.
+Dieses Dokument beschreibt den **realen Umsetzungsstand nach heutigem Stand**. 
 
 ---
 
@@ -20,62 +19,53 @@ Hier steht:
 # 1. Gesamtstatus
 # --------------------------------------------------
 
-Das Projekt ist nicht mehr in einer frühen Basis- oder Fix-Phase.
+Das Projekt ist **nicht mehr** in einer frühen Fix- oder Basisphase.
 
-Die Kernbasis steht bereits:
+Die Kernbasis steht bereits im Code:
 
 - äußere Wahrnehmung ist vorhanden
 - innere Runtime ist vorhanden
-- Zustandskette ist vorhanden
 - Entscheidungstendenz ist vorhanden
 - technische Handlungsbahn ist vorhanden
 - Episode / Review / Experience sind vorhanden
-- Persistenz- und KPI-Basis sind vorhanden
+- Persistenz für Memory- und Runtime-Zustände ist vorhanden
 
-Die Hauptarbeit liegt jetzt **nicht mehr** in der Einführung der Grundmechanik,
-sondern im **Architektur-Endausbau**.
+Die Hauptarbeit liegt damit **nicht mehr in der Einführung der Grundmechanik**,
+sondern im **Architektur-Endausbau und in der Experience-Vertiefung**. 
 
 ---
 
 # --------------------------------------------------
-# 2. Bereits umgesetzt
+# 2. Bereits fix umgesetzt
 # --------------------------------------------------
 
 # --------------------------------------------------
 # 2.1 Ebene 1 – äußeres Wahrnehmen
 # --------------------------------------------------
 
-Ebene 1 ist bereits als eigenständige Wahrnehmungsbasis angelegt.
+Ebene 1 ist als eigenständige Wahrnehmungsbasis real vorhanden.
 
-Bereits vorhanden sind:
+Bereits produktiv vorhanden:
 
-- OHLCV-Datenpfad
-- Workspace-/Fensterlogik
 - `candle_state`
 - `tension_state`
 - `visual_market_state`
 - `structure_perception_state`
 
+Die Wahrnehmung wird aus Marktdaten / `window` aufgebaut
+und als neutrales Wahrnehmungspaket weitergegeben. 
+
 ### Fachliche Bedeutung
 
-Die Außenwelt wird bereits nicht mehr nur als einfache Signalquelle behandelt.
-
-Sie wird im aktuellen Code als mehrschichtige Wahrnehmung erfasst:
+Die Außenwelt ist nicht mehr nur einfache Signalquelle,
+sondern bereits mehrschichtig beschrieben als:
 
 - Candle-Zustand
 - Spannungszustand
-- numerische äußere Marktform
+- äußere Marktform
 - Struktur-Wahrnehmung
 
-### Wichtiger Status
-
-`visual_market_state` ist bereits produktiv im Wahrnehmungspfad angekommen.
-
-Das heißt:
-
-- die Wahrnehmungsbasis ist nicht mehr nur geplant
-- sie ist bereits Teil des Bot-Zustands
-- sie wird bereits in Runtime und World-State weitergeführt
+Damit ist Ebene 1 real vorhanden und nicht mehr nur geplant. 
 
 ---
 
@@ -83,20 +73,18 @@ Das heißt:
 # 2.2 Ebene 2 – inneres Wahrnehmen / Denken / Handeln
 # --------------------------------------------------
 
-Ebene 2 ist bereits als laufende innere Verarbeitungsschicht vorhanden.
+Ebene 2 ist bereits als laufende innere Runtime-Schicht vorhanden.
 
-Bereits vorhanden sind:
+Bereits real vorhanden:
 
 - `MCMBrainRuntime`
-- Runtime-Thread-Modell
-- Marktimpuls-Übergabe an die Runtime
 - Runtime-Snapshot
-- Decision-State
-- Brain-Snapshot
+- Runtime-Decision-State
+- Runtime-Brain-Snapshot
+- Runtime-Marktimpuls-Verarbeitung
+- Runtime-Idle-Followup
 
-### Vorhandene innere Zustandskette
-
-Die gestufte Innenbahn ist bereits angelegt:
+Die innere Zustandskette ist angelegt und im Codepfad vertreten:
 
 - `outer_visual_perception_state`
 - `inner_field_perception_state`
@@ -105,14 +93,11 @@ Die gestufte Innenbahn ist bereits angelegt:
 - `felt_state`
 - `thought_state`
 - `meta_regulation_state`
-- `expectation_state`
-
-Diese Zustandskette ist nicht nur dokumentiert,
-sondern bereits im aktuellen Codepfad vertreten.
+- `expectation_state` 
 
 ### Entscheidungstendenz
 
-Die Handlung entsteht bereits nicht mehr direkt aus einem einfachen Signal.
+Die Handlung entsteht bereits nicht mehr direkt aus einem simplen Signal.
 
 Vorhanden ist eine vorgelagerte Entscheidungstendenz:
 
@@ -121,19 +106,18 @@ Vorhanden ist eine vorgelagerte Entscheidungstendenz:
 - `hold`
 - `replan`
 
-Erst danach folgt die technische Handelsbahn.
+Erst danach folgt die technische Handlungsbahn. 
 
 ### Technische Handlungsbahn
 
-Weiterhin vorhanden und aktiv:
+Weiterhin aktiv vorhanden:
 
 - Pending
 - Entry
 - Position
 - Exit
 
-Damit ist die Handlungsmechanik bereits an die innere Zustandslogik gekoppelt,
-auch wenn die architektonische Trennung noch nicht vollständig zu Ende geführt ist.
+Die technische Mechanik ist damit bereits an die innere Zustandslogik gekoppelt. 
 
 ---
 
@@ -141,10 +125,9 @@ auch wenn die architektonische Trennung noch nicht vollständig zu Ende geführt
 # 2.3 MCM-Zustandsraum
 # --------------------------------------------------
 
-Der MCM-Raum ist nicht mehr nur implizit,
-sondern bereits teilweise explizit lesbar.
+Der MCM-Zustandsraum ist bereits teilweise explizit lesbar.
 
-Bereits vorhanden sind Zustandsachsen wie:
+Vorhanden sind reale Zustandsachsen wie:
 
 - `field_density`
 - `field_stability`
@@ -153,11 +136,13 @@ Bereits vorhanden sind Zustandsachsen wie:
 - `recovery_need`
 - `survival_pressure`
 
-Diese Größen laufen bereits durch Runtime-/Decision-/Snapshot-Strukturen.
+Diese Größen laufen bereits durch Runtime-, Decision- und Snapshot-Strukturen. 
 
-Damit ist die spätere Zielidee,
-den MCM-Gesamtzustand explizit lesbar zu machen,
-im Code bereits begonnen und nicht mehr nur Theorie.
+### Fachliche Bedeutung
+
+Die Zielidee,
+den Innenraum des Systems explizit lesbar zu machen,
+ist bereits begonnen und produktiv im Code vertreten. :contentReference[oaicite:8]{index=8}
 
 ---
 
@@ -165,7 +150,7 @@ im Code bereits begonnen und nicht mehr nur Theorie.
 # 2.4 Ebene 3 – Entwicklung aus Erfahrung
 # --------------------------------------------------
 
-Die Entwicklungsebene ist bereits substanziell angelegt.
+Die Entwicklungsebene ist bereits substanziell umgesetzt.
 
 Vorhanden sind:
 
@@ -179,181 +164,379 @@ Vorhanden sind:
 - persistenter Memory-State
 - In-Trade-Update-Auswertung
 - Experience-Linking
-- Similarity-/Axis-/Drift-/Reinforcement-Ansätze
+- Similarity-/Axis-/Drift-/Reinforcement-Ansätze 
 
-### Fachliche Bedeutung
+### Nicht-Handlung ist integriert
 
-Das System speichert bereits nicht nur Ausgangsergebnisse,
-sondern ganze Entscheidungsverläufe.
+Nicht-Handlung ist nicht mehr nur Sonderfall,
+sondern realer Teil des Episoden- und Experience-Flusses:
 
-Damit ist Ebene 3 bereits mehr als nur Statistik oder Log.
+- `observed_only`
+- `withheld`
+- `replanned`
+- `abandoned` 
 
-Sie wirkt schon als Entwicklungsraum für:
+### Zustandsdelta ist integriert
 
-- Entscheidungsepisoden
-- Nicht-Handlung
-- Kontextbewertung
-- regulatorische Rückkopplung
-- langfristige Veränderung der Innenbahn
+Episode / Experience führen bereits:
 
----
+- `state_before`
+- `state_after`
+- `state_delta`
 
-# --------------------------------------------------
-# 2.5 Persistenz / KPI / Nachweis
-# --------------------------------------------------
-
-Auch die Nachweis- und Speicherbasis ist bereits aufgebaut.
-
-Vorhanden sind:
-
-- `trade_stats.json` als Aggregat
-- `attempt_records.jsonl`
-- `outcome_records.jsonl`
-- getrennte Attempt-/Outcome-Erfassung
-- KPI-Zusammenfassung
-- Drawdown-/Equity-/Proof-Kennzahlen
-- Persistenz für Memory-State
-- GUI-/Debug-Lesepfad als Ausgabeschicht
-
-Die Basis für Messbarkeit ist damit vorhanden,
-auch wenn sie für die neue Architektur noch weiter ausgebaut werden muss.
+Damit ist die Kopplung von Handlung / Nicht-Handlung und Zustandsveränderung bereits real umgesetzt. 
 
 ---
 
 # --------------------------------------------------
-# 3. Bereits teilweise umgesetzt, aber noch nicht verhärtet
+# 2.5 Persistenz
 # --------------------------------------------------
 
-Ein Teil des Zielbildes ist bereits sichtbar,
-aber noch nicht vollständig architektonisch zu Ende geführt.
+Persistenz ist vorhanden für:
 
-Dazu gehören insbesondere:
+- `signature_memory`
+- `context_clusters`
+- `mcm_runtime_snapshot`
+- `mcm_runtime_decision_state`
+- `mcm_runtime_brain_snapshot`
+- `mcm_decision_episode`
+- `mcm_experience_space`
+- weitere Memory-Zustände
 
-- harte Ebenen-Trennung
-- klare Runtime-Entkopplung
-- vollständige Trennung von Wahrnehmung, Innenbahn, Entscheidung und Technik
-- permanenter Innenprozess als vollständig eigenständige Laufzeitschicht
-- vollständige Unterordnung älterer Mischpfade unter die 3-Ebenen-Architektur
+Damit kann der Bot relevante Langzeitanteile seines Zustandsraums halten. :contentReference[oaicite:12]{index=12}
+
+---
+
+# --------------------------------------------------
+# 3. Was heute fachlich zusätzlich klar ausgearbeitet wurde
+# --------------------------------------------------
+
+Heute wurde die Entwicklungsrichtung von Ebene 3 fachlich deutlich geschärft.
+
+Wichtig:
+Dieser Teil ist **inhaltlich ausgearbeitet**,
+aber **noch nicht vollständig in dieser Tiefe im Code umgesetzt**.
+
+---
+
+# --------------------------------------------------
+# 3.1 Tragfähigkeit als zentrale Bewertungsgröße
+# --------------------------------------------------
+
+Experience soll nicht primär bewerten:
+
+- Profit
+- Trefferquote
+- klassische Trade-Kennzahlen
+
+Sondern:
+
+- wie tragfähig eine Situation für das System war
+- wie viel innere Reibung sie erzeugt hat
+- ob Handlung in dieser Situation effizient tragbar war
+
+Damit verschiebt sich die Experience-Bewertung fachlich von:
+
+- Ergebnisbewertung
+
+zu:
+
+- Tragfähigkeitsbewertung
+
+---
+
+# --------------------------------------------------
+# 3.2 Lernen als Umgangsfähigkeit
+# --------------------------------------------------
+
+Das System soll nicht lernen:
+
+- was abstrakt „richtig“ ist
+- wie man maximal aggressiv tradet
+
+Sondern:
+
+- womit es gut umgehen kann
+- in welchen Situationen es handlungsfähig bleibt
+- welche Struktur-Zustands-Kombinationen effizient tragbar sind
+
+Lernen bedeutet damit:
+
+- effizienter mit Situationen umgehen können
+- nicht einfach mehr handeln
+
+---
+
+# --------------------------------------------------
+# 3.3 Energie / Reibung / Kohärenz
+# --------------------------------------------------
+
+Der Nullpunkt der MCM bedeutet fachlich nicht:
+
+- Stillstand
+- Inaktivität
+- Handlungsunfähigkeit
+
+Sondern:
+
+- hohe Kohärenz mit der Umwelt
+- geringe innere Reibung
+- geringe energetische Belastung
+- hohe Energieeffizienz bei aktiver Interaktion
+
+Abweichung vom Zentrum bedeutet:
+
+- mehr Reibung
+- mehr regulatorische Last
+- mehr Unsicherheit
+- mehr Energieverbrauch
+
+Kohärenz bedeutet:
+
+- passendere Wahrnehmung
+- passendere Handlung
+- geringere innere Kosten
+
+---
+
+# --------------------------------------------------
+# 3.4 Erfahrungscluster
+# --------------------------------------------------
+
+Experience soll fachlich stärker als Cluster-System gedacht werden.
+
+Cluster repräsentieren nicht nur ähnliche Datenlagen,
+sondern:
+
+- Typen von Situationen
+- wiederkehrende Struktur-Zustands-Muster
+- deren Tragfähigkeit für das System
+
+Damit wird aus Experience fachlich:
+
+- nicht nur Verlaufsspeicherung
+- sondern Erfahrungsraum über tragfähige Umgangsformen
+
+---
+
+# --------------------------------------------------
+# 3.5 Outcome als Zustandswirkung
+# --------------------------------------------------
+
+Outcome soll fachlich nicht als Geldzahl wirken,
+sondern als Veränderung im Innenraum.
+
+Beispiel:
+
+- Gewinn -> Entlastung / Stabilisierung / evtl. Euphorie
+- Verlust -> Belastung / Rückzug / Recovery-Bedarf
+
+Wichtig:
+
+- positive Wirkung darf nicht blind verstärken
+- Euphorie ist nicht automatisch Stabilität
+- Verlust ist nicht nur schlecht, sondern regulatorisches Feedback
+
+---
+
+# --------------------------------------------------
+# 4. Was davon bereits technisch vorbereitet ist
+# --------------------------------------------------
+
+Für diese heutige Vertiefung gibt es bereits reale technische Anknüpfungspunkte im Code:
+
+- `context_clusters`
+- `signature_memory`
+- `mcm_experience_space`
+- `similarity_axes`
+- `drift`
+- `reinforcement`
+- `attenuation`
+- `review_score`
+- `structural_bearing_quality`
+- `observation_quality`
+- `decision_path_quality`
+- `state_before / state_after / state_delta` 
+
+### Einordnung
 
 Das bedeutet:
 
-Die Richtung stimmt bereits,
-aber die Struktur ist an mehreren Stellen noch nicht final verhärtet.
+- die **Richtung ist technisch vorbereitet**
+- die **heutige Experience-Vertiefung ist anschlussfähig**
+- aber die **volle fachliche Interpretation als Tragfähigkeits- und Energie-System ist noch nicht komplett ausformuliert bzw. verhärtet**
 
 ---
 
 # --------------------------------------------------
-# 4. Aktuell noch offen
+# 5. Was noch nicht fertig ist
 # --------------------------------------------------
 
 # --------------------------------------------------
-# 4.1 Architektur-Endausbau
+# 5.1 KPI / Auswertung
 # --------------------------------------------------
 
-Offen bleibt vor allem:
+Der KPI-/Nachweisbereich ist noch stark von der alten Trade-Welt geprägt.
 
-- Ebenen 1 / 2 / 3 technisch vollständig zu entmischen
-- Runtime als echten dauerhaften Innenprozess weiter zu vervollständigen
-- ältere Mischstellen weiter abzubauen
-- Wahrnehmungsbahn, Innenbahn, Entscheidungsbahn und Handlungsbahn noch klarer zu trennen
+Aktiv vorhanden sind noch klassische Kennzahlen wie:
+
+- `pnl_netto`
+- `pnl_tp`
+- `pnl_sl`
+- `equity_peak`
+- `max_drawdown_abs`
+- `max_drawdown_pct`
+- `winrate`
+- `profit_factor`
+- `expectancy` :contentReference[oaicite:14]{index=14}
+
+Diese Größen sind als Hauptbewertung für die Zielarchitektur nicht mehr passend
+und müssen später zurückgebaut oder umgeordnet werden.
 
 ---
 
 # --------------------------------------------------
-# 4.2 MCM-Zustandsraum weiter vertiefen
+# 5.2 GUI / Visualisierung
 # --------------------------------------------------
 
-Die Zustandsachsen sind bereits vorhanden,
-aber ihre Lesbarkeit und ihr Einsatz sind noch nicht Endzustand.
+Die GUI-Ausgabeschicht liest aktuell noch stark alte Nachweisstrukturen:
 
-Weiter offen bleibt:
+- `trade_stats.json`
+- `trade_equity.csv`
 
-- tiefere Ableitung aus dem laufenden MCM-Raum
-- konsistentere Snapshot-/Debug-/GUI-Lesbarkeit
-- stärkere Nutzung dieser Zustände in Review, Experience und Nicht-Handlung
-- weitere Härtung gegen starre Fremdlogik
+Auch die Equity-/PnL-Darstellung ist noch vorhanden. :contentReference[oaicite:15]{index=15}
+
+Hier fehlt später die saubere neue Darstellung von:
+
+- Außenwelt
+- Innenwelt
+- Zustandsachsen
+- Experience-/Tragfähigkeitsverlauf
 
 ---
 
 # --------------------------------------------------
-# 4.3 Entwicklungsebene weiter vertiefen
+# 5.3 Experience-Vertiefung
 # --------------------------------------------------
 
-Offen bleibt außerdem:
+Die heutige Vertiefung ist fachlich ausgearbeitet,
+aber noch nicht vollständig als klare technische Logik durchgezogen.
 
-- Nicht-Handlung als vollständiges Lernobjekt weiter stärken
-- Beobachtung / Sammlung / Pause tiefer als wertvolle Episode bewerten
-- In-Trade-Lernen weiter ausbauen
-- langfristige Veränderung der Innenbahn noch stärker aus Erfahrung ableiten
+Noch offen ist insbesondere:
+
+- Tragfähigkeit als explizite Bewertungsgröße
+- Lernen als Umgangsfähigkeit
+- Reibung / Energie als Experience-Kosten
+- Cluster-Bewertung über Tragfähigkeit statt Ergebnis
+- stärkere Entkopplung von Profitlogik
 
 ---
 
 # --------------------------------------------------
-# 4.4 Messbarkeit / Nachweis / Tests
+# 5.4 Tests
 # --------------------------------------------------
 
-Die Nachweisbasis ist vorhanden,
-aber für den Zielausbau noch nicht vollständig.
+Dedizierte Tests fehlen weiterhin insbesondere für:
 
-Offen bleiben:
-
-- KPI-/Nachweis für neue MCM-Zustände
-- KPI-/Nachweis für Nicht-Handlung und Erholung
-- erweiterte Debug-/GUI-Lesbarkeit
-- dedizierte Tests für:
-  - `bot_gate_funktions.py`
-  - `mcm_core_engine.py`
-  - neue Zustandsachsen
-  - regulatorische Pausen-/Beobachtungsdynamik
+- `bot_gate_funktions.py`
+- `mcm_core_engine.py` :contentReference[oaicite:16]{index=16}
 
 ---
 
 # --------------------------------------------------
-# 5. Einordnung des aktuellen Entwicklungsstands
+# 6. Nächste Schritte
 # --------------------------------------------------
 
-Das Projekt ist aktuell in einer Übergangsphase:
+# --------------------------------------------------
+# 6.1 PRIO 2 – Experience / Review vertiefen
+# --------------------------------------------------
 
-nicht mehr
+Nächster sinnvoller Hauptblock ist:
 
-- Basis-Fix
-- Rohumbau
-- reine Signalmechanik
-
-sondern bereits
-
-- Wahrnehmungssystem
-- Runtime-System
-- Innenzustandssystem
-- Episoden-/Erfahrungssystem
-- MCM-basierte Entwicklungsarchitektur
-
-Der Schritt, der jetzt offen ist,
-ist vor allem der Übergang von:
-
-- funktionierender MCM-Basis
-
-hin zu:
-
-- vollständig verhärteter MCM-Zielarchitektur
+- Experience fachlich von Ergebnisbewertung auf Tragfähigkeitsbewertung schärfen
+- Zustandswirkung von Outcome sauberer formulieren
+- Cluster stärker als Erfahrungsräume nutzen
+- Lernen explizit als Umgangsfähigkeit modellieren
 
 ---
 
 # --------------------------------------------------
-# 6. Kurzfazit
+# 6.2 PRIO 2 – Runtime / Architektur weiter trennen
 # --------------------------------------------------
 
-Der aktuelle Stand ist:
+Weiter zu schärfen:
 
-- die Grundarchitektur lebt bereits
-- die Wahrnehmungsbasis ist aktiv
-- die Innenbahn ist aktiv
-- Episode / Review / Experience sind aktiv
-- Persistenz / KPI sind aktiv
+- Ebene 1 = reine Wahrnehmung
+- Ebene 2 = reiner Innenprozess
+- Ebene 3 = reine Entwicklung / Experience
 
-Nicht fertig ist vor allem:
+Ziel:
 
-- die endgültige architektonische Trennung
-- der vollständig laufende Innenprozess als echte Dauerstruktur
-- der Endausbau der Entwicklungs- und Selbstregulationslogik
-- die vollständige Messbarkeit der neuen Architektur
+- weniger Vermischung von Runtime und Bot-State
+- klarere strukturelle Trennung der Ebenen
+
+---
+
+# --------------------------------------------------
+# 6.3 PRIO 3 – KPI umbauen
+# --------------------------------------------------
+
+Später umzubauen:
+
+- weg von PnL als zentraler KPI
+- hin zu Zustands- und Tragfähigkeitsmetriken
+
+Beispiele für spätere neue Bewertungsgrößen:
+
+- Zustandsstabilität
+- Handlungsfähigkeit
+- regulatorische Last
+- Regeneration
+- Tragfähigkeit je Strukturfeld
+
+---
+
+# --------------------------------------------------
+# 6.4 PRIO 3 – Visualisierung umbauen
+# --------------------------------------------------
+
+Später aufzubauen:
+
+- getrennte Sicht auf Außenwelt und Innenwelt
+- Chart + Wahrnehmungszustände
+- Innenraum mit Zustandsachsen
+- Experience-/Cluster-/Tragfähigkeitsdarstellung
+
+---
+
+# --------------------------------------------------
+# 6.5 PRIO 4 – Tests
+# --------------------------------------------------
+
+Danach:
+
+- dedizierte Tests für Kernpfade
+- Fokus auf Zustandsentwicklung
+- Fokus auf Wahrnehmungs- und Runtime-Konsistenz
+- Fokus nicht auf klassischen Trade-Erfolg
+
+---
+
+# --------------------------------------------------
+# 7. Fazit
+# --------------------------------------------------
+
+Der reale Stand des Projekts ist:
+
+- Kernmechanik steht
+- Wahrnehmung steht
+- Runtime steht
+- Experience steht
+- Persistenz steht
+
+Der nächste Hauptschritt ist **nicht mehr Basis-Fixerei**,
+sondern:
+
+- **Architektur-Endausbau**
+- **Experience-/Tragfähigkeits-Vertiefung**
+- **später KPI-/GUI-Neuausrichtung**. 

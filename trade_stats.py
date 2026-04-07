@@ -51,6 +51,9 @@ class TradeStats:
             "attempts_timeout": 0,
             "attempts_blocked": 0,
             "attempts_skipped": 0,
+            "attempts_observed": 0,
+            "attempts_replanned": 0,
+            "attempts_withheld": 0,
             "attempt_structure_zone": 0,
             "attempt_non_structure_zone": 0,
             "current_timestamp": None,
@@ -236,6 +239,16 @@ class TradeStats:
                 "attempt_density": float(attempt_feedback.get("attempt_density", 0.0) or 0.0),
                 "context_quality": float(attempt_feedback.get("context_quality", 0.0) or 0.0),
                 "overtrade_pressure": float(attempt_feedback.get("overtrade_pressure", 0.0) or 0.0),
+                "observe_share": float(attempt_feedback.get("observe_share", 0.0) or 0.0),
+                "replan_share": float(attempt_feedback.get("replan_share", 0.0) or 0.0),
+                "withheld_share": float(attempt_feedback.get("withheld_share", 0.0) or 0.0),
+                "pressure_to_capacity": float(attempt_feedback.get("pressure_to_capacity", 0.0) or 0.0),
+                "recovery_need": float(attempt_feedback.get("recovery_need", 0.0) or 0.0),
+                "regulated_courage": float(attempt_feedback.get("regulated_courage", 0.0) or 0.0),
+                "courage_gap": float(attempt_feedback.get("courage_gap", 0.0) or 0.0),
+                "action_inhibition": float(attempt_feedback.get("action_inhibition", 0.0) or 0.0),
+                "action_clearance": float(attempt_feedback.get("action_clearance", 0.0) or 0.0),
+                "regulation_before_action": float(attempt_feedback.get("regulation_before_action", 0.0) or 0.0),
                 "max_drawdown_abs": float(self.data.get("max_drawdown_abs", 0.0) or 0.0),
                 "max_drawdown_pct": float(self.data.get("max_drawdown_pct", 0.0) or 0.0),
             },
@@ -250,6 +263,9 @@ class TradeStats:
                 "sl": int(sl),
                 "cancels": int(cancels),
                 "attempts": int(attempts),
+                "attempts_observed": int(self.data.get("attempts_observed", 0) or 0),
+                "attempts_replanned": int(self.data.get("attempts_replanned", 0) or 0),
+                "attempts_withheld": int(self.data.get("attempts_withheld", 0) or 0),
                 "pnl_netto": float(pnl_netto),
             },
         }
@@ -276,44 +292,103 @@ class TradeStats:
         normalized_context = self._normalize_record_value(context or {})
 
         compact = {
-            "state": self._pick_fields(
-                normalized_context.get("state", {}),
-                ["energy", "coherence", "asymmetry", "coh_zone", "self_state", "attractor"],
-            ),
-            "focus": self._pick_fields(
-                normalized_context.get("focus", {}),
-                ["focus_point", "focus_confidence", "target_lock", "target_drift"],
-            ),
-            "structure_perception_state": self._pick_fields(
-                normalized_context.get("structure_perception_state", {}),
-                ["zone_proximity", "structure_stability", "structure_quality", "context_confidence"],
-            ),
-            "felt_state": self._pick_fields(
-                normalized_context.get("felt_state", {}),
-                ["pressure", "opportunity", "risk", "stability"],
-            ),
-            "thought_state": self._pick_fields(
-                normalized_context.get("thought_state", {}),
-                ["conflict", "maturity", "conviction", "uncertainty"],
-            ),
-            "meta_regulation_state": self._pick_fields(
-                normalized_context.get("meta_regulation_state", {}),
-                ["decision", "allow_plan", "observe_priority", "readiness", "maturity"],
-            ),
-            "expectation_state": self._pick_fields(
-                normalized_context.get("expectation_state", {}),
-                ["entry_expectation", "target_expectation", "approach_pressure", "pressure_release", "experience_regulation", "reflection_maturity"],
-            ),
-            "state_signature": self._pick_fields(
-                normalized_context.get("state_signature", {}),
-                ["signature_key"],
-            ),
-            "signal": self._pick_fields(
-                normalized_context.get("signal", {}),
-                ["signature_bias", "signature_quality", "signature_distance", "context_cluster_id", "context_cluster_bias", "context_cluster_quality", "context_cluster_distance", "inhibition_level", "habituation_level", "competition_bias", "observation_mode", "long_score", "short_score"],
-            ),
+            "state": self._pick_fields(normalized_context.get("state", {}), [
+                "energy",
+                "coherence",
+                "asymmetry",
+                "coh_zone",
+                "self_state",
+                "attractor",
+            ]),
+            "focus": self._pick_fields(normalized_context.get("focus", {}), [
+                "focus_point",
+                "focus_confidence",
+                "target_lock",
+                "target_drift",
+            ]),
+            "experience": self._pick_fields(normalized_context.get("experience", {}), [
+                "entry_expectation",
+                "target_expectation",
+                "approach_pressure",
+                "pressure_release",
+                "experience_regulation",
+                "reflection_maturity",
+                "load_bearing_capacity",
+                "protective_width_regulation",
+                "protective_courage",
+            ]),
+            "field_state": self._pick_fields(normalized_context.get("field_state", {}), [
+                "field_density",
+                "field_stability",
+                "regulatory_load",
+                "action_capacity",
+                "recovery_need",
+                "survival_pressure",
+                "pressure_to_capacity",
+            ]),
+            "regulation_snapshot": self._normalize_record_value(normalized_context.get("regulation_snapshot", {})),
+            "state_before": self._normalize_record_value(normalized_context.get("state_before", {})),
+            "state_after": self._normalize_record_value(normalized_context.get("state_after", {})),
+            "state_delta": self._normalize_record_value(normalized_context.get("state_delta", {})),
+            "felt_state": self._pick_fields(normalized_context.get("felt_state", {}), [
+                "confidence",
+                "urgency",
+                "pressure",
+                "hesitation",
+                "protective_tension",
+                "courage_tension",
+                "relief_need",
+                "regulated_confidence",
+            ]),
+            "meta_regulation_state": self._pick_fields(normalized_context.get("meta_regulation_state", {}), [
+                "decision",
+                "observation_priority",
+                "uncertainty_load",
+                "regulatory_balance",
+                "regulated_courage",
+                "courage_gap",
+                "action_inhibition",
+                "action_clearance",
+                "pre_action_phase",
+                "dominant_tension_cause",
+            ]),
+            "expectation_state": self._pick_fields(normalized_context.get("expectation_state", {}), [
+                "entry_expectation",
+                "target_expectation",
+                "approach_pressure",
+                "pressure_release",
+                "experience_regulation",
+                "reflection_maturity",
+                "load_bearing_capacity",
+            ]),
+            "trade_plan": self._pick_fields(normalized_context.get("trade_plan", {}), [
+                "decision",
+                "entry_price",
+                "sl_price",
+                "tp_price",
+                "rr_value",
+                "risk_model_score",
+                "reward_model_score",
+                "entry_validity_band",
+            ]),
+            "signal": self._pick_fields(normalized_context.get("signal", {}), [
+                "signature_bias",
+                "signature_block",
+                "signature_quality",
+                "signature_distance",
+                "context_cluster_id",
+                "context_cluster_bias",
+                "context_cluster_quality",
+                "context_cluster_distance",
+                "context_cluster_block",
+                "inhibition_level",
+                "habituation_level",
+                "competition_bias",
+                "observation_mode",
+                "long_score",
+                "short_score",
+            ]),
         }
-
         return {key: value for key, value in compact.items() if value}
     # ─────────────────────────────────────────────
     def _save(self):
@@ -368,6 +443,16 @@ class TradeStats:
                 "mean_structure_quality": 0.0,
                 "context_quality": 0.0,
                 "overtrade_pressure": 0.0,
+                "observe_share": 0.0,
+                "replan_share": 0.0,
+                "withheld_share": 0.0,
+                "pressure_to_capacity": 0.0,
+                "recovery_need": 0.0,
+                "regulated_courage": 0.0,
+                "courage_gap": 0.0,
+                "action_inhibition": 0.0,
+                "action_clearance": 0.0,
+                "regulation_before_action": 0.0,
             }
 
         total = float(len(items))
@@ -375,15 +460,38 @@ class TradeStats:
         blocked = 0.0
         cancelled = 0.0
         timeout = 0.0
+        observed = 0.0
+        replanned = 0.0
+        withheld = 0.0
         zone = 0.0
         structure_sum = 0.0
+        pressure_sum = 0.0
+        recovery_sum = 0.0
+        regulated_courage_sum = 0.0
+        courage_gap_sum = 0.0
+        action_inhibition_sum = 0.0
+        action_clearance_sum = 0.0
+        regulation_before_action_sum = 0.0
 
         for item in items:
             status = str((item or {}).get("status", "") or "").strip().lower()
             structure_quality = float((item or {}).get("structure_quality", 0.0) or 0.0)
             structure_bucket = str((item or {}).get("structure_bucket", "") or "").strip().lower()
+            pressure_to_capacity = float((item or {}).get("pressure_to_capacity", 0.0) or 0.0)
+            recovery_need = float((item or {}).get("recovery_need", 0.0) or 0.0)
+            regulated_courage = float((item or {}).get("regulated_courage", 0.0) or 0.0)
+            courage_gap = float((item or {}).get("courage_gap", 0.0) or 0.0)
+            action_inhibition = float((item or {}).get("action_inhibition", 0.0) or 0.0)
+            action_clearance = float((item or {}).get("action_clearance", 0.0) or 0.0)
+            pre_action_phase = str((item or {}).get("pre_action_phase", "") or "").strip().lower()
 
             structure_sum += structure_quality
+            pressure_sum += pressure_to_capacity
+            recovery_sum += recovery_need
+            regulated_courage_sum += regulated_courage
+            courage_gap_sum += courage_gap
+            action_inhibition_sum += action_inhibition
+            action_clearance_sum += action_clearance
 
             if status == "filled":
                 filled += 1.0
@@ -393,38 +501,70 @@ class TradeStats:
                 cancelled += 1.0
             elif status == "timeout":
                 timeout += 1.0
+            elif status == "observed_only":
+                observed += 1.0
+            elif status == "replanned":
+                replanned += 1.0
+            elif status == "withheld":
+                withheld += 1.0
 
             if structure_bucket == "zone":
                 zone += 1.0
+
+            if pre_action_phase in ("regulated", "ready", "stable", "aligned"):
+                regulation_before_action_sum += 1.0
 
         attempt_density = max(0.0, min(1.0, total / max(8.0, float(window) * 0.50)))
         fill_ratio = filled / total
         blocked_ratio = blocked / total
         cancel_ratio = cancelled / total
         timeout_ratio = timeout / total
+        observe_share = observed / total
+        replan_share = replanned / total
+        withheld_share = withheld / total
         zone_ratio = zone / total
         mean_structure_quality = structure_sum / total
+        avg_pressure_to_capacity = pressure_sum / total
+        avg_recovery_need = recovery_sum / total
+        avg_regulated_courage = regulated_courage_sum / total
+        avg_courage_gap = courage_gap_sum / total
+        avg_action_inhibition = action_inhibition_sum / total
+        avg_action_clearance = action_clearance_sum / total
+        regulation_before_action = regulation_before_action_sum / total
+
         context_quality = max(
             0.0,
             min(
                 1.0,
-                (mean_structure_quality * 0.56)
-                + (zone_ratio * 0.24)
-                + (fill_ratio * 0.12)
-                - (blocked_ratio * 0.10)
-                - (cancel_ratio * 0.08)
-                - (timeout_ratio * 0.12),
+                (mean_structure_quality * 0.34)
+                + (zone_ratio * 0.16)
+                + (fill_ratio * 0.10)
+                + (avg_regulated_courage * 0.12)
+                + (avg_action_clearance * 0.12)
+                + (regulation_before_action * 0.10)
+                + (observe_share * 0.04)
+                + (replan_share * 0.04)
+                - (min(1.0, avg_pressure_to_capacity / 2.0) * 0.08)
+                - (avg_recovery_need * 0.06)
+                - (avg_courage_gap * 0.06)
+                - (avg_action_inhibition * 0.06)
+                - (cancel_ratio * 0.04)
+                - (timeout_ratio * 0.06),
             ),
         )
+
         overtrade_pressure = max(
             0.0,
             min(
                 1.0,
-                (attempt_density * 0.48)
-                + ((1.0 - context_quality) * 0.28)
-                + (blocked_ratio * 0.14)
-                + (cancel_ratio * 0.10)
-                + (timeout_ratio * 0.16),
+                (attempt_density * 0.32)
+                + ((1.0 - context_quality) * 0.20)
+                + (blocked_ratio * 0.10)
+                + (cancel_ratio * 0.08)
+                + (timeout_ratio * 0.12)
+                + (min(1.0, avg_pressure_to_capacity / 2.0) * 0.10)
+                + (avg_recovery_need * 0.04)
+                + (avg_action_inhibition * 0.04),
             ),
         )
 
@@ -439,12 +579,23 @@ class TradeStats:
             "mean_structure_quality": float(mean_structure_quality),
             "context_quality": float(context_quality),
             "overtrade_pressure": float(overtrade_pressure),
+            "observe_share": float(observe_share),
+            "replan_share": float(replan_share),
+            "withheld_share": float(withheld_share),
+            "pressure_to_capacity": float(avg_pressure_to_capacity),
+            "recovery_need": float(avg_recovery_need),
+            "regulated_courage": float(avg_regulated_courage),
+            "courage_gap": float(avg_courage_gap),
+            "action_inhibition": float(avg_action_inhibition),
+            "action_clearance": float(avg_action_clearance),
+            "regulation_before_action": float(regulation_before_action),
         }
 
     # ─────────────────────────────────────────────
     def on_attempt(self, *, status: str, context: dict = None): 
         status_key = str(status or "").strip().lower()
         normalized_context = self._normalize_record_value(context or {})
+        compact_context = self._compact_context(normalized_context)
 
         self.data["attempts"] = int(self.data.get("attempts", 0) or 0) + 1
         if status_key == "submitted":
@@ -459,6 +610,12 @@ class TradeStats:
             self.data["attempts_blocked"] = int(self.data.get("attempts_blocked", 0) or 0) + 1
         elif status_key == "skipped":
             self.data["attempts_skipped"] = int(self.data.get("attempts_skipped", 0) or 0) + 1
+        elif status_key == "observed_only":
+            self.data["attempts_observed"] = int(self.data.get("attempts_observed", 0) or 0) + 1
+        elif status_key == "replanned":
+            self.data["attempts_replanned"] = int(self.data.get("attempts_replanned", 0) or 0) + 1
+        elif status_key == "withheld":
+            self.data["attempts_withheld"] = int(self.data.get("attempts_withheld", 0) or 0) + 1
 
         structure_quality = self._extract_structure_quality(normalized_context)
         if structure_quality >= 0.55:
@@ -475,12 +632,22 @@ class TradeStats:
             structure_bucket,
         )
 
+        field_state = dict(compact_context.get("field_state", {}) or {})
+        meta_regulation_state = dict(compact_context.get("meta_regulation_state", {}) or {})
+
         recent = list(self.data.get("recent_attempts", []) or [])
         recent.append(
             {
                 "status": status_key or "unknown",
                 "structure_quality": float(structure_quality),
                 "structure_bucket": structure_bucket,
+                "pressure_to_capacity": float(field_state.get("pressure_to_capacity", 0.0) or 0.0),
+                "recovery_need": float(field_state.get("recovery_need", 0.0) or 0.0),
+                "regulated_courage": float(meta_regulation_state.get("regulated_courage", 0.0) or 0.0),
+                "courage_gap": float(meta_regulation_state.get("courage_gap", 0.0) or 0.0),
+                "action_inhibition": float(meta_regulation_state.get("action_inhibition", 0.0) or 0.0),
+                "action_clearance": float(meta_regulation_state.get("action_clearance", 0.0) or 0.0),
+                "pre_action_phase": str(meta_regulation_state.get("pre_action_phase", "") or ""),
             }
         )
         self.data["recent_attempts"] = recent[-80:]
@@ -690,6 +857,16 @@ class TradeStats:
             "attempt_density": float(proof.get("attempt_density", 0.0) or 0.0),
             "context_quality": float(proof.get("context_quality", 0.0) or 0.0),
             "overtrade_pressure": float(proof.get("overtrade_pressure", 0.0) or 0.0),
+            "observe_share": float(proof.get("observe_share", 0.0) or 0.0),
+            "replan_share": float(proof.get("replan_share", 0.0) or 0.0),
+            "withheld_share": float(proof.get("withheld_share", 0.0) or 0.0),
+            "pressure_to_capacity": float(proof.get("pressure_to_capacity", 0.0) or 0.0),
+            "recovery_need": float(proof.get("recovery_need", 0.0) or 0.0),
+            "regulated_courage": float(proof.get("regulated_courage", 0.0) or 0.0),
+            "courage_gap": float(proof.get("courage_gap", 0.0) or 0.0),
+            "action_inhibition": float(proof.get("action_inhibition", 0.0) or 0.0),
+            "action_clearance": float(proof.get("action_clearance", 0.0) or 0.0),
+            "regulation_before_action": float(proof.get("regulation_before_action", 0.0) or 0.0),
             "max_drawdown_abs": float(proof.get("max_drawdown_abs", 0.0) or 0.0),
             "max_drawdown_pct": float(proof.get("max_drawdown_pct", 0.0) or 0.0),
             "kpi_summary": kpi_summary,

@@ -516,6 +516,334 @@ Dieses System soll lernen:
 
 ---
 
+  # ==================================================
+
+  # ERGÄNZUNG – EXPERIENCE / TRAGFÄHIGKEIT / CLUSTER
+
+  # (für UMSETZUNGSPLAN.md)
+
+  # ==================================================
+
+  # --------------------------------------------------
+
+  # Beobachtung
+
+  # --------------------------------------------------
+
+  * Das System verarbeitet bereits:
+
+    * Wahrnehmung (Struktur, Spannung, Marktform)
+    * Innenzustand (regulatory_load, action_capacity, etc.)
+    * Handlung / Nicht-Handlung
+    * Outcome → Zustandsveränderung
+
+  * Experience ist bereits vorhanden:
+
+    * Episoden
+    * Kontext
+    * Zustand vor / nach Handlung
+
+  * Es fehlt jedoch eine klare Definition von:
+
+    * Tragfähigkeit
+    * Erfahrungsclustern
+    * Lernen als Umgangsfähigkeit
+
+  # --------------------------------------------------
+
+  # Interpretation
+
+  # --------------------------------------------------
+
+  ## 1. Lernen im MCM-System
+
+  Lernen bedeutet nicht:
+
+  * richtige Entscheidung finden
+  * Profit maximieren
+
+  Sondern:
+
+  * effizient mit Situationen umgehen können
+  * bei möglichst geringer regulatorischer Last handeln
+  * handlungsfähig bleiben
+
+  ---
+
+  ## 2. Tragfähigkeit als zentrale Bewertungsgröße
+
+  Jede Situation wird bewertet als:
+
+  * tragfähig
+  * grenzwertig
+  * überlastend
+
+  Tragfähigkeit ergibt sich aus:
+
+  * regulatorischer Last (regulatory_load)
+  * verfügbarer Handlungskapazität (action_capacity)
+  * Erholungsbedarf (recovery_need)
+  * innerem Druck (survival_pressure)
+
+  ---
+
+  Formale Betrachtung:
+
+  tragfähigkeit ≈
+
+  * niedriger regulatory_load
+  * ausreichend hohe action_capacity
+  * geringe recovery_need
+
+  ---
+
+  ## 3. Energie- / Regulationsmodell
+
+  Grundprinzip:
+
+  - Abweichung zwischen Innenzustand und Außenwelt erhöht regulatorische Last
+  - Kohärenz reduziert regulatorische Last und Energieverbrauch
+
+  ---
+
+  Definition:
+
+  * hohe regulatorische Last:
+
+    * Unsicherheit
+    * Konflikt
+    * Fehlanpassung
+
+  * geringe regulatorische Last:
+
+    * klare Wahrnehmung
+    * stimmige Handlung
+    * stabile innere Lage
+
+  ---
+
+  Ziel des Systems:
+
+  * Energieeffiziente Interaktion mit der Umwelt
+  * nicht minimale Aktivität, sondern minimale regulatorische Last bei Aktivität
+
+  # --------------------------------------------------
+
+  # EXPERIENCE ALS CLUSTER-SYSTEM
+
+  # --------------------------------------------------
+
+  ## 4. Erfahrungscluster
+
+  Das System organisiert Erfahrung nicht als einzelne Events,
+  sondern als Cluster ähnlicher Situationen.
+
+  Ein Cluster enthält:
+
+  * Struktur (structure_perception_state)
+  * Spannungszustand (tension_state)
+  * Innenzustand vor Handlung
+  * Handlung / Nicht-Handlung
+  * Zustandsdelta (Wirkung)
+
+  ---
+
+  Cluster repräsentieren:
+
+  „Typen von Situationen, mit denen das System umgehen musste“
+
+  ---
+
+  ## 5. Cluster-Bewertung
+
+  Cluster werden nicht bewertet nach:
+
+  * Profit
+  * Trefferquote
+
+  Sondern nach:
+
+  * Tragfähigkeit der Situation
+  * Energieverbrauch
+  * Stabilität des Zustandsverlaufs
+
+  ---
+
+  Beispiele:
+
+  * stabil / tragfähig
+  * vorsichtig / unsicher
+  * überlastend / problematisch
+
+  # --------------------------------------------------
+
+  # OUTCOME → ZUSTANDSWIRKUNG
+
+  # --------------------------------------------------
+
+  ## 6. Outcome als Erlebnis
+
+  Outcome wird nicht als Zahl verarbeitet,
+  sondern als Zustandsveränderung.
+
+  ---
+
+  TP (Gewinn):
+
+  * Entlastung
+  * Stabilisierung
+  * ggf. Euphorie (Überaktivierung)
+
+  ---
+
+  SL (Verlust):
+
+  * Belastung
+  * Erhöhung von recovery_need
+  * Reduktion von action_capacity
+
+  ---
+
+  ## 7. Kontextabhängige Verstärkung
+
+  Die Wirkung eines Outcomes hängt ab von:
+
+  * RR (Risk/Reward)
+  * Strukturqualität
+  * Zustand vor der Handlung
+  * Erwartung vs Ergebnis
+
+  ---
+
+  Beispiel:
+
+  * hoher RR + saubere Struktur + TP
+    → starke positive Prägung
+
+  * schlechter Kontext + TP
+    → geringe positive Wirkung
+
+  ---
+
+  ## 8. Euphorie als Sonderfall
+
+  Euphorie ist:
+
+  * keine stabile Verbesserung
+  * sondern eine Form von Überaktivierung
+
+  Folge:
+
+  * Risiko von Fehlkalibrierung
+  * mögliche Abweichung vom Zentrum
+
+  ---
+
+  Das System muss lernen:
+
+  * positive Zustände zu regulieren
+  * nicht nur negative
+
+  # --------------------------------------------------
+
+  # LERNEN ALS UMGANGSFÄHIGKEIT
+
+  # --------------------------------------------------
+
+  ## 9. Kernmechanismus
+
+  Das System lernt nicht:
+
+  * was „richtig“ ist
+
+  Sondern:
+
+  * womit es gut umgehen kann
+
+  ---
+
+  Form:
+
+  (Struktur + Zustand + Handlung + Wirkung)
+  → wird zu
+  → Erfahrungswissen über Tragfähigkeit
+
+  ---
+
+  ## 10. Zielzustand
+
+  Das System strebt:
+
+  * hohe Kohärenz mit der Umwelt
+  * geringe regulatorische Last
+  * stabile Handlungsfähigkeit
+
+  ---
+
+  Nicht:
+
+  * maximale Aktivität
+  * maximale Profitabilität
+
+  ---
+
+  ## 11. Dynamisches Gleichgewicht
+
+  Der Nullpunkt der MCM ist:
+
+  * kein statischer Zustand
+  * kein Stillstand
+
+  Sondern:
+
+  * bewegtes Gleichgewicht
+  * kontinuierliche Anpassung an die Umwelt
+
+  ---
+
+  ## 12. Systemziel (final)
+
+  Das System optimiert:
+
+  * Zeit in tragfähigen Zuständen
+  * Energieeffizienz der Interaktion
+
+  ---
+
+  Profit ist:
+
+  * kein Ziel
+  * sondern ein mögliches Nebenprodukt stabiler Kohärenz
+
+  # --------------------------------------------------
+
+  # Schlussfolgerung
+
+  # --------------------------------------------------
+
+  * Experience wird erweitert zu:
+
+    * tragfähigkeitsbasierter Bewertung
+    * clusterbasierter Organisation
+
+  * Lernen wird definiert als:
+
+    * Verbesserung der Umgangsfähigkeit
+
+  * Zustand ersetzt:
+
+    * Profit als zentrale Bewertungsgröße
+
+  * Architektur bleibt:
+
+    * vollständig kompatibel mit bestehendem MCM-System
+
+  # ==================================================
+  # ende Ergenzung
+  # ==================================================
+
+---
+
 # --------------------------------------------------
 # 7. Harte Regel der Trennung
 # --------------------------------------------------

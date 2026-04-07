@@ -1,104 +1,169 @@
+# ==================================================
+# FIX_LISTE.md (bereinigt)
+# ==================================================
+
 # --------------------------------------------------
 # Beobachtung
 # --------------------------------------------------
 
-* `fix_liste.md` enthält aktuell noch bereits erledigte Punkte und ist damit nicht mehr auf echte Restarbeit reduziert.
+- PRIO 1 Kernumbau ist umgesetzt:
+  - Zustandsdelta (`state_before / state_after / state_delta`)
+  - Experience-Kopplung (Struktur × Zustand × Wirkung)
+  - Nicht-Handlung integriert (`observe / replan / withheld`)
+  - Wahrnehmung vollständig aus `window` ableitbar
 
-* Die nächste offene Hauptarbeit ist nicht Test-first und nicht `MCM`-Druck-/Regulationsausbau-first.
-
-* Vor weiterem Ausbau von:
-
-  * `field_density`
-  * `field_stability`
-  * `regulatory_load`
-  * `action_capacity`
-  * `recovery_need`
-  * `survival_pressure`
-
-  soll zuerst die Wahrnehmungsbasis umgesetzt werden.
-
-# --------------------------------------------------
-# Interpretation
-# --------------------------------------------------
-
-* Prio 1 ist die äußere Wahrnehmung als neue Basis für die weitere Architektur.
-
-* Diese Wahrnehmung soll nicht als Bilddaten-/CNN-System kommen, sondern als neutrales numerisches räumliches Wahrnehmungsfeld aus RAW-OHLCV.
-
-* Mehrskalen-Wahrnehmung darf vorbereitet werden, aber keine harte Fraktal-Regel und keine fest codierte Fraktal-Erkennung.
-
-* `HH/LL` und bestätigte Swing-Struktur bleiben nur sekundäre bestätigende Strukturwahrnehmung und nicht mehr Hauptbasis.
-
-* Erst wenn diese Wahrnehmung stabil in Thread 1 und Thread 2 angeschlossen ist, wird auf dieser Basis der weitere MCM-Zustandsraum und Druck-/Regulationsausbau fortgesetzt.
-
-* Tests bleiben niedrigste Priorität.
+- System befindet sich nicht mehr in der Fixphase,
+  sondern im Architektur-Endausbau
 
 # --------------------------------------------------
 # Schlussfolgerung
 # --------------------------------------------------
 
-* **Offene Fix-/Umbau-Liste**
+- PRIO 1 wird geschlossen
+- Fokus liegt auf Architektur, Review-Verfeinerung und Tests
 
-  * **Prio 1 · Wahrnehmungsbasis zuerst**
 
-    * neutrales `visual_market_state` einführen
-    * Form fest halten als numerisches räumliches Wahrnehmungsfeld
-    * Quelle bleibt nur RAW-OHLCV / Fensterdaten
-    * keine Bilddateien
-    * keine CNN-/Pixel-Verarbeitung
-    * keine harte Fraktal-Logik
-    * `HH/LL` nur noch sekundär verwenden
+# ==================================================
+# PRIO 2 – RUNTIME / ENTSCHEIDUNGSBAHN
+# ==================================================
 
-  * **Prio 2 · Thread-1-Anbindung der Wahrnehmung**
+- Trenne strikt:
+  - Ebene 1 = Wahrnehmung
+  - Ebene 2 = Innenprozess
+  - Entscheidungstendenz
+  - technische Ausführung
 
-    * Thread 1 baut zusätzlich zu:
+- Runtime entkoppeln von:
+  - Bot-State Vermischung
+  - direkten Seiteneffekten
 
-      * `candle_state`
-      * `tension_state`
-      * `structure_perception_state`
+- Entscheidung:
+  - zuerst intern (`act / observe / hold / replan`)
+  - danach technische Umsetzung
 
-      auch:
 
-      * `visual_market_state`
+# ==================================================
+# PRIO 2 – REVIEW / EXPERIENCE
+# ==================================================
 
-    * Ausgabe bleibt neutral
-    * keine Entscheidung
-    * kein Memory
-    * keine Orders
+- Tragfähigkeit als zentrale Bewertungsgröße etablieren:
+  - Bewertung von Situationen nach Belastung / Entlastung
+  - Bewertung nach Handlungsfähigkeit des Systems
+  - nicht nach Ergebnis (kein PnL-Fokus)
 
-  * **Prio 3 · Thread-2-Verarbeitung auf neue Wahrnehmung umstellen**
+- Lernen definieren als Umgangsfähigkeit:
+  - womit kann das System stabil umgehen
+  - in welchen Situationen bleibt es handlungsfähig
+  - nicht: was ist „richtig“ oder profitabel
 
-    * `outer_visual_perception_state` auf `visual_market_state` aufbauen
-    * weitere Wahrnehmungs-/Verarbeitungsbahn daran angleichen:
+- Zustandswirkung weiter schärfen:
+  - Belastung / Entlastung
+  - Veränderung von `action_capacity`
+  - Veränderung von `recovery_need`
 
-      * `perception_state`
-      * `processing_state`
-      * `felt_state`
-      * `thought_state`
-      * `meta_regulation_state`
-      * `expectation_state`
+- Experience stärker koppeln an:
+  - Zustandsverlauf über Zeit
+  - nicht nur Einzel-Events
+  - Entwicklung der Tragfähigkeit innerhalb eines Clusters
 
-    * bestehende symbolische Strukturwahrnehmung nicht löschen, aber unterordnen
+- Energie-/Reibungsmodell integrieren:
+  - Abweichung = erhöhter Energieverbrauch / regulatorische Last
+  - Kohärenz = geringe Reibung / hohe Effizienz
+  - Ziel: minimale Reibung bei aktiver Interaktion
 
-  * **Prio 4 · Danach erst weiterer MCM-Zustandsraum-Ausbau**
+- Cluster neu interpretieren:
+  - nicht nur Kontextgruppen
+  - sondern Erfahrungsräume über Tragfähigkeit
+  - Struktur + Zustand + Wirkung → Cluster
 
-    * `field_density`
-    * `field_stability`
-    * `regulatory_load`
-    * `action_capacity`
-    * `recovery_need`
-    * `survival_pressure`
+- Outcome neu interpretieren:
+  - kein PnL als Bewertung
+  - sondern Zustandswirkung:
+    - TP → Entlastung / Stabilisierung / evtl. Euphorie
+    - SL → Belastung / Rückzug / Erhöhter Recovery-Bedarf
 
-    erst weiter vertiefen, wenn Wahrnehmungsbasis produktiv angeschlossen ist
+- Positive Zustände regulieren:
+  - Euphorie als Überaktivierung erkennen
+  - keine unkontrollierte Verstärkung positiver Outcomes
 
-  * **Prio 5 · Danach Architektur-Endausbau**
+- Review stabilisieren:
+  - keine impliziten Bewertungsreste (z. B. PnL)
+  - Fokus vollständig auf Zustand und Tragfähigkeit
 
-    * permanenter Innenprozess weiter vervollständigen
-    * harte Runtime-Bahntrennung weiter zu Ende führen
-    * Entscheidungsepisode weiter ausbauen
-    * Erfahrungsraum / Review / Nicht-Handlung weiter vertiefen
 
-  * **Kleinste Prio · Tests**
+# ==================================================
+# PRIO 3 – KPI / AUSWERTUNG
+# ==================================================
 
-    * dedizierte Tests für `bot_gate_funktions.py`
-    * dedizierte Tests für `mcm_core_engine.py`
+- Entferne PnL als zentrale KPI
+
+- Neue KPI:
+  - Zustandsstabilität
+  - Handlungsfähigkeit
+  - regulatorische Last
+  - Regeneration
+
+- Strukturbezogene KPI:
+  - Tragfähigkeit je Strukturfeld
+
+
+# ==================================================
+# PRIO 3 – VISUALISIERUNG
+# ==================================================
+
+- Visualisierung hinzufügen:
+
+  Ebene 1:
+  - Chart (OHLC)
+  - Wahrnehmung (`candle_state`, `tension_state`, etc.)
+
+  Ebene 2:
+  - Innenzustand:
+    - field_density
+    - regulatory_load
+    - action_capacity
+    - recovery_need
+    - survival_pressure
+
+- Ziel:
+  - Außenwelt und Innenwelt getrennt sichtbar machen
+
+
+# ==================================================
+# PRIO 4 – TESTS
+# ==================================================
+
+- dedizierte Tests für:
+  - `bot_gate_funktions.py`
+  - `mcm_core_engine.py`
+
+- Fokus:
+  - Zustandsentwicklung
+  - nicht Trade-Ergebnis
+
+
+# ==================================================
+# OPTIONAL – EXTERNES GATE
+# ==================================================
+
+- optional:
+  - PnL als technisches ValueGate (Notbremse)
+
+- nicht erlaubt:
+  - Teil der Entscheidungslogik
+  - Teil der Experience
+
+
+# ==================================================
+# STATUS
+# ==================================================
+
+- Fixphase abgeschlossen
+- Architekturphase aktiv
+
+# --------------------------------------------------
+# Schlussfolgerung
+# --------------------------------------------------
+
+- dedizierte Tests für `bot_gate_funktions.py`
+- dedizierte Tests für `mcm_core_engine.py`y

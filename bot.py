@@ -35,6 +35,7 @@ STRUCTURE_ENGINE = StructureEngine()
 class Bot:
     # --------------------------------------------------
     def __init__(self, filepath: str):
+
         self.feed = CSVFeed(filepath)
         self.exit_engine = ExitEngine()
         self.value_gate = TradeValueGate()
@@ -93,8 +94,10 @@ class Bot:
         self.observation_mode = False
         self.last_signal_relevance = 0.0
 
+        self.tension_state = {}
         self.visual_market_state = {}
         self.structure_perception_state = {}
+        self.outer_market_state = {}
         self.perception_state = {}
         self.outer_visual_perception_state = {}
         self.inner_field_perception_state = {}
@@ -193,6 +196,22 @@ class Bot:
         else:
             event_name = "withheld"
 
+        state_before = self._build_regulation_state_snapshot()
+        state_after = self._build_regulation_state_snapshot()
+        state_delta = self._build_regulation_state_delta(
+            state_before,
+            state_after,
+        )
+
+        non_action_context = _build_entry_attempt_context(
+            self,
+            result,
+        )
+        self.stats.on_attempt(
+            status=event_name,
+            context=non_action_context,
+        )
+
         mark_runtime_episode_event(
             self,
             event_name,
@@ -202,9 +221,12 @@ class Bot:
                 "reason": str(result.get("rejection_reason", "runtime_non_action") or "runtime_non_action"),
                 "meta_regulation_state": dict(result.get("meta_regulation_state", {}) or {}),
                 "expectation_state": dict(result.get("expectation_state", {}) or {}),
+                "state_before": dict(state_before or {}),
+                "state_after": dict(state_after or {}),
+                "state_delta": dict(state_delta or {}),
             },
         )
-        return True                   
+        return True                 
     # ==================================================
     # HANDLUNGSBAHN
     # ==================================================
@@ -256,6 +278,12 @@ class Bot:
 
         meta_regulation_state = dict(getattr(self, "meta_regulation_state", {}) or {})
         runtime_state = dict(getattr(self, "mcm_runtime_decision_state", {}) or {})
+        position_state_before = self._build_regulation_state_snapshot()
+        position_state_after = self._build_regulation_state_snapshot()
+        position_state_delta = self._build_regulation_state_delta(
+            position_state_before,
+            position_state_after,
+        )
 
         pressure_to_capacity = 0.0
         if float(getattr(self, "action_capacity", 0.0) or 0.0) > 0.0:
@@ -287,6 +315,9 @@ class Bot:
                 "pre_action_phase": str(meta_regulation_state.get("pre_action_phase", "hold") or "hold"),
                 "dominant_tension_cause": str(meta_regulation_state.get("dominant_tension_cause", "-") or "-"),
                 "reason": "position_watch",
+                "state_before": dict(position_state_before or {}),
+                "state_after": dict(position_state_after or {}),
+                "state_delta": dict(position_state_delta or {}),
             },
         )
 
@@ -304,6 +335,7 @@ class Bot:
 
         position_context = dict(self.position.get("meta", {}) or {})
         resolved_position = dict(self.position or {})
+        state_before = self._build_regulation_state_snapshot()
 
         if live_mode and Config.AKTIV_ORDER:
             oid = self.position.get("order_id")
@@ -333,6 +365,11 @@ class Bot:
                 return True
 
         apply_outcome_stimulus(self, reason, self.position)
+        state_after = self._build_regulation_state_snapshot()
+        state_delta = self._build_regulation_state_delta(
+            state_before,
+            state_after,
+        )
         self._save_memory_state()
 
         if str(reason).lower() == "sl_hit":
@@ -355,6 +392,9 @@ class Bot:
             {
                 "position": dict(resolved_position or {}),
                 "reason": str(reason or "-"),
+                "state_before": dict(state_before or {}),
+                "state_after": dict(state_after or {}),
+                "state_delta": dict(state_delta or {}),
             },
         )
 
@@ -427,6 +467,12 @@ class Bot:
 
         meta_regulation_state = dict(getattr(self, "meta_regulation_state", {}) or {})
         runtime_state = dict(getattr(self, "mcm_runtime_decision_state", {}) or {})
+        pending_state_before = self._build_regulation_state_snapshot()
+        pending_state_after = self._build_regulation_state_snapshot()
+        pending_state_delta = self._build_regulation_state_delta(
+            pending_state_before,
+            pending_state_after,
+        )
 
         pressure_to_capacity = 0.0
         if float(getattr(self, "action_capacity", 0.0) or 0.0) > 0.0:
@@ -458,6 +504,9 @@ class Bot:
                 "pre_action_phase": str(meta_regulation_state.get("pre_action_phase", "hold") or "hold"),
                 "dominant_tension_cause": str(meta_regulation_state.get("dominant_tension_cause", "-") or "-"),
                 "reason": "pending_watch",
+                "state_before": dict(pending_state_before or {}),
+                "state_after": dict(pending_state_after or {}),
+                "state_delta": dict(pending_state_delta or {}),
             },
         )
 
@@ -469,9 +518,10 @@ class Bot:
         if (not entry_touched) and validity_touched:
             fill_price = float(min(max(entry_price, low), high))
 
-        if side == "LONG" and (entry_touched or validity_touched):
+        if side in ("LONG", "SHORT") and (entry_touched or validity_touched):
 
             risk = abs(fill_price - sl_price)
+            fill_state_before = self._build_regulation_state_snapshot()
 
             self.position = {
                 "side": side,
@@ -488,40 +538,11 @@ class Bot:
                 "meta": pending_meta,
             }
 
-            self.pending_entry = None
-            self.stats.on_attempt(
-                status="filled",
-                context=pending_meta,
+            fill_state_after = self._build_regulation_state_snapshot()
+            fill_state_delta = self._build_regulation_state_delta(
+                fill_state_before,
+                fill_state_after,
             )
-            mark_runtime_episode_event(
-                self,
-                "filled",
-                {
-                    "position": dict(self.position or {}),
-                    "reason": "backtest_fill",
-                },
-            )
-            self._save_memory_state()
-            return True
-
-        if side == "SHORT" and (entry_touched or validity_touched):
-
-            risk = abs(fill_price - sl_price)
-
-            self.position = {
-                "side": side,
-                "entry": float(fill_price),
-                "tp": tp_price,
-                "sl": sl_price,
-                "mfe": 0.0,
-                "mae": 0.0,
-                "risk": float(risk),
-                "order_id": None,
-                "entry_ts": last.get("timestamp"),
-                "entry_index": self.processed,
-                "last_checked_ts": last.get("timestamp"),
-                "meta": pending_meta,
-            }
 
             self.pending_entry = None
             self.stats.on_attempt(
@@ -534,6 +555,9 @@ class Bot:
                 {
                     "position": dict(self.position or {}),
                     "reason": "backtest_fill",
+                    "state_before": dict(fill_state_before or {}),
+                    "state_after": dict(fill_state_after or {}),
+                    "state_delta": dict(fill_state_delta or {}),
                 },
             )
             self._save_memory_state()
@@ -542,7 +566,13 @@ class Bot:
         if (self.processed - created) > max_wait:
 
             pending_snapshot = dict(self.pending_entry or {})
+            timeout_state_before = self._build_regulation_state_snapshot()
             apply_outcome_stimulus(self, "timeout", self.pending_entry)
+            timeout_state_after = self._build_regulation_state_snapshot()
+            timeout_state_delta = self._build_regulation_state_delta(
+                timeout_state_before,
+                timeout_state_after,
+            )
             self.stats.on_attempt(
                 status="timeout",
                 context=pending_meta,
@@ -553,159 +583,9 @@ class Bot:
                 {
                     "pending_entry": dict(pending_snapshot or {}),
                     "reason": "backtest_timeout",
-                },
-            )
-            self.stats.on_cancel(
-                order_id=None,
-                cause="backtest_timeout",
-                exploration_trade=False,
-                outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
-                context=pending_meta,
-            )
-
-            self._save_memory_state()
-            self.pending_entry = None
-            return True
-
-        return True
-
-        if self.pending_entry is None or self.position is not None:
-            return False
-
-        pending_meta = dict(self.pending_entry.get("meta", {}) or {})
-        mark_runtime_episode_event(
-            self,
-            "pending_update",
-            {
-                "pending_entry": dict(self.pending_entry or {}),
-                "reason": "pending_watch",
-            },
-        )
-
-        if live_mode:
-            return True
-
-        side = self.pending_entry["side"]
-        entry_price = self.pending_entry["entry"]
-        tp_price = self.pending_entry["tp"]
-        sl_price = self.pending_entry["sl"]
-
-        created = self.pending_entry["created_index"]
-        max_wait = self.pending_entry["max_wait_bars"]
-
-        high = float(last["high"])
-        low = float(last["low"])
-        trade_plan = dict(pending_meta.get("trade_plan", {}) or {})
-        entry_validity_band = dict(trade_plan.get("entry_validity_band", {}) or {})
-
-        validity_lower = entry_validity_band.get("lower")
-        validity_upper = entry_validity_band.get("upper")
-
-        try:
-            validity_lower = float(validity_lower) if validity_lower is not None else None
-        except Exception:
-            validity_lower = None
-
-        try:
-            validity_upper = float(validity_upper) if validity_upper is not None else None
-        except Exception:
-            validity_upper = None
-
-        entry_touched = low <= entry_price <= high
-        validity_touched = False
-
-        if validity_lower is not None and validity_upper is not None:
-            validity_touched = high >= validity_lower and low <= validity_upper
-
-        fill_price = float(entry_price)
-
-        if (not entry_touched) and validity_touched:
-            fill_price = float(min(max(entry_price, low), high))
-
-        if side == "LONG" and (entry_touched or validity_touched):
-
-            risk = abs(fill_price - sl_price)
-
-            self.position = {
-                "side": side,
-                "entry": float(fill_price),
-                "tp": tp_price,
-                "sl": sl_price,
-                "mfe": 0.0,
-                "mae": 0.0,
-                "risk": float(risk),
-                "order_id": None,
-                "entry_ts": last.get("timestamp"),
-                "entry_index": self.processed,
-                "last_checked_ts": last.get("timestamp"),
-                "meta": pending_meta,
-            }
-
-            self.pending_entry = None
-            self.stats.on_attempt(
-                status="filled",
-                context=pending_meta,
-            )
-            mark_runtime_episode_event(
-                self,
-                "filled",
-                {
-                    "position": dict(self.position or {}),
-                    "reason": "backtest_fill",
-                },
-            )
-            self._save_memory_state()
-            return True
-
-        if side == "SHORT" and (entry_touched or validity_touched):
-
-            risk = abs(fill_price - sl_price)
-
-            self.position = {
-                "side": side,
-                "entry": float(fill_price),
-                "tp": tp_price,
-                "sl": sl_price,
-                "mfe": 0.0,
-                "mae": 0.0,
-                "risk": float(risk),
-                "order_id": None,
-                "entry_ts": last.get("timestamp"),
-                "entry_index": self.processed,
-                "last_checked_ts": last.get("timestamp"),
-                "meta": pending_meta,
-            }
-
-            self.pending_entry = None
-            self.stats.on_attempt(
-                status="filled",
-                context=pending_meta,
-            )
-            mark_runtime_episode_event(
-                self,
-                "filled",
-                {
-                    "position": dict(self.position or {}),
-                    "reason": "backtest_fill",
-                },
-            )
-            self._save_memory_state()
-            return True
-
-        if (self.processed - created) > max_wait:
-
-            pending_snapshot = dict(self.pending_entry or {})
-            apply_outcome_stimulus(self, "timeout", self.pending_entry)
-            self.stats.on_attempt(
-                status="timeout",
-                context=pending_meta,
-            )
-            mark_runtime_episode_event(
-                self,
-                "timeout",
-                {
-                    "pending_entry": dict(pending_snapshot or {}),
-                    "reason": "backtest_timeout",
+                    "state_before": dict(timeout_state_before or {}),
+                    "state_after": dict(timeout_state_after or {}),
+                    "state_delta": dict(timeout_state_delta or {}),
                 },
             )
             self.stats.on_cancel(
@@ -885,27 +765,37 @@ class Bot:
     # --------------------------------------------------
     def _build_market_packet(self, window):
 
-        if not window:
-            return None
+        return self._build_market_perception_packet(window)
+    # --------------------------------------------------
+    def _build_regulation_state_delta(self, state_before: dict, state_after: dict) -> dict:
 
-        local_window = [dict(item or {}) for item in list(window or []) if isinstance(item, dict)]
-        if not local_window:
-            return None
-
-        last = local_window[-1]
-        prev_close = local_window[-2].get("close") if len(local_window) > 1 else None
-        candle_state = _build_candle_state(last, prev_close=prev_close)
-        tension_state = build_tension_state_from_window(local_window)
-        visual_market_state = build_visual_market_state(local_window)
-        structure_perception_state = STRUCTURE_ENGINE.build_structure_perception_state(local_window)
+        before = dict(state_before or {})
+        after = dict(state_after or {})
 
         return {
-            "timestamp": last.get("timestamp"),
-            "window": local_window,
-            "candle_state": dict(candle_state or {}),
-            "tension_state": dict(tension_state or {}),
-            "visual_market_state": dict(visual_market_state or {}),
-            "structure_perception_state": dict(structure_perception_state or {}),
+            "tension": {
+                "energy": float(after.get("tension", {}).get("energy", 0.0) - before.get("tension", {}).get("energy", 0.0)),
+                "coherence": float(after.get("tension", {}).get("coherence", 0.0) - before.get("tension", {}).get("coherence", 0.0)),
+                "stability": float(after.get("tension", {}).get("stability", 0.0) - before.get("tension", {}).get("stability", 0.0)),
+                "momentum": float(after.get("tension", {}).get("momentum", 0.0) - before.get("tension", {}).get("momentum", 0.0)),
+                "perceived_pressure": float(after.get("tension", {}).get("perceived_pressure", 0.0) - before.get("tension", {}).get("perceived_pressure", 0.0)),
+                "volume_pressure": float(after.get("tension", {}).get("volume_pressure", 0.0) - before.get("tension", {}).get("volume_pressure", 0.0)),
+            },
+            "field": {
+                "regulatory_load": float(after.get("field", {}).get("regulatory_load", 0.0) - before.get("field", {}).get("regulatory_load", 0.0)),
+                "action_capacity": float(after.get("field", {}).get("action_capacity", 0.0) - before.get("field", {}).get("action_capacity", 0.0)),
+                "recovery_need": float(after.get("field", {}).get("recovery_need", 0.0) - before.get("field", {}).get("recovery_need", 0.0)),
+                "survival_pressure": float(after.get("field", {}).get("survival_pressure", 0.0) - before.get("field", {}).get("survival_pressure", 0.0)),
+                "pressure_to_capacity": float(after.get("field", {}).get("pressure_to_capacity", 0.0) - before.get("field", {}).get("pressure_to_capacity", 0.0)),
+            },
+            "experience": {
+                "approach_pressure": float(after.get("experience", {}).get("approach_pressure", 0.0) - before.get("experience", {}).get("approach_pressure", 0.0)),
+                "pressure_release": float(after.get("experience", {}).get("pressure_release", 0.0) - before.get("experience", {}).get("pressure_release", 0.0)),
+                "experience_regulation": float(after.get("experience", {}).get("experience_regulation", 0.0) - before.get("experience", {}).get("experience_regulation", 0.0)),
+                "reflection_maturity": float(after.get("experience", {}).get("reflection_maturity", 0.0) - before.get("experience", {}).get("reflection_maturity", 0.0)),
+                "load_bearing_capacity": float(after.get("experience", {}).get("load_bearing_capacity", 0.0) - before.get("experience", {}).get("load_bearing_capacity", 0.0)),
+                "protective_courage": float(after.get("experience", {}).get("protective_courage", 0.0) - before.get("experience", {}).get("protective_courage", 0.0)),
+            },
         }
     # --------------------------------------------------
     def publish_market_window(self, window):
@@ -1052,6 +942,55 @@ class Bot:
 
         self._ensure_memory_state_loaded()
 
+        perception_packet = self._build_market_perception_packet(window)
+        if perception_packet is None:
+            return None
+
+        local_window = [dict(item or {}) for item in list(perception_packet.get("window", []) or []) if isinstance(item, dict)]
+        if not local_window:
+            return None
+
+        resolved_candle_state = dict(perception_packet.get("candle_state", {}) or {})
+        resolved_visual_market_state = dict(perception_packet.get("visual_market_state", {}) or {})
+        resolved_structure_perception_state = dict(perception_packet.get("structure_perception_state", {}) or {})
+        resolved_tension_state = dict(perception_packet.get("tension_state", {}) or {})
+
+        if candle_state is not None:
+            resolved_candle_state = dict(candle_state or {})
+
+        if visual_market_state is not None:
+            resolved_visual_market_state = dict(visual_market_state or {})
+
+        if structure_perception_state is not None:
+            resolved_structure_perception_state = dict(structure_perception_state or {})
+
+        self.current_timestamp = perception_packet.get("timestamp", local_window[-1].get("timestamp"))
+        self.tension_state = dict(resolved_tension_state or {})
+        self.visual_market_state = dict(resolved_visual_market_state or {})
+        self.structure_perception_state = dict(resolved_structure_perception_state or {})
+        self.outer_market_state = dict(perception_packet.get("outer_market_state", {}) or {})
+
+        runtime_result = step_mcm_runtime(
+            local_window,
+            dict(resolved_candle_state or {}),
+            bot=self,
+            tension_state=dict(resolved_tension_state or {}),
+            visual_market_state=dict(resolved_visual_market_state or {}),
+            structure_perception_state=dict(resolved_structure_perception_state or {}),
+        )
+        self._runtime_seeded = True
+
+        action_result = self._run_runtime_action_cycle(
+            local_window,
+            dict(resolved_candle_state or {}),
+        )
+        if action_result is None:
+            return runtime_result
+
+        return action_result
+    # --------------------------------------------------
+    def _build_runtime_action_context(self, window):
+
         if not window:
             return None
 
@@ -1059,48 +998,6 @@ class Bot:
         if not local_window:
             return None
 
-        if candle_state is None:
-            last = local_window[-1]
-            prev_close = local_window[-2].get("close") if len(local_window) > 1 else None
-            candle_state = _build_candle_state(last, prev_close=prev_close)
-
-        self.current_timestamp = local_window[-1].get("timestamp")
-        runtime_result = step_mcm_runtime(
-            local_window,
-            dict(candle_state or {}),
-            bot=self,
-            visual_market_state=dict(visual_market_state or {}),
-            structure_perception_state=dict(structure_perception_state or {}),
-        )
-        self._runtime_seeded = True
-
-        action_result = self._run_runtime_action_cycle(
-            local_window,
-            dict(candle_state or {}),
-        )
-        if action_result is None:
-            return runtime_result
-
-        return action_result
-    # --------------------------------------------------
-    def _run_runtime_action_cycle(self, window, candle_state):
-
-        self._ensure_memory_state_loaded()
-
-        if not window:
-            return None
-
-        # --------------------------------------------------
-        # Restart Recovery → Timestamp initialisieren
-        # --------------------------------------------------
-        if self.position and self.position.get("entry_ts") is None:
-            ts = window[-1].get("timestamp")
-            self.position["entry_ts"] = ts
-            self.position["last_checked_ts"] = ts
-
-        # ------------------------
-        # LIVE / BACKTEST Modus prüfen
-        # ------------------------
         live_mode = str(getattr(Config, "MODE", "LIVE")).upper() == "LIVE"
         external_order_active = False
 
@@ -1109,18 +1006,89 @@ class Bot:
             if DEBUG:
                 dbr_debug("RUNTIME: ORDER_ACTIVE_WATCH", "live_backtest_debug.csv")
 
-        self.current_timestamp = window[-1].get("timestamp")
+        last = local_window[-1]
+        timestamp = last.get("timestamp")
+
+        return {
+            "window": local_window,
+            "last": last,
+            "timestamp": timestamp,
+            "live_mode": bool(live_mode),
+            "external_order_active": bool(external_order_active),
+            "outer_market_state": dict(getattr(self, "outer_market_state", {}) or {}),
+        }
+    # --------------------------------------------------
+    def _prepare_runtime_action_context(self, action_context):
+
+        context = dict(action_context or {})
+        window = [dict(item or {}) for item in list(context.get("window", []) or []) if isinstance(item, dict)]
+
+        if not window:
+            return None
+
+        if self.position and self.position.get("entry_ts") is None:
+            ts = context.get("timestamp", window[-1].get("timestamp"))
+            self.position["entry_ts"] = ts
+            self.position["last_checked_ts"] = ts
+
+        self.current_timestamp = context.get("timestamp", window[-1].get("timestamp"))
         self.stats.data["current_timestamp"] = self.current_timestamp
+        return {
+            "window": window,
+            "last": dict(context.get("last", window[-1]) or window[-1]),
+            "live_mode": bool(context.get("live_mode", False)),
+            "external_order_active": bool(context.get("external_order_active", False)),
+            "outer_market_state": dict(context.get("outer_market_state", {}) or {}),
+        }
+    # --------------------------------------------------
+    def _run_position_execution_path(self, action_context):
 
-        last = window[-1]
+        context = dict(action_context or {})
+        return self._handle_active_position(
+            context.get("window", []),
+            context.get("last", {}),
+            bool(context.get("live_mode", False)),
+        )
+    # --------------------------------------------------
+    def _run_pending_execution_path(self, action_context):
 
-        if self._handle_active_position(window, last, live_mode):
+        context = dict(action_context or {})
+        return self._handle_pending_entry(
+            context.get("window", []),
+            context.get("last", {}),
+            bool(context.get("live_mode", False)),
+        )
+    # --------------------------------------------------
+    def _run_decision_execution_path(self, action_context, candle_state):
+
+        context = dict(action_context or {})
+        return self._handle_entry_attempt(
+            context.get("window", []),
+            dict(candle_state or {}),
+            context.get("last", {}),
+            bool(context.get("live_mode", False)),
+            bool(context.get("external_order_active", False)),
+        )
+    # --------------------------------------------------
+    def _run_runtime_action_cycle(self, window, candle_state):
+
+        self._ensure_memory_state_loaded()
+
+        action_context = self._build_runtime_action_context(window)
+        if action_context is None:
+            return None
+
+        prepared_context = self._prepare_runtime_action_context(action_context)
+        if prepared_context is None:
+            return None
+
+        if self._run_position_execution_path(prepared_context):
             return True
 
-        if self._handle_pending_entry(window, last, live_mode):
+        if self._run_pending_execution_path(prepared_context):
             return True
 
-        if self._handle_entry_attempt(window, candle_state, last, live_mode, external_order_active):
+        if self._run_decision_execution_path(prepared_context, candle_state):
             return True
 
         return True
@@ -1145,6 +1113,78 @@ class Bot:
         dynamic_load = self._runtime_dynamic_load()
         scaled_cycles = int(round(dynamic_load * followup_cycles))
         return int(max(0, min(followup_cycles, scaled_cycles if followup_cycles > 1 else followup_cycles)))
+    # ==================================================
+    # MARKET PACKET BUILDERS
+    # ==================================================
+    def _normalize_market_window(self, window):
+
+        if not window:
+            return []
+
+        return [dict(item or {}) for item in list(window or []) if isinstance(item, dict)]
+    # --------------------------------------------------
+    def _build_candle_state_packet(self, window):
+
+        local_window = self._normalize_market_window(window)
+        if not local_window:
+            return {}
+
+        last = local_window[-1]
+        prev_close = local_window[-2].get("close") if len(local_window) > 1 else None
+        return dict(_build_candle_state(last, prev_close=prev_close) or {})
+    # --------------------------------------------------
+    def _build_tension_state_packet(self, window):
+
+        local_window = self._normalize_market_window(window)
+        if not local_window:
+            return {}
+
+        return dict(build_tension_state_from_window(local_window) or {})
+    # --------------------------------------------------
+    def _build_visual_market_state_packet(self, window):
+
+        local_window = self._normalize_market_window(window)
+        if not local_window:
+            return {}
+
+        return dict(build_visual_market_state(local_window) or {})
+    # --------------------------------------------------
+    def _build_structure_perception_packet(self, window):
+
+        local_window = self._normalize_market_window(window)
+        if not local_window:
+            return {}
+
+        return dict(STRUCTURE_ENGINE.build_structure_perception_state(local_window) or {})
+    # --------------------------------------------------
+    def _build_market_perception_packet(self, window):
+
+        local_window = self._normalize_market_window(window)
+        if not local_window:
+            return None
+
+        last = local_window[-1]
+        candle_state = self._build_candle_state_packet(local_window)
+        tension_state = self._build_tension_state_packet(local_window)
+        visual_market_state = self._build_visual_market_state_packet(local_window)
+        structure_perception_state = self._build_structure_perception_packet(local_window)
+        outer_market_state = {
+            "timestamp": last.get("timestamp"),
+            "candle_state": dict(candle_state or {}),
+            "tension_state": dict(tension_state or {}),
+            "visual_market_state": dict(visual_market_state or {}),
+            "structure_perception_state": dict(structure_perception_state or {}),
+        }
+
+        return {
+            "timestamp": last.get("timestamp"),
+            "window": local_window,
+            "candle_state": dict(candle_state or {}),
+            "tension_state": dict(tension_state or {}),
+            "visual_market_state": dict(visual_market_state or {}),
+            "structure_perception_state": dict(structure_perception_state or {}),
+            "outer_market_state": dict(outer_market_state or {}),
+        }    
     # ==================================================
     # MEMORY STATE
     # ==================================================
@@ -1202,6 +1242,69 @@ class Bot:
         self._memory_state_dirty = False
         self._memory_state_last_save_ts = float(time.time())
         return payload           
+    # --------------------------------------------------
+    def _build_regulation_state_snapshot(self) -> dict:
+
+        if self is None:
+            return {
+                "tension": {
+                    "energy": 0.0,
+                    "coherence": 0.0,
+                    "stability": 0.0,
+                    "momentum": 0.0,
+                    "perceived_pressure": 0.0,
+                    "volume_pressure": 0.0,
+                },
+                "field": {
+                    "regulatory_load": 0.0,
+                    "action_capacity": 0.0,
+                    "recovery_need": 0.0,
+                    "survival_pressure": 0.0,
+                    "pressure_to_capacity": 0.0,
+                },
+                "experience": {
+                    "approach_pressure": 0.0,
+                    "pressure_release": 0.0,
+                    "experience_regulation": 0.0,
+                    "reflection_maturity": 0.0,
+                    "load_bearing_capacity": 0.0,
+                    "protective_courage": 0.0,
+                },
+            }
+
+        tension_state = dict(getattr(self, "tension_state", {}) or {})
+        regulatory_load = float(getattr(self, "regulatory_load", 0.0) or 0.0)
+        action_capacity = float(getattr(self, "action_capacity", 0.0) or 0.0)
+
+        pressure_to_capacity = 0.0
+        if action_capacity > 0.0:
+            pressure_to_capacity = regulatory_load / max(0.05, action_capacity)
+
+        return {
+            "tension": {
+                "energy": float(tension_state.get("energy", 0.0) or 0.0),
+                "coherence": float(tension_state.get("coherence", 0.0) or 0.0),
+                "stability": float(tension_state.get("stability", 0.0) or 0.0),
+                "momentum": float(tension_state.get("momentum", 0.0) or 0.0),
+                "perceived_pressure": float(tension_state.get("perceived_pressure", 0.0) or 0.0),
+                "volume_pressure": float(tension_state.get("volume_pressure", 0.0) or 0.0),
+            },
+            "field": {
+                "regulatory_load": float(regulatory_load),
+                "action_capacity": float(action_capacity),
+                "recovery_need": float(getattr(self, "recovery_need", 0.0) or 0.0),
+                "survival_pressure": float(getattr(self, "survival_pressure", 0.0) or 0.0),
+                "pressure_to_capacity": float(pressure_to_capacity),
+            },
+            "experience": {
+                "approach_pressure": float(getattr(self, "approach_pressure", 0.0) or 0.0),
+                "pressure_release": float(getattr(self, "pressure_release", 0.0) or 0.0),
+                "experience_regulation": float(getattr(self, "experience_regulation", 0.0) or 0.0),
+                "reflection_maturity": float(getattr(self, "reflection_maturity", 0.0) or 0.0),
+                "load_bearing_capacity": float(getattr(self, "load_bearing_capacity", 0.0) or 0.0),
+                "protective_courage": float(getattr(self, "protective_courage", 0.0) or 0.0),
+            },
+        }    
     # ==================================================
     # INTERNE PIPELINE (NUR WINDOW → LOGIK)
     # ==================================================
@@ -1214,8 +1317,32 @@ class Bot:
             return None
 
         candle_state = dict(item.get("candle_state", {}) or {})
+        tension_state = dict(item.get("tension_state", {}) or {})
         visual_market_state = dict(item.get("visual_market_state", {}) or {})
         structure_perception_state = dict(item.get("structure_perception_state", {}) or {})
+
+        # --------------------------------------------------
+        # FALLBACK: Wahrnehmung immer aus window erzeugen
+        # --------------------------------------------------
+        if not candle_state:
+            last = window[-1]
+            prev_close = window[-2].get("close") if len(window) > 1 else None
+            candle_state = _build_candle_state(last, prev_close=prev_close)
+
+        if not tension_state:
+            tension_state = build_tension_state_from_window(window)
+
+        if not visual_market_state:
+            visual_market_state = build_visual_market_state(window)
+
+        if not structure_perception_state:
+            structure_perception_state = STRUCTURE_ENGINE.build_structure_perception_state(window)
+
+        self.tension_state = dict(tension_state or {})
+        self.visual_market_state = dict(visual_market_state or {})
+        self.structure_perception_state = dict(structure_perception_state or {})
+        self.outer_market_state = dict(item.get("outer_market_state", {}) or {})
+
         if not candle_state:
             last = window[-1]
             prev_close = window[-2].get("close") if len(window) > 1 else None
@@ -1307,6 +1434,36 @@ class Bot:
 def _build_entry_attempt_context(bot, entry_result: dict) -> dict:
 
     result = dict(entry_result or {})
+    action_capacity = float(result.get("action_capacity", 0.0) or 0.0)
+    pressure_to_capacity = 0.0
+    regulation_snapshot = bot._build_regulation_state_snapshot() if bot is not None else {
+        "tension": {
+            "energy": 0.0,
+            "coherence": 0.0,
+            "stability": 0.0,
+            "momentum": 0.0,
+            "perceived_pressure": 0.0,
+            "volume_pressure": 0.0,
+        },
+        "field": {
+            "regulatory_load": 0.0,
+            "action_capacity": 0.0,
+            "recovery_need": 0.0,
+            "survival_pressure": 0.0,
+            "pressure_to_capacity": 0.0,
+        },
+        "experience": {
+            "approach_pressure": 0.0,
+            "pressure_release": 0.0,
+            "experience_regulation": 0.0,
+            "reflection_maturity": 0.0,
+            "load_bearing_capacity": 0.0,
+            "protective_courage": 0.0,
+        },
+    }
+
+    if action_capacity > 0.0:
+        pressure_to_capacity = float(result.get("regulatory_load", 0.0) or 0.0) / max(0.05, action_capacity)
 
     return {
         "state": {
@@ -1316,45 +1473,56 @@ def _build_entry_attempt_context(bot, entry_result: dict) -> dict:
             "coh_zone": float(result.get("coh_zone", 0.0) or 0.0),
             "self_state": str(result.get("self_state", "stable") or "stable"),
             "attractor": str(result.get("attractor", "neutral") or "neutral"),
-            "memory_center": float(result.get("memory_center", 0.0) or 0.0),
-            "memory_strength": int(result.get("memory_strength", 0) or 0),
         },
         "focus": {
-            "focus_point": float(getattr(bot, "focus_point", 0.0) or 0.0),
-            "focus_confidence": float(getattr(bot, "focus_confidence", 0.0) or 0.0),
-            "target_lock": float(getattr(bot, "target_lock", 0.0) or 0.0),
-            "target_drift": float(getattr(bot, "target_drift", 0.0) or 0.0),
+            "focus_point": float(getattr(bot, "focus_point", 0.0) or 0.0) if bot is not None else 0.0,
+            "focus_confidence": float(result.get("focus", {}).get("focus_confidence", getattr(bot, "focus_confidence", 0.0) if bot is not None else 0.0) or 0.0),
+            "target_lock": float(getattr(bot, "target_lock", 0.0) or 0.0) if bot is not None else 0.0,
+            "target_drift": float(getattr(bot, "target_drift", 0.0) or 0.0) if bot is not None else 0.0,
         },
         "experience": {
-            "entry_expectation": float(result.get("entry_expectation", 0.0) or 0.0),
-            "target_expectation": float(result.get("target_expectation", 0.0) or 0.0),
-            "approach_pressure": float(result.get("approach_pressure", 0.0) or 0.0),
-            "pressure_release": float(result.get("pressure_release", 0.0) or 0.0),
-            "experience_regulation": float(result.get("experience_regulation", 0.0) or 0.0),
-            "reflection_maturity": float(result.get("reflection_maturity", 0.0) or 0.0),
+            "entry_expectation": float(getattr(bot, "entry_expectation", 0.0) or 0.0) if bot is not None else 0.0,
+            "target_expectation": float(getattr(bot, "target_expectation", 0.0) or 0.0) if bot is not None else 0.0,
+            "approach_pressure": float(getattr(bot, "approach_pressure", 0.0) or 0.0) if bot is not None else 0.0,
+            "pressure_release": float(getattr(bot, "pressure_release", 0.0) or 0.0) if bot is not None else 0.0,
+            "experience_regulation": float(getattr(bot, "experience_regulation", 0.0) or 0.0) if bot is not None else 0.0,
+            "reflection_maturity": float(getattr(bot, "reflection_maturity", 0.0) or 0.0) if bot is not None else 0.0,
+            "load_bearing_capacity": float(getattr(bot, "load_bearing_capacity", 0.0) or 0.0) if bot is not None else 0.0,
+            "protective_width_regulation": float(getattr(bot, "protective_width_regulation", 0.0) or 0.0) if bot is not None else 0.0,
+            "protective_courage": float(getattr(bot, "protective_courage", 0.0) or 0.0) if bot is not None else 0.0,
         },
+        "field_state": {
+            "field_density": float(result.get("field_density", 0.0) or 0.0),
+            "field_stability": float(result.get("field_stability", 0.0) or 0.0),
+            "regulatory_load": float(result.get("regulatory_load", 0.0) or 0.0),
+            "action_capacity": float(action_capacity),
+            "recovery_need": float(result.get("recovery_need", 0.0) or 0.0),
+            "survival_pressure": float(result.get("survival_pressure", 0.0) or 0.0),
+            "pressure_to_capacity": float(pressure_to_capacity),
+        },
+        "regulation_snapshot": dict(regulation_snapshot or {}),
         "vision": dict(result.get("vision", {}) or {}),
         "filtered_vision": dict(result.get("filtered_vision", {}) or {}),
         "world_state": dict(result.get("world_state", {}) or {}),
         "structure_perception_state": dict(result.get("structure_perception_state", {}) or {}),
         "outer_visual_perception_state": dict(result.get("outer_visual_perception_state", {}) or {}),
         "inner_field_perception_state": dict(result.get("inner_field_perception_state", {}) or {}),
-        "processing_state": dict(result.get("processing_state", {}) or {}),
         "perception_state": dict(result.get("perception_state", {}) or {}),
+        "processing_state": dict(result.get("processing_state", {}) or {}),
         "felt_state": dict(result.get("felt_state", {}) or {}),
         "thought_state": dict(result.get("thought_state", {}) or {}),
         "meta_regulation_state": dict(result.get("meta_regulation_state", {}) or {}),
         "expectation_state": dict(result.get("expectation_state", {}) or {}),
         "state_signature": dict(result.get("state_signature", {}) or {}),
         "trade_plan": {
+            "decision": str(result.get("decision", "WAIT") or "WAIT"),
             "entry_price": float(result.get("entry_price", 0.0) or 0.0),
-            "tp_price": float(result.get("tp_price", 0.0) or 0.0),
             "sl_price": float(result.get("sl_price", 0.0) or 0.0),
+            "tp_price": float(result.get("tp_price", 0.0) or 0.0),
             "rr_value": float(result.get("rr_value", 0.0) or 0.0),
-            "entry_validity_band": dict(result.get("entry_validity_band", {}) or {}),
-            "target_conviction": float(result.get("target_conviction", 0.0) or 0.0),
             "risk_model_score": float(result.get("risk_model_score", 0.0) or 0.0),
             "reward_model_score": float(result.get("reward_model_score", 0.0) or 0.0),
+            "entry_validity_band": dict(result.get("entry_validity_band", {}) or {}),
         },
         "signal": {
             "signature_bias": float(result.get("signature_bias", 0.0) or 0.0),

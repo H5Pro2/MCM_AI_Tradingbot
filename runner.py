@@ -55,6 +55,173 @@ def _print_backtest_range(path):
     except Exception:
         print("BACKTEST RANGE: -")
 
+# --------------------------------------------------
+# BACKTEST MODE
+# --------------------------------------------------
+def _run_backtest_mode():
+
+    filepath = Config.BACKTEST_FILEPATH
+
+    bot = Bot(filepath)
+    bot.start_runtime_thread()
+
+    buffer = []
+    bot.processed = 0
+    world_replay_loop_seconds = max(
+        0.0,
+        float(getattr(Config, "WORLD_REPLAY_LOOP_SECONDS", 0.0) or 0.0),
+    )
+
+    for row in bot.feed.rows(delay_seconds=world_replay_loop_seconds):
+        buffer.append(row)
+
+        if len(buffer) < Config.WINDOW_SIZE:
+            continue
+
+        if len(buffer) > Config.WINDOW_SIZE:
+            buffer.pop(0)
+
+        bot.publish_market_window(buffer)
+        bot.wait_until_runtime_idle()
+
+    bot.stop_runtime_thread()
+    save_memory_state(bot)
+    return filepath, bot, bot.stats.snapshot()
+
+# --------------------------------------------------
+# TIMEFRAME RESOLUTION
+# --------------------------------------------------
+def _resolve_timeframe_seconds(timeframe: str) -> int:
+
+    tf = timeframe.lower().strip()
+
+    if tf.endswith("m"):
+        return int(tf[:-1]) * 60
+    elif tf.endswith("h"):
+        return int(tf[:-1]) * 3600
+
+    return 60
+
+# --------------------------------------------------
+# LIVE MODE (SEQUENZIELL · BACKEND-IDENTISCH)
+# --------------------------------------------------
+def _run_live_mode():
+
+    timeframe = Config.TIMEFRAME
+    symbol = Config.SYMBOL
+
+    # --------------------------------------------------
+    # Chart-Loop Intervall
+    # --------------------------------------------------
+    world_time_loop_seconds = max(
+        0.25,
+        float(getattr(Config, "WORLD_TIME_LOOP_SECONDS", 1.0) or 1.0),
+    )
+
+    exchange = create_exchange()
+
+    set_context(
+        exchange=exchange,
+        symbol=symbol,
+        timeframe=timeframe,
+        get_sufficient_balance=get_sufficient_balance,
+        get_account_value=get_account_value,
+    )
+    ensure_order_monitor_started()
+
+    bot = Bot(None)
+    bot.start_runtime_thread()
+
+    last_processed_ts = None
+    buffer = []
+
+    while True:
+
+        raw = fetch_ohlcv(exchange, symbol, timeframe)
+
+        if raw is None or not isinstance(raw, list):
+            continue
+
+        if len(raw) < Config.WINDOW_SIZE + 1:
+            continue
+
+        # --------------------------------------------------
+        # Letzte Kerze nur entfernen wenn sie noch läuft
+        # --------------------------------------------------
+        tf_seconds = _resolve_timeframe_seconds(timeframe)
+
+        now_ts = int(time.time())
+        last_candle_ts = int(raw[-1][0]) // 1000
+
+        # Wenn letzte Kerze noch nicht geschlossen ist → entfernen
+        if now_ts < (last_candle_ts + tf_seconds):
+            raw = raw[:-1]
+
+        # --------------------------------------------------
+        # INITIALISIERUNG (einmalig)
+        # --------------------------------------------------
+        if last_processed_ts is None:
+
+            init_slice = raw[-Config.WINDOW_SIZE:]
+            init_workspace_live(symbol, timeframe, init_slice)
+
+            buffer = [
+                {
+                    "timestamp": int(ts),
+                    "open": float(o),
+                    "high": float(h),
+                    "low": float(l),
+                    "close": float(c),
+                    "volume": float(v),
+                }
+                for ts, o, h, l, c, v in init_slice
+            ]
+
+            bot.publish_market_window(buffer)
+            last_processed_ts = buffer[-1]["timestamp"]
+            time.sleep(world_time_loop_seconds)
+            continue
+
+        # --------------------------------------------------
+        # NEUE KERZEN ERMITTELN
+        # --------------------------------------------------
+        new_candles = [
+            c for c in raw
+            if int(c[0]) > last_processed_ts
+        ]
+
+        if not new_candles:
+            time.sleep(world_time_loop_seconds)
+            continue
+
+        # --------------------------------------------------
+        # SEQUENZIELLE VERARBEITUNG
+        # --------------------------------------------------
+        for ts, o, h, l, c, v in new_candles:
+
+            # Workspace append
+            append_workspace_live(symbol, timeframe, (ts, o, h, l, c, v))
+
+            row = {
+                "timestamp": int(ts),
+                "open": float(o),
+                "high": float(h),
+                "low": float(l),
+                "close": float(c),
+                "volume": float(v),
+            }
+
+            buffer.append(row)
+
+            if len(buffer) > Config.WINDOW_SIZE:
+                buffer.pop(0)
+
+            bot.publish_market_window(buffer)
+
+            last_processed_ts = int(ts)
+
+        time.sleep(world_time_loop_seconds)
+
 # ==================================================
 # MAIN
 # ==================================================
@@ -99,33 +266,7 @@ if __name__ == "__main__":
     # --------------------------------------------------
     if Config.MODE == "BACKTEST":
 
-        filepath = Config.BACKTEST_FILEPATH
-
-        bot = Bot(filepath)
-        bot.start_runtime_thread()
-
-        buffer = []
-        bot.processed = 0
-        world_replay_loop_seconds = max(
-            0.0,
-            float(getattr(Config, "WORLD_REPLAY_LOOP_SECONDS", 0.0) or 0.0),
-        )
-
-        for row in bot.feed.rows(delay_seconds=world_replay_loop_seconds):
-            buffer.append(row)
-
-            if len(buffer) < Config.WINDOW_SIZE:
-                continue
-
-            if len(buffer) > Config.WINDOW_SIZE:
-                buffer.pop(0)
-
-            bot.publish_market_window(buffer)
-            bot.wait_until_runtime_idle()
-
-        bot.stop_runtime_thread()
-        save_memory_state(bot)
-        stats = bot.stats.snapshot()
+        filepath, bot, stats = _run_backtest_mode()
 
         _print_backtest_range(filepath)
 
@@ -183,124 +324,4 @@ if __name__ == "__main__":
     # --------------------------------------------------
     elif Config.MODE == "LIVE":
 
-        timeframe = Config.TIMEFRAME
-        symbol = Config.SYMBOL
-
-        # --------------------------------------------------
-        # Chart-Loop Intervall
-        # --------------------------------------------------
-        world_time_loop_seconds = max(
-            0.25,
-            float(getattr(Config, "WORLD_TIME_LOOP_SECONDS", 1.0) or 1.0),
-        )
-
-        exchange = create_exchange()
-
-        set_context(
-            exchange=exchange,
-            symbol=symbol,
-            timeframe=timeframe,
-            get_sufficient_balance=get_sufficient_balance,
-            get_account_value=get_account_value,
-        )
-        ensure_order_monitor_started()
-
-        bot = Bot(None)
-        bot.start_runtime_thread()
-
-        last_processed_ts = None
-        buffer = []
-
-        while True:
-
-            raw = fetch_ohlcv(exchange, symbol, timeframe)
-
-            if raw is None or not isinstance(raw, list):
-                continue
-
-            if len(raw) < Config.WINDOW_SIZE + 1:
-                continue
-
-            # --------------------------------------------------
-            # Letzte Kerze nur entfernen wenn sie noch läuft
-            # --------------------------------------------------
-            tf = timeframe.lower().strip()
-
-            if tf.endswith("m"):
-                tf_seconds = int(tf[:-1]) * 60
-            elif tf.endswith("h"):
-                tf_seconds = int(tf[:-1]) * 3600
-            else:
-                tf_seconds = 60
-
-            now_ts = int(time.time())
-            last_candle_ts = int(raw[-1][0]) // 1000
-
-            # Wenn letzte Kerze noch nicht geschlossen ist → entfernen
-            if now_ts < (last_candle_ts + tf_seconds):
-                raw = raw[:-1]
-
-            # --------------------------------------------------
-            # INITIALISIERUNG (einmalig)
-            # --------------------------------------------------
-            if last_processed_ts is None:
-
-                init_slice = raw[-Config.WINDOW_SIZE:]
-                init_workspace_live(symbol, timeframe, init_slice)
-
-                buffer = [
-                    {
-                        "timestamp": int(ts),
-                        "open": float(o),
-                        "high": float(h),
-                        "low": float(l),
-                        "close": float(c),
-                        "volume": float(v),
-                    }
-                    for ts, o, h, l, c, v in init_slice
-                ]
-
-                bot.publish_market_window(buffer)
-                last_processed_ts = buffer[-1]["timestamp"]
-                time.sleep(world_time_loop_seconds)
-                continue
-
-            # --------------------------------------------------
-            # NEUE KERZEN ERMITTELN
-            # --------------------------------------------------
-            new_candles = [
-                c for c in raw
-                if int(c[0]) > last_processed_ts
-            ]
-
-            if not new_candles:
-                time.sleep(world_time_loop_seconds)
-                continue
-
-            # --------------------------------------------------
-            # SEQUENZIELLE VERARBEITUNG
-            # --------------------------------------------------     
-            for ts, o, h, l, c, v in new_candles:
-
-                # Workspace append
-                append_workspace_live(symbol, timeframe, (ts, o, h, l, c, v))
-
-                row = {
-                    "timestamp": int(ts),
-                    "open": float(o),
-                    "high": float(h),
-                    "low": float(l),
-                    "close": float(c),
-                    "volume": float(v),
-                }
-
-                buffer.append(row)
-
-                if len(buffer) > Config.WINDOW_SIZE:
-                    buffer.pop(0)
-
-                bot.publish_market_window(buffer)
-
-                last_processed_ts = int(ts)
-
-            time.sleep(world_time_loop_seconds)
+        _run_live_mode()
