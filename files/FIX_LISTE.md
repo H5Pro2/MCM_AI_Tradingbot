@@ -10,6 +10,620 @@ Regelwerk: `files/MD_ANWEISUNG.md`.
 
 ---
 
+- [x] Lauf 8 bis 10 nach Hypothesenreifung ausgewertet.
+  Befund:
+  - Lauf 8: PnL ca. `+20.89`
+  - Lauf 9: PnL ca. `+30.28`, aber hoeherer Drawdown ca. `17.45 %`
+  - Lauf 10: PnL ca. `+32.37` bei niedrigem Drawdown ca. `6.63 %`
+  - Short ist klarer Haupttraeger
+  - Long bleibt wechselhaft
+  - Hypothesenwerte trennen weiter sauber zwischen Handlung, Watch und Replan
+
+- [ ] Reorganisierende Hypothesen als innere Replay-/Verdauungsspur schaerfen.
+  Ziel:
+  - `open_hypothesis_reorganizing` nicht direkt als Handlungskraft lesen
+  - diese Spur als Trainingsmaterial fuer spaetere Strukturkontakte nutzen
+  - bestaetigte Wiederkehr in Vertrauen umwandeln
+  - keine harte Sperre, sondern Reifung ueber wiederholten Kontakt
+
+---
+
+- [x] Lauf 6 und 7 nach Hypothesenreifung ausgewertet.
+  Befund:
+  - Lauf 6: PnL ca. `+16.56`
+  - Lauf 7: PnL ca. `+25.08`
+  - Lauf 7 hat deutlich niedrigeren Drawdown mit ca. `7.26 %`
+  - Short wird klarer Haupttraeger
+  - neue Hypothesenwerte werden im Field-Protokoll geschrieben
+  - `act` zeigt hoeheres `open_hypothesis_action_permission`
+  - `replan` zeigt hoehere Lernladung und Realitaetspruefung
+
+- [ ] Lauf 8 nach Hypothesenreifung pruefen.
+  Ziel:
+  - bestaetigen, ob Lauf 7 eine stabile Reifewirkung oder ein Einzelpeak war
+  - pruefen, ob Short weiter Haupttraeger bleibt
+  - Long-Unruhe beobachten
+  - Drawdown und `open_hypothesis_reality_check_need` verfolgen
+  - keine harte Richtungsvorgabe ableiten
+
+---
+
+- [x] Hypothesenreifung gegen vorsichtige Hemmung verfeinert.
+  Umsetzung:
+  - `open_hypothesis_confirmation_weight`
+  - `open_hypothesis_learning_charge`
+  - `open_hypothesis_action_permission`
+  - `open_hypothesis_reality_check_need`
+  - reorganisierende Hypothesen wirken staerker als Reflexions- und
+    Lernspannung, weniger als direkter Motorimpuls
+  - Protokolle wurden um die neuen Werte erweitert
+
+- [ ] Lauf 6 nach Hypothesenreifung pruefen.
+  Ziel:
+  - Verteilung der vier neuen Hypothesenwerte auswerten
+  - pruefen, ob `open_hypothesis_reorganizing` weniger direkt verlustreich
+    handelt
+  - pruefen, ob `open_hypothesis_carried` weiterhin tragend bleibt
+  - besonders Long-PnL, `act_watch`, `replan`, `open_hypothesis_reality_check`
+    und `plan_allowed` beobachten
+
+---
+
+- [x] Lauf 5 nach MCM-Spannungsachse ausgewertet.
+  Befund:
+  - PnL ca. `+4.32`
+  - Long nur noch leicht positiv mit ca. `+0.81`
+  - Short positiv mit ca. `+3.52`
+  - MCM-Achse bleibt stabil: fast alles `0`, kein positiver Ueberdehnungsmodus
+  - Rueckgang kommt eher aus Hypothesenreifung, weniger bestaetigter Struktur
+    und mehr Zurueckhaltung
+
+- [ ] Hypothesenreifung gegen vorsichtige Hemmung pruefen.
+  Ziel:
+  - `open_hypothesis_carried`, `open_hypothesis_burdened` und
+    `open_hypothesis_reorganizing` genauer in Handlung / Beobachtung /
+    Replay koppeln
+  - reorganisierende Hypothesen nicht als Handlungskraft lesen
+  - keine harte Sperre bauen, sondern eine weichere Reifedifferenzierung
+    zwischen tragender Hypothese, belasteter Hypothese und Lernspannung
+
+---
+
+- [ ] Gedankenraum nach frischem Lauf 1 auf Speicherwachstum prüfen.
+  Befund:
+  - `mcm_thought_memory.json` ist nach einem Lauf bereits ca. `8.7 MB`
+  - Thought-Seed-Protokoll ca. `10 MB`
+  - DIO bildet viele neue Syntax- und Gedankenfamilien
+  Ziel:
+  - keine harte Kürzung
+  - Verdichtung prüfen: ähnliche Gedankenfamilien zusammenführen, ohne die
+    emergente Varianz zu zerstören
+  - unterscheiden zwischen wertvoller Gedankenreifung und reiner Wiederholung
+
+- [ ] Lauf 2 mit neuem Thought-Memory auswerten.
+  Ziel:
+  - prüfen, ob `open_hypothesis_reorganizing_memory` in tragendere Zustände
+    übergeht
+  - prüfen, ob `hypothesis_trust` steigt
+  - prüfen, ob `inner_outer_alignment` und `temporal_self_consistency`
+    stabiler werden
+  - prüfen, ob Long/Short-Verhalten ausgewogener oder bewusster wird
+
+- [x] Lauf 2 mit neuem Thought-Memory ausgewertet.
+  Befund:
+  - PnL ca. `+5.08`
+  - Trades sinken von `409` auf `345`
+  - Thought-Memory wächst kaum weiter und wirkt daher eher wiederverwendend
+    als explosionsartig
+  - `open_hypothesis_carried_memory` steigt deutlich von `340` auf `927`
+  - `hypothesis_trust` steigt von ca. `0.023` auf ca. `0.059`
+  - `inner_outer_alignment` und `temporal_self_consistency` steigen nur leicht
+  Nächster Schritt:
+  - Lauf 3 prüfen, ob getragene Hypothesen weiter zunehmen
+  - danach Thought-Memory-Verdichtung prüfen, falls Wiederholungen entstehen
+
+- [x] Lauf 3 mit neuem Thought-Memory ausgewertet.
+  Befund:
+  - PnL ca. `+13.01`
+  - Thought-Memory bleibt kontrolliert bei ca. `8.74 MB`
+  - `observation_learning.maturity_trust` steigt auf ca. `0.535`
+  - `observation_learning.action_pressure` sinkt auf ca. `0.463`
+  - `hypothesis_trust` fällt gegenüber Lauf 2 wieder auf ca. `0.030`
+  - `open_hypothesis_carried_memory` fällt auf `429`
+  Deutung:
+  - äußere Performance verbessert sich, aber innere Hypothesen-Sicherheit
+    bleibt instabil
+  - DIO wirkt funktionaler, aber noch nicht wirklich selbstsicher
+
+- [ ] Lauf 4 als Stabilitätsprüfung nach Lauf 3 auswerten.
+  Ziel:
+  - prüfen, ob PnL-Steigerung stabil oder laufabhängig ist
+  - prüfen, ob `act_watch` konstruktiv bleibt
+  - prüfen, ob `position_nervousness` sinkt oder weiter hoch bleibt
+  - prüfen, ob Thought-Memory weiter verdichtet bleibt
+
+- [x] Lauf 4 als Stabilitätsprüfung nach Lauf 3 ausgewertet.
+  Befund:
+  - PnL ca. `+31.26`
+  - Entwicklungsreihe: `+3.57`, `+5.08`, `+13.01`, `+31.26`
+  - Thought-Memory bleibt kontrolliert bei ca. `8.75 MB`
+  - Long wird leicht positiv, Short bleibt Hauptträger
+  - `hypothesis_trust` bleibt niedrig, also Performance steigt schneller als
+    inneres Selbstvertrauen
+  Deutung:
+  - starker Hinweis auf kognitives Zünden / bessere Handlungskopplung
+  - noch kein endgültiger Nachweis, weitere Läufe nötig
+
+- [ ] Entwicklungsübersicht für Läufe nach frischem Memory bauen.
+  Ziel:
+  - pro Lauf PnL, Trades, Long/Short-PnL, Thought-Memory-Größe,
+    `hypothesis_trust`, `open_hypothesis_carried_memory`, `act_watch`,
+    Observation-Maturity und Action-Pressure nebeneinander auswerten
+  - sichtbar machen, ob DIO wirklich reift oder nur laufabhängig variiert
+
+- [x] Entwicklungsübersicht für Läufe nach frischem Memory gebaut.
+  Datei:
+  - `files/ENTWICKLUNGSUEBERSICHT.md`
+  Enthält:
+  - Lauf 1 bis 4
+  - PnL-Reihe `+3.57 -> +5.08 -> +13.01 -> +31.26`
+  - Thought-Protokollgröße
+  - Hypothesen- und Observation-Werte
+  Nächster Schritt:
+  - nach Lauf 5 fortschreiben
+  - prüfen, ob Lauf 4 ein getragener Reifungssprung oder eine starke
+    Varianzphase war
+
+- [x] Lauf 5 ausgewertet und Entwicklungsübersicht fortgeschrieben.
+  Befund:
+  - PnL ca. `+20.97`
+  - schwächer als Lauf 4, aber weiter deutlich über Lauf 1 bis 3
+  - Short bleibt stark mit ca. `+29.62`
+  - Long kippt wieder negativ mit ca. `-8.65`
+  - mehr `WAIT`, `hold`, `fused_score_too_low` und `maturity_block`
+  - `open_hypothesis_carried_memory` steigt auf `627`
+  Deutung:
+  - eher vorsichtige Reorganisation als Zusammenbruch
+  - Long-Bereich bleibt instabil und sollte in Lauf 6 beobachtet werden
+
+- [ ] Lauf 6 auf Long-spezifische Unsicherheit prüfen.
+  Ziel:
+  - Long-PnL und Long-Trades prüfen
+  - prüfen, ob `maturity_block` und `fused_score_too_low` weiter steigen
+  - prüfen, ob getragene Hypothesen trotz Vorsicht weiter zunehmen
+  - keine harte Long-Regel ableiten
+
+- [x] MCM-Spannungsachse `-- - 0 + ++` umgesetzt.
+  Umsetzung:
+  - positive MCM-Seite wird nicht mehr automatisch als Ruhe/Support gelesen
+  - neue Werte:
+    - `positive_expansion_pressure`
+    - `negative_contraction_pressure`
+    - `positive_overextension`
+    - `positive_return_pressure`
+    - `mcm_axis_displacement`
+    - `mcm_axis_tension`
+    - `mcm_axis_state`
+    - `positive_zero_point_regulation`
+  - positive Überdehnung kann weich Beobachtung, `act_watch`, Reflexion und
+    Rückführung zur 0 erhöhen
+  - keine harte Long-/Short-Regel
+  Prüfung:
+  - `python -m py_compile .\MCM_Brain_Modell.py .\bot.py .\trade_stats.py`
+    läuft sauber
+
+- [ ] Nächsten Lauf nach MCM-Spannungsachse auswerten.
+  Ziel:
+  - Verteilung von `mcm_axis_state` prüfen
+  - `positive_return_pressure` bei Long vs Short vergleichen
+  - prüfen, ob `positive_expansion_zero_point` oder
+    `positive_expansion_observe` sichtbar werden
+  - prüfen, ob Long weniger aus positiver Überdehnung handelt
+
+- [x] Debug Läufe 1-3 nach MCM-Spannungsachse ausgewertet.
+  Befund:
+  - Lauf 1: ca. `-0.01`
+  - Lauf 2: ca. `+3.13`
+  - Lauf 3: ca. `+22.84`
+  - Short bleibt Hauptträger
+  - Long bleibt instabil
+  - `action_clearance` sinkt, `action_inhibition` steigt
+  - `act_watch` steigt deutlich
+  Deutung:
+  - Reorganisationskurve statt Zusammenbruch
+  - DIO wird vorsichtiger/gebundener und in Lauf 3 trotzdem deutlich stärker
+
+- [x] Field-Protokoll für MCM-Spannungsachse korrigiert.
+  Befund:
+  - Läufe 1-3 hatten die Mechanik aktiv, aber die neuen Achsen wurden im
+    `mcm_field_decision_protocol.csv` noch nicht ausgeschrieben
+  Umsetzung:
+  - Header und Row um die neuen MCM-Achsen ergänzt
+  Prüfung:
+  - `python -m py_compile .\MCM_Brain_Modell.py .\bot.py .\trade_stats.py`
+    läuft sauber
+
+- [ ] Nächsten Lauf mit korrigiertem Field-Protokoll prüfen.
+  Ziel:
+  - direkte Verteilung von `mcm_axis_state`
+  - Long vs Short bei `positive_expansion_pressure`
+  - Long vs Short bei `positive_return_pressure`
+  - Auftreten von `positive_zero_point_regulation`
+  - Gründe `positive_expansion_zero_point` und `positive_expansion_observe`
+
+
+- [x] `mcm_thought_memory.json` gegen Windows-Dateilock abgesichert.
+  Umsetzung:
+  - robuste atomare Schreibfunktion mit eindeutiger Temp-Datei
+  - Retry bei `PermissionError`
+  - Fehlerprotokoll statt Lauf-Crash
+  - Thought-Memory bleibt dirty und kann später erneut speichern
+  - Formsymbol-Memory nutzt dieselbe robuste Schreibfunktion
+
+- [x] Debug-Ausgabe in fachliche Unterordner aufgeteilt.
+  Umsetzung:
+  - `DEBUG_GROUPED_DIRS = True`
+  - automatische Sortierung zentral in `debug_reader`
+  - `gui/`: PnL-/Stats-Dateien
+  - `core/`: Kernentscheidungen, Outcomes, Thought-Seeds, Neurotransition
+  - `language/`: Formsprache und Gedankenspur
+  - `perception/`: Sehen, Kontakt, strategische Fenster
+  - `position/`: Position und Exit-Kandidaten
+  - `performance/`: Laufzeit-/Schreibprofile
+  - Brain-Mechanik unverändert
+
+- [ ] Neuen Lauf 1 auf Debugstruktur prüfen.
+  Ziel:
+  - `debug/debug_lauf_1/gui/trade_equity.csv` wird geschrieben
+  - `debug/debug_lauf_1/gui/trade_stats.json` wird geschrieben
+  - Kernprotokolle landen in `core/`
+  - DIO-Syntax/Thought-Protokolle landen in `language/` bzw. `core/`
+  - keine alten ungeordneten Debugdateien direkt im Laufwurzelordner
+
+- [x] Neue Memory und neue Debugs für DIO-Form-Language-Start vorbereitet.
+  Umsetzung:
+  - aktive Memory-Dateien archiviert
+  - aktive Debugläufe archiviert
+  - `debug/` ist leer für neue Läufe
+  - nächster Lauf baut Welt-, Form- und Gedankenerfahrung neu auf
+
+- [ ] Neuen Lauf 1 nach Memory-/Debug-Neustart prüfen.
+  Ziel:
+  - neue Memory-Dateien entstehen sauber
+  - neuer Debuglauf entsteht im leeren `debug/`
+  - DIO-Syntaxspuren werden geschrieben:
+    `dio_world_experience_anchor`, `dio_thought_experience_anchor`,
+    `dio_dialogue_bridge_sentence`
+  - erste neue Thought-Families und Formfamilien aus frischem Speicher
+    auswerten
+
+- [x] DIO Form Language Core als zentrale innere Syntaxschicht angelegt.
+  Umsetzung:
+  - `dio_language_sentence` bindet Form, Feld, Gedanke, Herkunft, Reifung,
+    Handlung und Kontext
+  - `dio_world_experience_anchor` und `dio_thought_experience_anchor`
+    trennen weltliche Erfahrung und Gedankenerfahrung
+  - `dio_dialogue_bridge_sentence` bildet die verdichtete Brücke zwischen
+    Fühlen, Weltgedächtnis, Gedankengedächtnis, Hypothese und Handlung
+  - `dio_syntax_signature`, `dio_language_state`, `dio_syntax_origin`,
+    `dio_syntax_density`, `dio_syntax_compression` und
+    `dio_syntax_coherence` ergänzt
+  - Thought-Memory speichert die Satzspur bei Seeds und Familien mit
+  - Thought-Seed-Protokoll schreibt die neue Syntaxdiagnose
+
+- [ ] Nächsten Lauf auf DIO-Syntax prüfen.
+  Ziel:
+  - wiederkehrende `dio_syntax_signature` zählen
+  - `dio_language_state` nach PnL, Phase und emergenter Struktur auswerten
+  - prüfen, ob `dio_syntax_compression` kognitive Last reduziert
+  - prüfen, ob `dio_syntax_origin` mit semantischer Herkunft zusammenpasst
+  - prüfen, ob Weltanker und Gedankenanker sauber getrennt bleiben
+
+- [x] Historische Hypothesen-/Handlungsgewichtung sauber zusammenführen.
+  Ziel:
+  - Entscheidungen nicht nur nach Momentreiz bewerten
+  - getragene, belastete und reorganisierende Hypothesen als Gedächtnisspur
+    führen
+  - `form_symbol_*`, Kontextcluster, Beobachtungsreife, Thought-Families und
+    `open_hypothesis_learning` zu einer weichen Rezeptorschicht verbinden
+  - keine harte Sperre, sondern organische Reifung, Vertrauen, Vorsicht,
+    Replay und Reframing
+
+- [ ] Nächsten Lauf auf historische Hypothesen-/Handlungsgewichtung prüfen.
+  Ziel:
+  - `hypothesis_trust`, `hypothesis_caution` und
+    `hypothesis_reorganization_weight` im Feldprotokoll auswerten
+  - prüfen, ob `action_weight` und `decision_weight` weniger breit hemmen als
+    die vorige Reifeschicht
+  - besonders `ordinary_structure_reading`, `open_hypothesis_carried` und
+    `open_hypothesis_reorganizing` vergleichen
+
+- [x] Lauf 63 ausgewertet.
+  Befund:
+  - PnL ca. `+40.14`
+  - Drawdown ca. `6.63 %`, ruhiger als Lauf 61/62
+  - Short bleibt tragend: ca. `+30.08`
+  - `family_total_seen`: `3351`
+  - Top-Familien liegen jetzt über `100` Wiederholungen
+  - offene Strukturhypothese wieder stärker negativ: ca. `-33.91`
+
+- [ ] Offene Strukturhypothesen mit Thought-Family-Kontext analysieren.
+  Ziel:
+  - belastete offene Hypothesen nach Familien gruppieren
+  - tragende offene Hypothesen nach Familien gruppieren
+  - prüfen, ob bestimmte Familien immer wieder zu früh motorisch werden
+  - keine Sperre bauen, sondern Reifungs-/Distanzierungslogik verbessern
+
+
+- [x] Debug-Schreiblast auf Kern-Diagnose entschärft.
+  Umsetzung:
+  - neues Standardprofil `DIO_CORE_DEBUG`
+  - schwere Dauerprotokolle im Standardlauf aus
+  - `trade_stats.json` und `trade_equity.csv` bleiben als PnL-/GUI-Spur aktiv
+  - Outcome, Feldentscheidung, Neurotransition, Positionslast und
+    Thought-Seeds bleiben sichtbar
+  - Thought-Memory und Thought-Families bleiben aktiv
+  - Mechanik unverändert, nur Diagnoseausgabe reduziert
+
+- [ ] Nächsten Lauf mit `DIO_CORE_DEBUG` auf Debuggröße prüfen.
+  Ziel:
+  - Ordnergröße gegen Lauf 63 vergleichen
+  - prüfen, ob die verbleibenden Kernprotokolle für Auswertung reichen
+  - bei Bedarf einzelne Protokolle gezielt wieder zuschalten
+
+- [x] Lauf 64 ausgewertet.
+  Befund:
+  - PnL ca. `+52.14`
+  - Drawdown ca. `6.54 %`
+  - Debuggröße ca. `34.29 MB`, deutlich kleiner als Lauf 63
+  - Short ca. `+34.57`, Long ca. `+17.57`
+  - bestätigte Struktur: `54 TP / 0 SL`, ca. `+58.93`
+  - offene Strukturhypothese bleibt Hauptlast: ca. `-35.09`
+
+- [x] Stats-Zusammenfassung bei gepuffertem Debug repariert.
+  Umsetzung:
+  - `TradeStats` hält Outcome-Records zusätzlich in einem kleinen
+    In-Memory-Cache
+  - `trade_stats.json` kann emergente Strukturwerte sofort zusammenfassen
+  - `outcome_records.jsonl` bleibt gepuffert und wird nicht schwerer
+
+- [ ] Lauf 65 auf `trade_stats.json`-Emergenzwerte prüfen.
+  Ziel:
+  - `kpi_summary.emergent_structure` darf nicht mehr leer/0 sein
+  - `trade_equity.csv` weiter für GUI prüfen
+  - Debuggröße weiter beobachten
+
+- [x] Lauf 65 ausgewertet.
+  Befund:
+  - PnL ca. `+44.88`
+  - Drawdown ca. `9.09 %`
+  - Debuggröße ca. `34.83 MB`
+  - `trade_equity.csv` geschrieben mit `371` Equity-Zeilen
+  - `trade_stats.json` enthält emergente Strukturwerte korrekt
+  - bestätigte Struktur: `50 TP / 0 SL`, ca. `+52.21`
+  - offene Hypothese getragen: `30 TP / 0 SL`, ca. `+31.89`
+  - offene Hypothese reorganisierend: `0 TP / 127 SL`, ca. `-54.68`
+
+- [ ] Reifeschicht für offene Hypothesen weiterentwickeln.
+  Ziel:
+  - getragene offene Hypothesen nicht bremsen
+  - belastete/reorganisierende offene Hypothesen in Nachreifen, Replay,
+    Distanzierung und erneute Wahrnehmung führen
+  - keine harte Sperre, sondern organische Selbstregulation
+
+- [x] Reifeschicht für offene Hypothesen umgesetzt.
+  Umsetzung:
+  - `open_hypothesis_bearing_echo`
+  - `open_hypothesis_reifung_pressure`
+  - `open_hypothesis_reflection_pull`
+  - `open_hypothesis_motor_tension`
+  - `open_hypothesis_reifung_state`
+  - getragen stärkt weich, reorganisierend führt eher zu Replay/Replan
+
+- [ ] Lauf 66 auf offene Hypothesen prüfen.
+  Ziel:
+  - Verlustlast von `open_hypothesis_reorganizing` beobachten
+  - `open_hypothesis_carried` darf nicht beschädigt werden
+  - Verhältnis aus act / observe / replan prüfen
+  - Debuggröße weiter beobachten
+
+- [x] Lauf 65 nach Hypothesen-Reifeschicht geprüft.
+  Befund:
+  - PnL ca. `+30.19`
+  - Drawdown ca. `11.24 %`
+  - bestätigte Struktur bleibt stark: `58 TP / 0 SL`, ca. `+58.21`
+  - offene reorganisierende Hypothese bleibt stark negativ: ca. `-51.67`
+  - normale Strukturlesung deutlich schwächer: ca. `+7.59`
+  - Reifeschicht wirkt zu breit und zu bremsend
+
+- [x] Crash in Reifeschicht behoben.
+  Befund:
+  - `open_hypothesis_reifung_state` wurde in der Pre-Action-Kette benutzt,
+    bevor die Variable im Funktionsfluss gesetzt war
+  Umsetzung:
+  - Reifungsberechnung vor die Pre-Action-Entscheidung verschoben
+  - doppelte spätere Berechnung entfernt
+  - Kompilierung sauber
+
+- [x] Zweiten Reihenfolgefehler in Reifeschicht behoben.
+  Befund:
+  - frühe Reifungsberechnung griff auf spätere Bewusstseinswerte
+    `inner_outer_alignment` und `perceptual_distance` zu
+  Umsetzung:
+  - frühe Reflexionsspannung nutzt jetzt bereits verfügbare Proxies:
+    Feldklarheit, Memory-Orientierung und Erfahrungsregulation
+  - spätere Bewusstseinswerte bleiben weiterhin für spätere Regulation aktiv
+
+- [x] `trade_equity.csv` aus Debug-Buffer herausgenommen.
+  Umsetzung:
+  - Equity-/PnL-Kurve wird sofort geschrieben
+  - GUI kann die Datei während des Laufs lesen
+  - schwere Forschungsdateien bleiben gepuffert
+
+- [ ] Im nächsten Lauf prüfen, ob `trade_equity.csv` live anwächst.
+
+
+- [x] Codeprüfung nach VS-Code-Absturz durchgeführt.
+  Befund:
+  - keine Python-Syntaxfehler
+  - `debug_lauf_62` ca. `135.57 MB`
+  - große CSV/JSONL-Dateien sind wahrscheinliche IDE-Belastung
+  - Thought-Memory hatte unnötige Vollnormalisierung pro Update
+
+- [x] Thought-Memory-Update optimiert.
+  Umsetzung:
+  - pro Tick inkrementelle Aktualisierung
+  - Vollnormalisierung nur beim Schreiben oder deutlichem Überschreiten der
+    Limits
+  - bestehende `mcm_thought_memory.json` bleibt lesbar
+
+- [x] Debug-Schreiblast gezielt optimieren.
+  Ziel:
+  - große Protokolle nicht dauerhaft maximal schreiben
+  - schwere Debugs optional seltener oder nur im Analysemodus schreiben
+  - VS-Code-/IDE-Belastung reduzieren
+  - Mechanik nicht verändern
+
+
+- [x] Lauf 62 ausgewertet.
+  Befund:
+  - PnL ca. `+52.25`
+  - Winrate ca. `45.88 %`
+  - Attempts sinken gegen Lauf 61: `11300` -> `10275`
+  - `family_count`: `768`
+  - `family_total_seen`: `1948`
+  - Short trägt stark: ca. `+38.45`
+  - bestätigte Struktur: `60 TP / 0 SL`, ca. `+62.75`
+  - offene Hypothese bleibt negativ, aber weniger belastend als Lauf 61
+
+- [ ] Lauf 63 auf Stabilität der Thought-Families prüfen.
+  Ziel:
+  - prüfen, ob Lauf 62 ein stabiler Sprung oder Vorprägungseffekt war
+  - Top-Familien nach `seen`, Reife und Herkunft auswerten
+  - Attempts/Trade beobachten
+  - offene Hypothesen prüfen:
+    weniger Last, mehr Reifung oder nur Zufall?
+
+
+- [x] Thought-Memory-Familienbildung umgesetzt.
+  Umsetzung:
+  - `mcm_thought_memory.json` bekommt `families`
+  - Seeds bekommen `thought_family_id`, `family_key`, `sentence_state`
+  - Familien entstehen aus DIO-eigener Syntax, nicht aus menschlichen Labels
+
+- [ ] Nächsten Lauf auf Thought-Families prüfen.
+  Ziel:
+  - `summary.family_count` und `summary.family_total_seen` prüfen
+  - häufigste Familien auswerten
+  - prüfen, ob Familien Wiederholung besser verdichten als Einzel-Seeds
+  - offene Hypothesen als Familien-Reifung betrachten
+
+- [x] Lauf 61 ausgewertet.
+  Befund:
+  - PnL ca. `+29.32`
+  - `mcm_thought_memory.json` wurde geschrieben
+  - Thought-Memory ist sofort bei `2048` Seeds
+  - `total_seen` ca. `2179`, also viele Einzelgedanken mit wenig Wiederholung
+  - Short trägt stärker als Long:
+    Short ca. `+19.73`, Long ca. `+9.58`
+  - `confirmed_structural_interpretation` bleibt sehr stark:
+    `49 TP / 0 SL`, ca. `+50.94`
+  - `open_structural_hypothesis` bleibt Hauptlast:
+    `24 TP / 137 SL`, ca. `-33.66`
+
+- [ ] Thought-Memory-Familienbildung prüfen.
+  Ziel:
+  - nicht nur einzelne `thought_seed_id` speichern
+  - ähnliche Seeds weich zu Gedankenfamilien verdichten
+  - Fragmentierung senken
+  - wiederkehrende innere Themen sichtbar machen
+  - keine harte Regel, sondern organische Verdichtung der eigenen Syntax
+
+
+- [ ] Sprachentwicklung als Bindeglied weiter ausarbeiten.
+  Ziel:
+  - DIOs eigene Syntax nicht nur als Label, sondern als
+    Wahrnehmungs-/Handlungsbindung verstehen
+  - prüfen, wie Formzeichen und Thought-Seeds zu Relationen werden können
+  - später eigene Satzstrukturen in DIO-Syntax ermöglichen
+  - menschliche Sprache nur als Übersetzung/Debug verwenden
+
+
+- [ ] Eigene DIO-Syntax konsequent durch das System prüfen.
+  Ziel:
+  - menschliche Begriffe nur als Debug-/Übersetzungslabel verwenden
+  - interne Entscheidungen stärker über Formzeichen, Thought-Seeds,
+    Feldzustände und eigene Verdichtungen laufen lassen
+  - prüfen, wo noch menschliche Kategorien als innere Wahrheit wirken könnten
+  - spätere Satzbildung als Relation zwischen DIO-eigenen Zeichen denken,
+    nicht als kopierte Menschensprache
+
+
+- [x] Lauf 60 ausgewertet.
+  Befund:
+  - PnL ca. `+36.68`
+  - Short trägt stärker als Long:
+    Long ca. `+9.76`, Short ca. `+26.92`
+  - `confirmed_structural_interpretation` bleibt sehr stark:
+    `53 TP / 0 SL`, ca. `+54.57`
+  - `open_structural_hypothesis` bleibt Hauptlast:
+    `28 TP / 152 SL`, ca. `-35.26`
+  - Thought-Memory wurde in Lauf 60 noch nicht geschrieben, weil der Lauf vor
+    dem Einbau gestartet war
+
+- [ ] Nächsten Lauf mit neuem Thought-Memory und Direction-Profil prüfen.
+  Ziel:
+  - `bot_memory/mcm_thought_memory.json` muss entstehen
+  - `kpi_summary.direction_profile` muss in `trade_stats.json` sichtbar sein
+  - Long/Short nicht als Regel, sondern als Richtungserleben auswerten
+  - offene Strukturhypothesen auf Reifung statt reflexhaftes Handeln prüfen
+
+
+- [ ] Richtungspräferenz später als Wahrnehmungsrückführung prüfen.
+  Ziel:
+  - `direction_profile` nicht als Regel verwenden
+  - Long/Short/Gemischt als innere Charakteristik lesen
+  - mögliche spätere Werte:
+    `direction_pull`, `direction_bearing_quality`, `direction_stress`,
+    `direction_trust`, `direction_blindness`
+  - Frage:
+    "Warum zieht mein Feld eher in diese Richtung, und was macht diese
+    Richtung mit meiner Innenlage?"
+
+
+- [x] Long/Short-Charakteristik als Counter ergänzt.
+  Umsetzung:
+  - Trades, TP/SL und PnL werden je Richtung gezählt
+  - Entry-Versuche, submitted und filled werden je Richtung gezählt
+  - Ausgabe in `trade_stats.json` und `kpi_summary.direction_profile`
+
+- [ ] Nächsten Lauf auf Richtungsprofil prüfen.
+  Ziel:
+  - `long_trade_share` vs. `short_trade_share` prüfen
+  - `long_attempt_share` vs. `short_attempt_share` prüfen
+  - Long-/Short-Winrate und Long-/Short-PnL auswerten
+  - unterscheiden, ob DIO eine Richtung nur sucht oder ob sie auch tragfähig
+    gefüllt und abgeschlossen wird
+
+
+- [x] Separates Thought-Memory angelegt.
+  Umsetzung:
+  - neuer Pfad `bot_memory/mcm_thought_memory.json`
+  - getrennt von `memory_state.json` und `form_symbol_memory.json`
+  - speichert innere Gedankenkeime verdichtet nach Seed-ID
+  - kein harter Eingriff in Motorik oder Entry-Entscheidung
+
+- [ ] Nächsten Lauf auf Thought-Memory prüfen.
+  Ziel:
+  - prüfen, ob `mcm_thought_memory.json` geschrieben wird
+  - `summary.seed_count` und `summary.total_seen` beobachten
+  - prüfen, ob `borrowed_reinterpretation_needed`,
+    `reinterpretation_memory_trace`, `replay_memory_trace`,
+    `own_field_binding_developing` sichtbar werden
+  - klären, ob diese Spur später nur Diagnose bleibt oder weich in
+    Thought-Seed-Reifung, Replay und Fokus zurückgeführt wird
+
+
 # Aktiver Fokus
 
 - [x] `_gui.py` vereinfacht und neu angeordnet.
@@ -1474,7 +2088,7 @@ Regelwerk: `files/MD_ANWEISUNG.md`.
   - Offene Strukturhypothesen nicht blockieren, sondern als unreif erkennen
     und eher in Beobachtung, Replay oder Reifung halten.
 
-- [ ] Emergente Gedächtnisspur als innere Denkschicht vorbereiten.
+- [x] Emergente Gedächtnisspur als innere Denkschicht diagnostisch vorbereiten.
   Ziel:
   - offene Strukturhypothesen nicht löschen und nicht hart sperren
   - Gedankenkeime aus der akuten Motorik lösen und als innere Spur speichern
@@ -1508,6 +2122,213 @@ Regelwerk: `files/MD_ANWEISUNG.md`.
   - Realitätsbindung über Form, MCM-Feld, Erfahrung und spätere Konsequenz
     sichern
   - Grübelkaskaden und Überregulation diagnostisch sichtbar machen
+  Umsetzung:
+  - `mcm_thought_seed_protocol.csv` ergänzt
+  - `seed_metaregulator_state` diagnostisch eingeführt
+  - keine Motorikänderung, keine Handlungssperre
+
+- [ ] Emergent Memory Trace später an Memory-Reifung koppeln.
+  Ziel:
+  - erst nach Auswertung mehrerer Läufe entscheiden
+  - keine direkte Trade-Regel
+  - Thought-Seeds nur dann in Memory-Reifung übernehmen, wenn
+    Realitätsbindung, Wiederkehr und Konsequenz tragend genug sind
+  - Drift- und Überdenkzustände nicht als Strategie behandeln
+
+- [x] Thought-Seed-Diagnose mit Outcome-Bestätigung synchronisieren.
+  Befund aus Lauf 46:
+  - Outcome erkennt `confirmed_structural_interpretation`
+  - Thought-Seed-Diagnose bleibt noch bei `open_structural_hypothesis`
+  - `reality_binding_score` ist vorsichtiger als die spätere Konsequenz
+  Umsetzung:
+  - `thought_confirmation_score` oder bessere `reality_binding_score`
+    ergänzt
+  - keine Motorikregel
+  - nur innere Sprache schärfen: offene Idee, reifende Idee,
+    bestätigte Idee, driftende Idee
+
+- [x] Thought-Seed-Synchronisierung in Lauf 48 geprüft.
+  Ziel:
+  - prüfen, ob `confirmed_structural_interpretation` im
+    `mcm_thought_seed_protocol.csv` sichtbar wird
+  - prüfen, ob `seed_action_ready` nur bei ausreichend geerdeten Gedanken
+    auftaucht
+  - keine Memory-Kopplung vor dieser Auswertung
+  Lauf 47:
+  - noch keine `confirmed_structural_interpretation` im Seed-Protokoll
+  - noch kein `seed_action_ready`
+  - `seed_mature` steigt aber von `185` auf `245`
+  Nachrüstung:
+  - Thought-Seed wird ab Lauf 48 in Entry-/Outcome-Kontext übernommen
+  - direkte Kette `Gedankenkeim -> Trade -> Konsequenz` prüfen
+  Befund Lauf 48:
+  - `399 / 399` Outcome-Einträge haben eine `thought_seed_id`
+  - direkte Kette ist damit technisch sichtbar
+  - Seed-Protokoll bleibt innerlich vorsichtig und benennt noch keine
+    bestätigte Struktur als eigenes Seed-Ereignis
+
+- [x] Thought-Seed-Innensprache organisch nachgeschärft.
+  Ziel:
+  - bestätigte Konsequenzspuren besser mit reifenden Gedankenkeimen verbinden
+  - offene Strukturhypothesen, bestätigte Strukturdeutung und Replay/Store
+    sauberer unterscheiden
+  - keine harte Handlungssperre, keine Motorikregel
+  - Fokus: bessere Selbstwahrnehmung der eigenen Gedankenkeime
+  Umsetzung:
+  - `consequence_echo` ergänzt
+  - `reorganization_echo` ergänzt
+  - `thought_consequence_alignment` ergänzt
+  - Felder in `mcm_thought_seed_protocol.csv` und `outcome_records.jsonl`
+    übernommen
+  - `py_compile` und Smoke-Test sauber
+
+- [ ] Nächsten Lauf mit Thought-Seed-Konsequenz-Echo prüfen.
+  Ziel:
+  - prüfen, ob `seed_action_ready` im echten Lauf auftaucht
+  - prüfen, ob `confirmed_structural_interpretation` im
+    `mcm_thought_seed_protocol.csv` sichtbar wird
+  - `thought_consequence_alignment` gegen TP/SL und offene Hypothesen lesen
+  - keine Motorikänderung vor dieser Auswertung
+  Lauf 49:
+  - `seed_action_ready` taucht noch nicht auf
+  - `confirmed_structural_interpretation` bleibt im Seed-Protokoll aus
+  - Outcome bestätigt aber weiter `46/46` bestätigte Strukturdeutungen
+  - `thought_consequence_alignment` trennt bestätigte und offene Strukturen
+    noch zu schwach
+  Nachrüstung:
+  - `thought_consequence_balance` ergänzt
+  - `thought_reality_lag` ergänzt
+
+- [ ] Thought-Seed-Balance im nächsten Lauf prüfen.
+  Ziel:
+  - prüfen, ob bestätigte Strukturen positivere `thought_consequence_balance`
+    zeigen als offene Hypothesen
+  - prüfen, ob bestätigte Strukturen kleineres `thought_reality_lag` zeigen
+  - keine Schwellenlockerung, solange die Trennung nicht sichtbar ist
+  Lauf 50:
+  - Trennung ist noch zu schwach
+  - bestätigte Strukturen und offene Hypothesen liegen bei Balance/Lag zu nah
+    beieinander
+  Nachrüstung:
+  - `thought_structural_grounding` ergänzt
+  - `thought_open_hypothesis_pressure` ergänzt
+
+- [ ] Thought-Seed-Erdung im nächsten Lauf prüfen.
+  Ziel:
+  - prüfen, ob `thought_structural_grounding` bestätigte Strukturen klarer
+    von offenen Hypothesen trennt
+  - prüfen, ob `thought_open_hypothesis_pressure` bei schlechten offenen
+    Hypothesen erhöht ist
+  - keine Motorikänderung vor dieser Auswertung
+  Lauf 51:
+  - PnL erholt sich auf ca. `+40.03`
+  - Drawdown sinkt wieder auf ca. `5.11 %`
+  - `thought_structural_grounding` trennt bestätigte und offene Struktur noch
+    nicht ausreichend
+  - `thought_open_hypothesis_pressure` ist bei bestätigter Struktur und
+    offener Hypothese ähnlich hoch
+
+- [x] Outcome-Lernspur für offene Hypothesen gebaut.
+  Ziel:
+  - offene Hypothesen nach späterer Konsequenz als tragend, belastend oder
+    reorganisierend auswertbar machen
+  - keine Handlungssperre
+  - keine Motorikregel
+  - Grundlage für spätere innere Reifung der Gedankensprache schaffen
+  Umsetzung:
+  - `open_hypothesis_learning_state`
+  - `open_hypothesis_consequence_score`
+  - `open_hypothesis_burden_score`
+  - `open_hypothesis_reorganization_score`
+  - `kpi_summary.open_hypothesis_learning`
+
+- [ ] Outcome-Lernspur für offene Hypothesen im nächsten Lauf prüfen.
+  Ziel:
+  - Verteilung `carried / burdened / reorganizing` prüfen
+  - PnL, Erdung, Lag und Hypothesendruck je Gruppe vergleichen
+  - erst danach entscheiden, ob diese Lernspur in die Thought-Seed-Reifung
+    zurückgeführt wird
+  Lauf 52:
+  - `open_hypothesis_carried`: `24`, `+21.96` PnL, `24/24` TP
+  - `open_hypothesis_burdened`: `150`, `-65.47` PnL, `150/150` SL
+  - `open_hypothesis_reorganizing`: `0`
+  Befund:
+  - Lernspur trennt getragen und belastet sehr sauber
+  - mittlere Reorganisationslage fehlt noch
+
+- [x] Reorganisationsspur für offene Hypothesen geschärft.
+  Ziel:
+  - nicht nur gut/schlecht unterscheiden
+  - Grauzonen als Reframing-/Reorganisationslage sichtbar machen
+  - keine Handlungssperre
+  - Grundlage für gereiftere spätere Wiederprüfung offener Gedanken
+  Umsetzung:
+  - `open_hypothesis_reorganizing` kann jetzt entstehen, wenn
+    Reorganisationsdruck hoch ist und Belastung nicht klar dominiert
+  - bleibt rein rückblickende Lernspur
+
+- [ ] Reorganisationsspur im nächsten Lauf prüfen.
+  Ziel:
+  - prüfen, ob `open_hypothesis_reorganizing` entsteht
+  - prüfen, ob diese Gruppe zwischen `carried` und `burdened` liegt
+  - keine Rückkopplung in Motorik vor dieser Auswertung
+  Lauf 53:
+  - `open_hypothesis_carried`: `23`, ca. `+25.85`, `23/23` TP
+  - `open_hypothesis_burdened`: `24`, ca. `-10.79`, `24/24` SL
+  - `open_hypothesis_reorganizing`: `127`, ca. `-54.35`, `127/127` SL
+  Befund:
+  - dritte Lernlage entsteht
+  - sie ist aber noch Verlust-Reorganisation, keine entlastete Grauzone
+
+- [ ] Reorganisationslage später als Replay-/Abstandsbedarf koppeln.
+  Ziel:
+  - `open_hypothesis_reorganizing` nicht als Handlungsmut behandeln
+  - als Bedarf für Replay, Abstand und Neudeutung sichtbar machen
+  - keine harte Handlungssperre
+  - zuerst diagnostisch/rückwirkend, dann mögliche Thought-Seed-Reifung prüfen
+  Umsetzung:
+  - `open_hypothesis_replay_need`
+  - `open_hypothesis_distance_need`
+  - `open_hypothesis_reinterpretation_need`
+  - KPI-Mittelwerte `avg_replay_need`, `avg_distance_need`,
+    `avg_reinterpretation_need`
+
+- [ ] Reorganisationsbedürfnisse im nächsten Lauf prüfen.
+  Ziel:
+  - prüfen, ob `reorganizing` ein eigenes Replay-/Distanz-/Neudeutungsprofil
+    zeigt
+  - prüfen, ob diese Profile von `carried` und `burdened` unterscheidbar sind
+  - keine Rückkopplung vor dieser Auswertung
+  Lauf 54:
+  - `reorganizing` zeigt höhere Replay-/Distanz-/Neudeutungswerte als
+    `carried`
+  - Neudeutungsbedarf ist am stärksten
+  - Reorganisationsgruppe bleibt noch SL-lastig
+  Nachrüstung:
+  - `open_hypothesis_reorganization_posture` ergänzt
+  - Haltungen: `reinterpretation_dominant`, `distance_dominant`,
+    `replay_dominant`, `low_reorganization_need`
+
+- [ ] Reorganisationshaltung im nächsten Lauf prüfen.
+  Ziel:
+  - prüfen, welche Haltung bei `reorganizing` dominiert
+  - erst danach mögliche Thought-Seed-Reifekopplung entscheiden
+  Lauf 55:
+  - `reinterpretation_dominant`: `140`, ca. `-59.46` PnL
+  - `replay_dominant`: `23`, ca. `+23.19` PnL
+  - `distance_dominant`: `0`
+  - `low_reorganization_need`: `0`
+  Befund:
+  - getragene offene Hypothesen sind replay-dominant
+  - belastende/reorganisierende offene Hypothesen sind
+    reinterpretation-dominant
+
+- [x] Reorganisationshaltung in Thought-Seed-Reifung zurückführen.
+  Ziel:
+  - `reinterpretation_dominant` als Neudeutungsbedarf sichtbar machen
+  - `replay_dominant` als Wiederholungs-/Vertiefungsspur sichtbar machen
+  - keine harte Sperre
+  - zunächst nur innere Diagnose/Meta-Reifung
 
 - [ ] Spätere Web-GUI nur als Beobachtungsraum vorbereiten.
   Ziel:
@@ -1548,3 +2369,469 @@ Regelwerk: `files/MD_ANWEISUNG.md`.
 - [x] Weitere MCM-Theorieanker aus dem MCM-Repository in README,
   UMSETZUNGSPLAN, WICHTIG_MECHANIKEN und MCM_VARIABLEN_MECHANIK
   dokumentiert.
+# Aktiver Punkt nach Umsetzung
+
+- [ ] Lauf 56 nach Thought-Seed-Rueckfuehrung auswerten.
+  Ziel:
+  - pruefen, ob `thought_reifung_direction` sichtbar zwischen
+    `replay_maturation`, `distance_maturation` und
+    `reinterpretation_maturation` trennt
+  - pruefen, ob `seed_reinterpret` bei belastenden offenen Hypothesen erscheint
+  - pruefen, ob `seed_replay` bei getragenen offenen Hypothesen als
+    Vertiefungsspur erscheint
+  - keine harte Handlungssperre ableiten
+
+- [x] Reorganisationshaltung in Thought-Seed-Reifung zurueckfuehren.
+  Umsetzung:
+  - `last_outcome_decomposition` wird nach Exit/Cancel aus `trade_stats.py` in
+    `bot.py` zurueck synchronisiert
+  - Meta-Regulation erhaelt die vorherige offene Hypothesenhaltung
+  - Thought Seeds erhalten Replay-, Distanz- und Neudeutungspull
+  - `mcm_thought_seed_protocol.csv` protokolliert die neuen Reifewerte
+
+---
+# Aktiver Punkt - Selbst/Fremd-Differenz
+
+- [ ] Lauf 60 nach Rückführung geliehener Analogie prüfen.
+  Ziel:
+  - `borrowed_open_hypothesis_pressure` auswerten
+  - prüfen, ob `borrowed_analogy_watch` + `open_structural_hypothesis`
+    weniger Verlustlast erzeugt
+  - prüfen, ob `seed_reinterpret` bei geliehener Analogie häufiger und
+    konstruktiver erscheint
+  - prüfen, ob `mixed_translation_zone` weiter positiv bleibt
+
+- [ ] `borrowed_analogy_watch` in Thought-Seed-Reifung zurückführen.
+  Ziel:
+  - keine harte Sperre
+  - geliehene Analogie als unreife semantische Herkunft behandeln
+  - besonders bei `open_structural_hypothesis` mehr Reinterpretation,
+    Distanz oder Beobachtung erzeugen
+  - prüfen, ob eigene Feldbindung vor Handlung wachsen kann
+
+- [x] `borrowed_analogy_watch` in Thought-Seed-Reifung zurückgeführt.
+  Umsetzung:
+  - `borrowed_open_hypothesis_pressure`
+  - `own_field_binding_pull`
+  - weiche Verstärkung von Reinterpretation/Distanz
+  - Outcome-Export der Thought-Seed-Herkunft ergänzt
+
+- [x] Lauf 59 ausgewertet.
+  Befund:
+  - PnL ca. `+27.40`
+  - `borrowed_analogy_watch` im Outcome deutlich negativ: ca. `-22.70`
+  - `borrowed_analogy_watch` + `open_structural_hypothesis`:
+    `39` Fälle, `0` TP / `39` SL, ca. `-17.15`
+  - `mixed_translation_zone` bleibt positiv: ca. `+36.65`
+  - semantische Herkunft hat damit echte diagnostische Aussagekraft
+
+- [ ] Lauf 59 nach direktem Outcome-Export der semantischen Herkunft prüfen.
+  Ziel:
+  - PnL/TP/SL nach `semantic_origin_state` auswerten
+  - prüfen, ob `borrowed_analogy_watch` mehr Observe/Reinterpret braucht
+  - prüfen, ob `mixed_translation_zone` produktive Übergangslage ist
+  - prüfen, ob `differentiated_contact` häufiger wird
+
+- [x] Lauf 58 ausgewertet.
+  Befund:
+  - PnL ca. `+42.74`
+  - `semantic_origin_state` verteilt sich erstmals:
+    `mixed_translation_zone`, `borrowed_analogy_watch`,
+    `unlocated_semantic_contact`, sehr selten `differentiated_contact`
+  - bestätigte Struktur bleibt 100 % TP-lastig
+  - direkter Outcome-Export der semantischen Herkunft wurde nachgerüstet
+
+- [ ] Lauf 58 auf neue Herkunftsverteilung prüfen.
+  Ziel:
+  - Verteilung von `semantic_origin_state` nach weicher Kalibrierung prüfen
+  - neue Margins auswerten:
+    `own_vs_foreign_margin`, `borrowed_vs_own_margin`,
+    `boundary_support_margin`
+  - Zusammenhang mit Observe/Hold/Act und `seed_reinterpret` prüfen
+
+- [ ] `semantic_origin_state` weicher kalibrieren.
+  Ziel:
+  - aktuelle Messwerte sind vorhanden, aber alle Zustände landen noch in
+    `unlocated_semantic_contact`
+  - keine harte Identitätsregel bauen
+  - stattdessen organische Lagebeschreibung ermöglichen:
+    `own_field_origin`, `mixed_translation_zone`, `borrowed_analogy_watch`,
+    `differentiated_contact`
+  - prüfen, ob `adopted_language_pressure` und
+    `self_foreign_boundary_clarity` dafür stärker relativ zueinander gelesen
+    werden müssen
+
+- [x] `semantic_origin_state` weicher kalibriert.
+  Umsetzung:
+  - relative Margins ergänzt
+  - Zustände werden nicht mehr nur über hohe harte Einzelwerte bestimmt
+  - Protokolle schreiben die neuen Margins mit
+
+- [ ] Lauf 57 prüfen.
+  Ziel:
+  - prüfen, ob die Selbst/Fremd-Spalten jetzt in
+    `mcm_field_decision_protocol.csv` und `mcm_memory_thinking_protocol.csv`
+    geschrieben werden
+  - `semantic_origin_state` auswerten
+  - Zusammenhang zwischen `semantic_origin_conflict`, Reflexion und
+    Beobachtung prüfen
+  - prüfen, ob `seed_reinterpret` die offenen Hypothesen in den Folgeläufen
+    entlastet
+
+- [x] Lauf 57 ausgewertet.
+  Befund:
+  - PnL ca. `+31.40`
+  - Selbst/Fremd-Spalten werden geschrieben
+  - `semantic_origin_state` bleibt noch komplett
+    `unlocated_semantic_contact`
+  - `reinterpretation_maturation` im Outcome positiv mit ca. `+19.25`
+  - nächster Fix: Herkunftszustände weicher kalibrieren
+
+- [ ] Nächsten Lauf auf semantische Herkunft prüfen.
+  Ziel:
+  - Verteilung von `semantic_origin_state` prüfen
+  - besonders `own_field_origin`, `mixed_translation_zone`,
+    `borrowed_analogy_watch` und `unlocated_semantic_contact`
+  - prüfen, ob hoher `semantic_origin_conflict` mit mehr Reflexion,
+    Beobachtung oder Neudeutung zusammenfällt
+  - keine harte Identitätsregel ableiten
+
+- [x] Lauf 56 nach Thought-Seed-Rückführung ausgewertet.
+  Befund:
+  - PnL ca. `+31.58`
+  - `seed_reinterpret` sehr stark sichtbar
+  - `reinterpretation_maturation` wirkt bereits als eigene innere Reifespur
+  - Selbst/Fremd-Protokollspalten fehlen noch im Lauf-56-CSV und müssen in
+    Lauf 57 geprüft werden
+
+- [x] Selbst/Fremd-Differenz als MCM-Reifeschicht umgesetzt.
+  Umsetzung:
+  - Meta-Regulation erhält eigene Herkunfts-/Fremddruckwerte
+  - Field- und Memory-Thinking-Protokolle schreiben die neuen Werte
+  - Statistik-Kontext übernimmt die neuen Werte
+
+---
+---
+
+- [x] Lauf 4 nach MCM-Spannungsachse ausgewertet.
+  Befund:
+  - PnL ca. `+15.69`
+  - Long erstmals klar positiv mit ca. `+9.42`
+  - Short ebenfalls positiv mit ca. `+6.27`
+  - `mcm_field_decision_protocol.csv` schreibt die neuen Achsvariablen jetzt
+    sauber mit
+  - `mcm_axis_state` bleibt fast vollstaendig bei `0`
+  - keine sichtbare `positive_zero_point_regulation`, also keine starke
+    positive Ueberdehnung
+
+- [ ] Lauf 5 nach MCM-Spannungsachse pruefen.
+  Ziel:
+  - pruefen, ob Long-Stabilisierung aus Lauf 4 wiederholbar ist
+  - `positive_overextension` vor schlechten Long-Entscheidungen auswerten
+  - `mcm_axis_state`, `mcm_axis_tension` und `positive_return_pressure` nach
+    Long/Short/Wait vergleichen
+  - keine harte Regel ableiten, sondern nur organische Spannungsfuehrung
+    schaerfen
+
+- [x] Gedanken-Verdauung fuer offene Hypothesen umgesetzt.
+  Umsetzung:
+  - `thought_digestive_replay_pull`
+  - `thought_digestive_distance_pull`
+  - `thought_digestive_integration_pull`
+  - `thought_digestive_returned_trust`
+  - `thought_digest_state`
+  - Thought-Memory speichert die Werte fuer Seeds und Familien
+  - Thought-Seed-Protokoll und Trade-Stats schreiben die Werte mit
+  - Compile-Pruefung bestanden
+
+- [ ] Naechsten Lauf auf Hypothesen-Verdauung pruefen.
+  Ziel:
+  - Verteilung von `thought_digest_state` auswerten
+  - pruefen, ob `open_hypothesis_reorganizing_memory` eher in Replay,
+    Abstand oder Integration geht
+  - pruefen, ob `digestive_trust_return` vor besseren Entscheidungen sichtbar
+    wird
+  - keine harte Sperre ableiten, sondern weiche Reifung und innere
+    Nachverarbeitung schaerfen
+
+- [x] Lauf 11 und Lauf 12 nach Gedanken-Verdauung geprueft.
+  Befund:
+  - Lauf 11 im sichtbaren Debug staerker Long-getragen
+  - Lauf 12 staerker Short-verteilt und im Endzustand niedrigerer Cortisolwert
+  - beide enden bei `open_hypothesis_reorganizing_memory`
+  - Thought-Memory zeigt bereits `digestive_replay` und `digestive_distance`
+  - `digestive_trust_return` ist noch nicht stabil sichtbar
+
+- [ ] Gezieltes Thought-Seed-Debug fuer reduzierte Debug-Ausgabe bauen.
+  Ziel:
+  - keine Rueckkehr zur kompletten CSV-Flut
+  - kleine Diagnose-Datei fuer `thought_digest_state`,
+    `thought_reifung_direction`, `thought_digestive_replay_pull`,
+    `thought_digestive_distance_pull`, `thought_digestive_integration_pull`,
+    `thought_digestive_returned_trust`, `open_hypothesis_reifung_state`,
+    `open_hypothesis_action_permission` und `open_hypothesis_reality_check_need`
+  - damit sichtbar machen, wann DIO replayt, Abstand nimmt, integriert oder
+    Vertrauen zurueckbekommt
+
+- [x] Gezieltes Thought-Digest-Debug umgesetzt.
+  Umsetzung:
+  - neue Datei `core/mcm_thought_digest_protocol.csv`
+  - `DIO_CORE_DEBUG` schreibt nicht mehr die grosse
+    `mcm_thought_seed_protocol.csv`
+  - Thought-Memory bleibt aktiv
+  - Research-/GUI-Profile koennen weiterhin die grosse Thought-Seed-Datei
+    schreiben
+  - Compile-Pruefung bestanden
+
+- [ ] Naechsten Lauf mit bestehender Erfahrung auf anderem Datensatz pruefen.
+  Vorschlag:
+  - `data/1-12_2025_5m_SOLUSDT.csv`
+  - Memory behalten, damit Transfer sichtbar wird
+  - danach `core/mcm_thought_digest_protocol.csv` auswerten
+  - besonders `digestive_replay`, `digestive_distance`,
+    `digestive_integration`, `digestive_trust_return`, Cortisol und
+    `open_hypothesis_action_permission` vergleichen
+
+- [x] Lauf 13 mit Thought-Digest-Protokoll ausgewertet.
+  Befund:
+  - PnL ca. `+35.43`
+  - Long ca. `+4.09`, Short ca. `+31.34`
+  - neue Datei `core/mcm_thought_digest_protocol.csv` wird geschrieben
+  - grosse `mcm_thought_seed_protocol.csv` wird im DIO-Core-Profil nicht mehr
+    geschrieben
+  - `digestive_replay`: `3776`
+  - `digestive_distance`: `679`
+  - `digestive_trust_return`: noch `0`
+  - `open_hypothesis_reorganizing_memory` wird sauber in Replay/Abstand
+    verschoben statt direkt handlungsnah zu bleiben
+
+- [ ] Trust-Return-Vorstufen aus Lauf 13 pruefen.
+  Ziel:
+  - Zeilen mit `thought_digestive_returned_trust >= 0.25` untersuchen
+  - pruefen, ob diese spaeter bessere Entscheidungen, niedrigeren Cortisolwert
+    oder hoeheren `open_hypothesis_action_permission` vorbereiten
+  - keine harte Schwelle bauen, sondern Rueckkehr von Vertrauen organischer
+    sichtbar machen
+
+- [x] Trust-Return-Vorstufe umgesetzt.
+  Umsetzung:
+  - `trust_return_readiness` ergaenzt
+  - neuer Zustand `digestive_trust_emergence`
+  - `digestive_trust_return` muss nicht mehr gegen Replay/Distance gewinnen,
+    sondern darf waehrend innerer Verarbeitung entstehen
+  - Thought-Memory, Thought-Digest-Protokoll und Trade-Stats schreiben die
+    neue Readiness mit
+  - Compile-Pruefung bestanden
+
+- [ ] Naechsten Lauf auf Trust-Return pruefen.
+  Ziel:
+  - Verteilung von `digestive_trust_emergence` und `digestive_trust_return`
+    pruefen
+  - `trust_return_readiness` gegen Cortisol, Action-Permission und spaetere
+    Tradequalitaet lesen
+  - pruefen, ob Vertrauen zurueckkehrt, ohne dass DIO zu frueh motorisch wird
+
+- [x] Lauf 14 bis Lauf 16 nach Trust-Return ausgewertet.
+  Befund:
+  - `digestive_trust_emergence` taucht stabil auf:
+    Lauf 14 `39`, Lauf 15 `31`, Lauf 16 `34`
+  - `digestive_trust_return` taucht erstmals auf:
+    Lauf 14 `5`, Lauf 15 `3`, Lauf 16 `3`
+  - Trust-Return entsteht fast immer aus `open_hypothesis_carried_memory` und
+    `replay_maturation`
+  - haeufige Kopplung an `act`
+  - Cortisol ist dabei nicht niedrig; Vertrauen ist also noch motorisch
+    angespannt
+
+- [x] Trust-Return von direkter Motorik feiner entkoppeln.
+  Ziel:
+  - keine Handlungssperre bauen
+  - `digestive_trust_emergence` als Stabilisierung / Fokussierung lesen
+  - wenn Trust zurueckkommt, aber Cortisol noch hoch ist, soll DIO Vertrauen
+    halten, replayen oder fokussieren koennen
+  - erst wenn Vertrauen und Nervensystem zusammen tragfaehig wirken, soll die
+    Motorik daraus natuerlich mehr Handlungskraft bekommen
+  Umsetzung:
+  - `trust_return_motor_heat`
+  - `trust_return_stabilization_need`
+  - `trust_return_focus_pull`
+  - `trust_return_motor_mode`
+  - vorheriger Digest-Zustand wird als Nachhall in die Meta-Regulation
+    aufgenommen
+  - bei hohem Trust-Return und hoher nervlicher Last wird nicht hart
+    blockiert, sondern in `act_watch`, `replan`, Replay oder Fokussierung
+    verschoben
+  - Thought-Digest-Protokoll und Trade-Stats schreiben die neue Schicht mit
+  - Compile-Pruefung bestanden
+
+- [ ] Naechsten Lauf auf Trust-Return-Motorik pruefen.
+  Ziel:
+  - Verteilung von `trust_return_motor_mode` pruefen
+  - besonders `trust_stabilize_before_act`, `trust_focused_ready` und
+    `trust_emerging` lesen
+  - pruefen, ob `digestive_trust_emergence` seltener direkt in `act` kippt
+  - Cortisol, MaxDD, PnL-Verlauf und offene Hypothesenlast vergleichen
+  - wichtig: keine Sperrlogik ableiten, sondern schauen, ob DIO Vertrauen
+    erst stabilisieren kann, bevor es motorisch wirkt
+
+- [x] Lauf 17 nach Trust-Return-Motorik geprueft.
+  Befund:
+  - Netto-PnL ca. `+30.44`
+  - Trades `378`, TP/SL `158/220`
+  - Long ca. `-2.34`, Short ca. `+32.78`
+  - Max-DD ca. `5.58%`
+  - `digestive_trust_emergence`: `28`
+  - `digestive_trust_return`: `4`
+  - `trust_focused_ready`: `32`
+  - `trust_stabilize_before_act`: `0`
+  - die Entkopplung ist sichtbar, aber noch eher als Fokus-Schicht statt als
+    echte Stabilisierung vor Handlung
+
+- [x] Trust-Return-Stabilisierung organischer speisen.
+  Ziel:
+  - keine harte Sperre und kein mechanisches Absenken als Blocker
+  - `trust_return_stabilization_need` weicher aus Cortisol,
+    offener Hypothesenlast, niedriger Innen/Aussen-Kohärenz und
+    `digestive_trust_emergence` speisen
+  - DIO soll Vertrauen halten und prüfen können, ohne es sofort motorisch zu
+    entladen
+  - naechster Lauf muss zeigen, ob `trust_stabilize_before_act` natuerlich
+    auftaucht und ob offene reorganisierende Hypothesen weniger Schaden machen
+  Umsetzung:
+  - `trust_return_open_hypothesis_load`
+  - `trust_return_context_instability`
+  - beide Werte speisen `trust_return_motor_heat`,
+    `trust_return_stabilization_need` und leicht den Fokus-Pull
+  - Thought-Digest-Protokoll und Trade-Stats schreiben die neuen Werte mit
+
+- [ ] Naechsten Lauf nach organischer Trust-Stabilisierung pruefen.
+  Ziel:
+  - pruefen, ob `trust_stabilize_before_act` jetzt natuerlich auftaucht
+  - direkte Kopplung `digestive_trust_emergence -> act` beobachten
+  - offene reorganisierende Hypothesen nach PnL/SL-Last pruefen
+  - `trust_return_open_hypothesis_load` und
+    `trust_return_context_instability` gegen Cortisol und
+    `inner_outer_alignment` lesen
+
+- [x] Lauf 18 nach organischer Trust-Stabilisierung geprueft.
+  Befund:
+  - Netto-PnL ca. `+24.43`
+  - Trades `352`, TP/SL `144/208`
+  - Long ca. `+8.46`, Short ca. `+15.97`
+  - Max-DD ca. `6.94%`
+  - `trust_stabilize_before_act` taucht erstmals auf: `11`
+  - `trust_focused_ready`: `13`
+  - direkte Kopplung `digestive_trust_emergence -> act` sinkt:
+    Lauf 17 `19/28`, Lauf 18 `11/22`
+  - Stabilisierung ist sichtbar, aber noch vor allem in Observe/Hold, nicht
+    als aktive Umleitung aus geplanter Motorik
+
+- [x] Trust-Stabilisierung an Motorik-Schnittstelle feiner anbinden.
+  Ziel:
+  - keine Sperre bauen
+  - wenn `trust_stabilize_before_act` bei geplanter Handlung auftaucht, DIO
+    eher in `act_watch` oder kurzes Replay verschieben lassen
+  - DIO soll Vertrauen als innere Information halten koennen, bevor Handlung
+    daraus wird
+  - pruefen, ob offene reorganisierende Hypothesen dadurch weniger teuer
+    werden, ohne bestaetigte Strukturdeutung zu bremsen
+  Umsetzung:
+  - `trust_return_motor_contact_strength`
+  - `trust_return_act_bridge`
+  - `previous_confirmed_structure_protection`
+  - bestaetigte Strukturdeutung bekommt Schutz vor unnötiger Dämpfung
+  - Trust-Stabilisierung kann geplante Handlung weich in `act_watch` oder
+    Replay verschieben, wenn die innere Lage noch nicht trägt
+
+- [ ] Naechsten Lauf auf Trust-Motorik-Bruecke pruefen.
+  Ziel:
+  - `trust_return_act_bridge` bei geplanten Handlungen lesen
+  - zaehlen, wie oft daraus `act_watch` oder `replan` entsteht
+  - bestaetigte Strukturdeutung weiter auf TP/SL und PnL pruefen
+  - offene reorganisierende Hypothesen auf SL-Last und PnL pruefen
+  - PnL, Max-DD und Long/Short-Verteilung vergleichen
+
+- [x] Diagnose zur schwachen ersten Laufhaelfte im alten Datensatz erstellt.
+  Befund:
+  - viele Laeufe bauen den groessten PnL erst nach ca. 50 Prozent auf
+  - das Muster war nicht erst durch die letzte Trust-Bruecke vorhanden
+  - alter Datensatz hat stark unterschiedliche Viertel:
+    0-25 Prozent Push, 25-50 Prozent Abverkauf, 50-75 Prozent massiver
+    Abverkauf, 75-100 Prozent seitwaerts
+  - DIO sortiert in der ersten Haelfte offenbar Regimewechsel und offene
+    Hypothesen; spaeter wird besonders Short tragender
+
+- [ ] Neuen Datensatz gegen 50-Prozent-Muster testen.
+  Ziel:
+  - `3-4_2026_5m_SOLUSDT.csv` mit bestehender Erfahrung laufen lassen
+  - pruefen, ob der schwache erste-Haelfte-Effekt wieder auftaucht
+  - wenn ja: Ursache eher Denk-/Motorikarchitektur
+  - wenn nein: Ursache eher alter Datensatz / Regimeuebergang
+  - dabei `trust_return_act_bridge`, offene Hypothesenlast,
+    bestaetigte Strukturdeutung und Long/Short-Profil vergleichen
+
+- [x] Ersten Transferlauf auf `3-4_2026_5m_SOLUSDT.csv` geprueft.
+  Befund:
+  - Debug: `debug_lauf_21`
+  - Netto-PnL ca. `-17.29`
+  - Trades `277`, TP/SL `81/196`
+  - Long ca. `-5.80`, Short ca. `-11.50`
+  - Max-DD ca. `17.69%`
+  - bestaetigte Strukturdeutung bleibt stark:
+    `30 TP / 0 SL`, ca. `+24.43`
+  - offene Strukturhypothese und low-Strukturen fressen den Lauf:
+    offene Hypothese ca. `-34.45`, low ca. `-46.78`
+  - alter Short-Vorteil traegt auf neuem Datensatz nicht
+
+- [ ] Transfer-/Fremdheitsregulation vorbereiten.
+  Ziel:
+  - keine alte Erfahrung loeschen
+  - keine harte Long-/Short-/Low-Regel bauen
+  - alte Erfahrung auf fremdem Datensatz erst als Hypothese behandeln
+  - lokale Bestaetigung muss Handlungskraft reifen lassen
+  - bestaetigte Strukturdeutung schuetzen
+  - offene Hypothesen und low-Strukturen auf fremdem Boden eher beobachten,
+    replayen, nachreifen lassen
+
+- [ ] Vergleichslauf mit frischer Memory auf neuem Datensatz pruefen.
+  Ziel:
+  - erkennen, ob der Transferbruch aus alter Erfahrung stammt
+  - gleicher Datensatz `3-4_2026_5m_SOLUSDT.csv`
+  - Memory frisch aufbauen
+  - PnL, Long/Short, confirmed/open/low und Thought-Memory vergleichen
+
+- [x] Lauf 22 mit frischer Memory auf neuem Datensatz geprueft.
+  Befund:
+  - Netto-PnL ca. `-18.41`
+  - Trades `337`, TP/SL `100/237`
+  - Long ca. `-9.24`, Short ca. `-9.17`
+  - Max-DD ca. `19.26%`
+  - frische Memory ist nicht besser als bestehende Erfahrung
+  - bestaetigte Strukturdeutung bleibt stark:
+    `26 TP / 0 SL`, ca. `+21.15`
+  - low, offene Hypothese und reorganisierende Hypothese bleiben die
+    Hauptverlusttraeger
+
+- [ ] Moeglichkeitsreife / Possibility-Maturity vorbereiten.
+  Ziel:
+  - DIO darf Moeglichkeiten weiter sehen
+  - Moeglichkeiten sollen nicht hart verboten werden
+  - offene Moeglichkeit braucht lokale Bestaetigung, Strukturkontakt,
+    Wiedererkennung oder Replay, bevor sie Motorik bekommt
+  - bestaetigte Strukturdeutung schuetzen
+  - low/open/reorganizing nicht pauschal blockieren, sondern als unreife
+    Moeglichkeit in Beobachtung/Reifung halten
+
+- [ ] Varianzverengung / mechanische Schutzkonvergenz prüfen.
+  Ziel:
+  - keine einzelne Schutzschicht vorschnell entfernen
+  - prüfen, ob mehrere weiche Regulatoren zusammen wie ein harter Reflex
+    wirken
+  - besonders beobachten:
+    `zero_point_regulation`, `context_cluster_negative`,
+    `trust_return_act_bridge`, `open_hypothesis_reifung_state`,
+    `observe`, `hold`, `act_watch`, `act`
+  - Varianz nicht künstlich erhöhen, sondern Beweglichkeit im MCM-Feld
+    zurückgeben
+  - organisches Ziel:
+    Schutz darf vorhanden sein, aber nicht zur regulatorischen Starre werden

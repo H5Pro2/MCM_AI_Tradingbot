@@ -86,6 +86,40 @@ entwickeln kann.
 
 ---
 
+## Unsicherheit, Emergenz und Selbst/Fremd-Wahrnehmung
+
+Unsicherheit wird in DIO nicht wegprogrammiert. Eine Welt mit Varianz erzeugt
+immer neue Ausnahmen; jede harte Sonderregel würde nur die nächste Ausnahme
+erzwingen. DIO soll Unsicherheit deshalb als Feldzustand verarbeiten:
+beobachten, Varianten bilden, Abstand nehmen, neu deuten und über Erfahrung
+reifen.
+
+Vorahnung ist in diesem Projekt keine feste Vorhersage. Vorahnung bedeutet:
+aus Teilmustern, Erinnerung, Spannung und Varianz einen Möglichkeitsraum zu
+bilden. Die stärkste Varianzform ist dabei Emergenz: Ein Feld kann aus
+Unsicherheit eine neue tragfähige Ordnung entstehen lassen.
+
+Ein zentraler Schritt ist die Selbst/Fremd-Wahrnehmung. DIO soll nicht nur
+erkennen, dass eine Deutung aktiv ist, sondern auch prüfen, woher sie stammt:
+
+- eigene MCM-Lage
+- äußerer Reizdruck
+- Erinnerung / Erfahrung
+- übernommene Analogie oder fremde Sprache
+- Mischzone zwischen eigener Deutung und fremdem Vergleich
+
+Diese Unterscheidung erzeugt Distanz. Distanz bedeutet hier keine Blockade,
+sondern Reife: DIO kann Innenlage und Außenwelt getrennt betrachten, bevor
+eine Handlung daraus entsteht.
+
+Trading ist dabei nur der aktuelle Testkörper. Ein Chart wird in diesem
+Projekt als dynamische Energiespur gelesen: Bewegung, Druck, Verdichtung,
+Entladung, Rhythmus, Bruch und Wiederkehr. Die Architektur ist grundsätzlich
+auch auf andere dynamische Energiespuren übertragbar, zum Beispiel Robotik,
+visuelle Wahrnehmung, Sprache, Biosignale oder soziale Prozessdynamik.
+
+---
+
 ## Einordnung der Projektdokumente
 
 Dieses `README.md` ist der **Einstieg**.
@@ -103,6 +137,12 @@ Die weiteren Kern-Dokumente sind:
 
 - `files/MCM_VARIABLEN_MECHANIK.md`  
   zentrale Variablen, Ebenen, Wirkung und organische Bedeutung
+
+- `files/DIO_MCM_ERWEITERUNG.md`  
+  Erkenntnisse aus DIO für das übergeordnete MCM-Projekt:
+  Wahrnehmung als Übersetzung, getrennte Erfahrungsräume, Hypothesenreifung,
+  neurochemische Feldmodulation, Zeit-/Raumtiefe und Emergenz als
+  Forschungsraum.
 
 ---
 
@@ -265,6 +305,11 @@ Kurz gesagt:
 Die MCM ist DIOs innerer Resonanzkörper.
 Die MCM-Neuronen sind die lokalen Nervenzellen dieses Resonanzkörpers.
 Die Neurochemie moduliert, wie dieser Körper gerade reagiert.
+
+Die daraus entstehenden Erkenntnisse werden zusätzlich in
+`files/DIO_MCM_ERWEITERUNG.md` gesammelt. Diese Datei verbindet das
+praktische DIO-System mit dem übergeordneten MCM-Projekt und hält fest, was
+aus der technischen Umsetzung für die MCM-Theorie zurückgewonnen werden kann.
 
 ---
 
@@ -1389,6 +1434,12 @@ Er wird zuerst zu Wahrnehmung, innerer Verarbeitung, Regulation und Entscheidung
 
 Handlung ist damit kein Reflex,
 sondern das mögliche Ergebnis eines tragfähigen inneren Zustands.
+
+Die MCM wird dabei als Spannungsraum um einen regulativen Nullpunkt gelesen:
+`-- - 0 + ++`. Positive Feldlagen bedeuten nicht automatisch Ruhe oder
+Wohlbefinden. Auch positive Expansion kann Druck erzeugen und eine Rückführung
+zur 0 brauchen, wenn sie nicht durch Struktur, Feldtragfähigkeit und innere
+Kohärenz getragen ist.
 
 Das System ist bereits real als mehrschichtiges Wahrnehmungs-,
 Innenraum- und Experience-System aufgebaut.

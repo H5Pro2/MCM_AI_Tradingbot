@@ -14,7 +14,7 @@ class Config:
     # ==================================================
     # DATENQUELLE
     # ==================================================
-    BACKTEST_FILEPATH = "data/1-2_2026_5m_SOLUSDT.csv" 
+    BACKTEST_FILEPATH = "data/3-4_2026_5m_SOLUSDT.csv" 
     # workspace | 1-12_2023_5m_SOLUSDT | 1-12_2024_5m_SOLUSDT | 1-12_2025_5m_SOLUSDT | 1-2_2026_5m_SOLUSDT | test_5m_SOLUSDT
     
     CSV_OHLCV_PATH = "data/workspace.csv"   # Live Mode OHLCV Daten BÃ¶rse
@@ -57,11 +57,12 @@ class Config:
     # ==================================================
     MCM_DEBUG = True
     MCM_OUTCOME_DEBUG = True
-    DEBUG_OUTPUT_PROFILE = "RESEARCH_DEBUG" # RESEARCH_DEBUG, LEAN_BACKTEST, GUI_DEBUG, PERFORMANCE_DEBUG, LIVE_DEBUG oder CUSTOM.
+    DEBUG_OUTPUT_PROFILE = "DIO_CORE_DEBUG" # DIO_CORE_DEBUG, RESEARCH_DEBUG, LEAN_BACKTEST, GUI_DEBUG, PERFORMANCE_DEBUG, LIVE_DEBUG oder CUSTOM.
     DEBUG_WRITE_MODE = "buffered_safe" # immediate, buffered oder buffered_safe. Buffered haelt Debug-Zeilen bis Ende/Flush im RAM.
     DEBUG_BUFFER_FLUSH_EVERY_N = 1000 # Bei buffered_safe nach N gepufferten Zeilen je Datei schreiben.
     DEBUG_BUFFER_FLUSH_SECONDS = 10.0 # Bei buffered_safe spaetestens nach N Sekunden je Datei schreiben.
     DEBUG_BUFFER_MAX_LINES_PER_FILE = 50000 # Sicherheitsgrenze je Datei; danach wird automatisch geflusht.
+    DEBUG_GROUPED_DIRS = True # Schreibt Debug-Dateien pro Lauf in Unterordner wie gui/core/research/performance.
     MCM_RUNTIME_PROFILE_DEBUG = True # Schreibt Laufzeitprofile nach debug/mcm_profile.csv, um Rechenzeit, Snapshot- und Schreibkosten sichtbar zu machen.
     MCM_RUNTIME_PROFILE_MIN_MS = 0.05 # Mindestdauer in Millisekunden, ab der Profiling-Zeilen geschrieben werden.
     MCM_RUNTIME_PROFILE_EVERY_N = 10 # Schreibt jede n-te Profiling-Zeile. HÃ¶her setzen, wenn der Profiling-Output zu groÃŸ wird.
@@ -72,6 +73,8 @@ class Config:
     TRADE_STATS_ATTEMPT_RECORD_EVERY_N = 10 # Schreibt nur jede n-te Attempt-Zeile; echte Submitted/Filled/Cancel/Timeout-Events bleiben sichtbar.
     TRADE_STATS_ATTEMPT_RECORD_COMPACT = True # Entfernt schwere Snapshot-Nester aus Attempt-JSONL und behaelt nur Diagnoseachsen.
     TRADE_STATS_JSON_SAVE_EVERY_N = 25 # Schreibt trade_stats.json auf Attempt-Pfaden nur periodisch; Exits/Cancels schreiben weiterhin sofort.
+    MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG = True # Schreibt Rueckblick-/Bereichsfenster-Diagnose; sehr datenintensiv, nur bei gezielter Strukturpruefung aktiv lassen.
+    MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG = True # Schreibt Kontaktbereichs-Diagnose; fuer Kernlaeufe standardmaessig abschaltbar.
     MCM_FIELD_DECISION_PROTOCOL_DEBUG = True # Schreibt ein kompaktes Feldentscheidungs-Protokoll nach debug/mcm_field_decision_protocol.csv.
     MCM_FIELD_DECISION_PROTOCOL_EVERY_N = 5 # Schreibt jede n-te Feldentscheidung; Phasenwechsel werden trotzdem sofort geschrieben.
     MCM_NEURO_TRANSITION_PROTOCOL_DEBUG = True # Schreibt neurochemische Zustandswechsel mit -2/+2 Kerzenumfeld nach debug/mcm_neuro_transition_protocol.csv.
@@ -93,6 +96,10 @@ class Config:
     MCM_EXIT_CANDIDATE_MAX_CURRENT_R = -0.45 # Kandidat braucht echte adverse Tiefe; leichte Rueckatmung nach Gewinnlauf reicht nicht.
     MCM_FORM_SYMBOL_PROTOCOL_DEBUG = True # Schreibt interne Eigenzeichen-/Formsymbol-Diagnose nach debug/mcm_form_symbol_protocol.csv.
     MCM_FORM_SYMBOL_PROTOCOL_EVERY_N = 5 # Schreibt jede n-te Formsymbol-Diagnose; Symbol-/Zoomwechsel werden trotzdem sofort geschrieben.
+    MCM_THOUGHT_SEED_PROTOCOL_DEBUG = True # Schreibt Gedankenkeim-/Gedankenfamilien-Diagnose; JSON-Memory bleibt unabhaengig davon aktiv.
+    MCM_THOUGHT_SEED_PROTOCOL_EVERY_N = 5 # Schreibt jede n-te Gedankenkeim-Zeile.
+    MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG = True # Schlanke Diagnose fuer Gedanken-Verdauung, Replay, Abstand, Integration und Trust-Return.
+    MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N = 5 # Schreibt jede n-te Verdauungszeile; Zustandswechsel werden sofort sichtbar.
     MCM_VISUAL_CORTEX_PROTOCOL_DEBUG = True # Schreibt beobachtende Formsehen-Diagnose nach debug/mcm_visual_cortex_protocol.csv.
     MCM_VISUAL_CORTEX_PROTOCOL_EVERY_N = 5 # Schreibt jede n-te visuelle Kortex-Zeile; Formwechsel werden trotzdem sofort geschrieben.
     MCM_FORM_SYMBOL_MEMORY_ENABLED = True # Persistenter, separater Speicher fuer eigene Form-Sprache.
@@ -101,6 +108,11 @@ class Config:
     MCM_FORM_SYMBOL_MEMORY_MAX_SYMBOLS = 1024 # Begrenzung gegen Speicherwachstum.
     MCM_FORM_SYMBOL_MEMORY_MAX_VARIANTS = 12 # Pro Form-Familie nur haeufige Varianten behalten.
     MCM_FORM_SYMBOL_MEMORY_MAX_COMPOUNDS = 768 # Begrenzung fuer zusammengesetzte Formzeichen.
+    MCM_THOUGHT_MEMORY_ENABLED = True # Persistenter, separater Speicher fuer innere Gedankenkeime.
+    MCM_THOUGHT_MEMORY_PATH = "bot_memory/mcm_thought_memory.json" # Getrennt von weltlicher Erfahrung und Form-Sprache.
+    MCM_THOUGHT_MEMORY_SAVE_EVERY_N = 64 # Speichert periodisch nach N Gedanken-Aktualisierungen.
+    MCM_THOUGHT_MEMORY_MAX_SEEDS = 2048 # Begrenzung gegen Speicherwachstum.
+    MCM_THOUGHT_MEMORY_MAX_FAMILIES = 768 # Begrenzung fuer verdichtete Gedankenfamilien.
     MCM_STRUCTURE_ACTION_MIN_QUALITY = 0.70 # Unterhalb davon braucht Handlung zusaetzliche Tragfaehigkeit statt nur Wiedererkennung.
     MCM_STRUCTURE_ACTION_MID_SUPPORT_MIN = 0.045 # Minimaler Memory-/Feldsupport fuer mittlere Struktur.
     MCM_STRUCTURE_ACTION_MID_STRENGTH_MIN = 1.36 # Starke Entscheidung darf mittlere Struktur kontrolliert passieren.
@@ -207,6 +219,38 @@ def _apply_debug_output_profile():
         return
 
     profiles = {
+        "DIO_CORE_DEBUG": {
+            "DEBUG_WRITE_MODE": "buffered",
+            "DEBUG_WRITE_EVERY_N": 25,
+            "DEBUG_BUFFER_FLUSH_EVERY_N": 2000,
+            "DEBUG_BUFFER_FLUSH_SECONDS": 20.0,
+            "MCM_DEBUG": False,
+            "MCM_OUTCOME_DEBUG": True,
+            "MCM_RUNTIME_PROFILE_DEBUG": False,
+            "MCM_FILE_WRITE_PROFILE_DEBUG": False,
+            "TRADE_STATS_ATTEMPT_RECORD_DEBUG": False,
+            "TRADE_STATS_ATTEMPT_RECORD_COMPACT": True,
+            "TRADE_STATS_JSON_SAVE_EVERY_N": 25,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": False,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": False,
+            "MCM_FIELD_DECISION_PROTOCOL_DEBUG": True,
+            "MCM_FIELD_DECISION_PROTOCOL_EVERY_N": 25,
+            "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": True,
+            "MCM_NEURO_TRANSITION_PROTOCOL_CONTEXT": 2,
+            "MCM_MEMORY_THINKING_PROTOCOL_DEBUG": False,
+            "MCM_POSITION_INTERVENTION_PROTOCOL_DEBUG": True,
+            "MCM_POSITION_INTERVENTION_PROTOCOL_EVERY_N": 25,
+            "MCM_TARGET_EXPECTATION_PROTOCOL_DEBUG": False,
+            "MCM_EXIT_CANDIDATE_OBSERVE_DEBUG": True,
+            "MCM_IDLE_THINKING_PROTOCOL_DEBUG": False,
+            "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": False,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": False,
+            "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N": 25,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N": 10,
+            "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": False,
+            "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 100,
+        },
         "RESEARCH_DEBUG": {
             "DEBUG_WRITE_MODE": "buffered_safe",
             "DEBUG_WRITE_EVERY_N": 8,
@@ -219,6 +263,8 @@ def _apply_debug_output_profile():
             "TRADE_STATS_ATTEMPT_RECORD_DEBUG": True,
             "TRADE_STATS_ATTEMPT_RECORD_EVERY_N": 10,
             "TRADE_STATS_ATTEMPT_RECORD_COMPACT": True,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": True,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_EVERY_N": 5,
             "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": True,
@@ -234,6 +280,10 @@ def _apply_debug_output_profile():
             "MCM_IDLE_THINKING_PROTOCOL_EVERY_N": 5,
             "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": True,
             "MCM_FORM_SYMBOL_PROTOCOL_EVERY_N": 5,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N": 5,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N": 5,
             "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": True,
             "MCM_VISUAL_CORTEX_PROTOCOL_EVERY_N": 5,
             "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 25,
@@ -248,6 +298,8 @@ def _apply_debug_output_profile():
             "TRADE_STATS_ATTEMPT_RECORD_DEBUG": True,
             "TRADE_STATS_ATTEMPT_RECORD_EVERY_N": 50,
             "TRADE_STATS_ATTEMPT_RECORD_COMPACT": True,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": False,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": False,
             "MCM_FIELD_DECISION_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_EVERY_N": 20,
             "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": True,
@@ -260,6 +312,10 @@ def _apply_debug_output_profile():
             "MCM_IDLE_THINKING_PROTOCOL_DEBUG": False,
             "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": True,
             "MCM_FORM_SYMBOL_PROTOCOL_EVERY_N": 20,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": False,
+            "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N": 20,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N": 10,
             "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": True,
             "MCM_VISUAL_CORTEX_PROTOCOL_EVERY_N": 20,
             "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 100,
@@ -274,6 +330,8 @@ def _apply_debug_output_profile():
             "TRADE_STATS_ATTEMPT_RECORD_DEBUG": True,
             "TRADE_STATS_ATTEMPT_RECORD_EVERY_N": 25,
             "TRADE_STATS_ATTEMPT_RECORD_COMPACT": True,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": False,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_EVERY_N": 10,
             "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": True,
@@ -289,6 +347,10 @@ def _apply_debug_output_profile():
             "MCM_IDLE_THINKING_PROTOCOL_EVERY_N": 10,
             "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": True,
             "MCM_FORM_SYMBOL_PROTOCOL_EVERY_N": 10,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N": 10,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N": 10,
             "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": True,
             "MCM_VISUAL_CORTEX_PROTOCOL_EVERY_N": 10,
             "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 10,
@@ -303,6 +365,8 @@ def _apply_debug_output_profile():
             "MCM_FILE_WRITE_PROFILE_DEBUG": True,
             "MCM_FILE_WRITE_PROFILE_EVERY_N": 1,
             "TRADE_STATS_ATTEMPT_RECORD_DEBUG": False,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": False,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": False,
             "MCM_FIELD_DECISION_PROTOCOL_DEBUG": False,
             "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": False,
             "MCM_MEMORY_THINKING_PROTOCOL_DEBUG": False,
@@ -311,6 +375,8 @@ def _apply_debug_output_profile():
             "MCM_EXIT_CANDIDATE_OBSERVE_DEBUG": False,
             "MCM_IDLE_THINKING_PROTOCOL_DEBUG": False,
             "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": False,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": False,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": False,
             "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": False,
             "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 250,
         },
@@ -326,6 +392,8 @@ def _apply_debug_output_profile():
             "TRADE_STATS_ATTEMPT_RECORD_DEBUG": True,
             "TRADE_STATS_ATTEMPT_RECORD_EVERY_N": 10,
             "TRADE_STATS_ATTEMPT_RECORD_COMPACT": True,
+            "MCM_STRATEGIC_WINDOW_PROTOCOL_DEBUG": False,
+            "MCM_ACTIVE_CONTACT_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_DEBUG": True,
             "MCM_FIELD_DECISION_PROTOCOL_EVERY_N": 10,
             "MCM_NEURO_TRANSITION_PROTOCOL_DEBUG": True,
@@ -341,16 +409,20 @@ def _apply_debug_output_profile():
             "MCM_IDLE_THINKING_PROTOCOL_EVERY_N": 5,
             "MCM_FORM_SYMBOL_PROTOCOL_DEBUG": True,
             "MCM_FORM_SYMBOL_PROTOCOL_EVERY_N": 20,
+            "MCM_THOUGHT_SEED_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N": 20,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG": True,
+            "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N": 10,
             "MCM_VISUAL_CORTEX_PROTOCOL_DEBUG": True,
             "MCM_VISUAL_CORTEX_PROTOCOL_EVERY_N": 20,
             "MCM_VISUAL_SNAPSHOT_WRITE_EVERY_N": 25,
         },
     }
 
-    selected = dict(profiles.get(profile, profiles["RESEARCH_DEBUG"]) or {})
+    selected = dict(profiles.get(profile, profiles["DIO_CORE_DEBUG"]) or {})
     for key, value in selected.items():
         setattr(Config, key, value)
-    Config.DEBUG_OUTPUT_PROFILE_ACTIVE = profile if profile in profiles else "RESEARCH_DEBUG"
+    Config.DEBUG_OUTPUT_PROFILE_ACTIVE = profile if profile in profiles else "DIO_CORE_DEBUG"
 
 
 _apply_debug_output_profile()

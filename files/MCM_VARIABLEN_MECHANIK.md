@@ -27,6 +27,318 @@ selbst zu organisieren.
 
 ---
 
+# MCM-Spannungsachse / positive Rückführung
+
+## `positive_expansion_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Neurochemie / MCM-Feld / Meta-Regulation
+- Funktion: misst expansive positive Spannung aus Dopaminzug, Erwartung,
+  Handlungsnähe, Planungsdruck und positiver Aktivierung.
+- Bedeutung: "Ich werde positiv in Richtung Handlung gezogen."
+
+## `negative_contraction_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Neurochemie / MCM-Feld / Meta-Regulation
+- Funktion: misst kontraktive Spannung aus Stress, Hemmung, Alarm,
+  Feldstrain, Fragmentierung und Orientierungslücke.
+- Bedeutung: "Ich werde durch Belastung, Schutz oder Unsicherheit
+  zusammengezogen."
+
+## `positive_overextension`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: positive MCM-Spannung
+- Funktion: misst, ob positive Expansion stärker ist als die tragende
+  Feldbasis. Entsteht besonders, wenn Handlungszug hoch ist, aber
+  `field_action_support`, `structure_action_bearing`, Interpretation oder
+  innere/äußere Kohärenz nicht ausreichend tragen.
+- Bedeutung: "Das fühlt sich positiv an, könnte aber überdehnt sein."
+
+## `positive_return_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Rückführung zur 0
+- Funktion: beschreibt den Druck, positive Expansion zur regulierten Mitte
+  zurückzuführen.
+- Wirkung: erhöht weich Beobachtung, `act_watch`, Hemmung, Reflexion und
+  Wahrnehmungsdistanz, ohne Handlung hart zu sperren.
+- Bedeutung: "Ich muss positive Erregung erst zur 0 zurückführen, bevor sie
+  reife Handlung wird."
+
+## `mcm_axis_displacement`
+
+- Bereich: `-1.0 - 1.0`
+- Ebene: MCM-Spannungsraum
+- Funktion: beschreibt die aktuelle Richtung der Feldspannung.
+  Positive Werte bedeuten expansive Spannung, negative Werte kontraktive
+  Spannung.
+- Bedeutung: "In welche Richtung ist mein MCM-Feld aus der Mitte verschoben?"
+
+## `mcm_axis_tension`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: MCM-Spannungsraum
+- Funktion: beschreibt die Stärke der aktuell dominierenden Spannung,
+  unabhängig von der Richtung.
+- Bedeutung: "Wie stark ist mein Feld vom Nullpunkt entfernt?"
+
+## `mcm_axis_state`
+
+- Ebene: MCM-Spannungsraum
+- Mögliche Werte:
+  - `--`
+  - `-`
+  - `0`
+  - `+`
+  - `++`
+- Funktion: verdichtet `mcm_axis_displacement` in DIOs Formsprache.
+- Bedeutung: "Meine Feldlage ist stark kontraktiv, leicht kontraktiv,
+  reguliert, leicht expansiv oder stark expansiv."
+
+## `positive_zero_point_regulation`
+
+- Bereich: boolesch
+- Ebene: Meta-Regulation
+- Funktion: zeigt an, dass nicht negative Belastung, sondern positive
+  Überdehnung eine Rückführung zur 0 verlangt.
+- Wirkung: kann weiche Beobachtung / `positive_expansion_zero_point`
+  auslösen, wenn positive Expansion nicht genug getragen ist.
+- Bedeutung: "Nicht Stress zieht mich aus der Mitte, sondern positive
+  Erwartung."
+
+---
+
+# Historische Entscheidungs- und Handlungsgewichtung
+
+Ebene:
+MCM-Gedächtnis / Hypothesenreife / motorische Selbstregulation.
+
+Funktion:
+Entscheidungen, Handlungen, Beobachtungen und Nicht-Handlungen sollen nicht nur
+den aktuellen Reiz abbilden. Sie tragen eine Erinnerung daran, ob ähnliche
+Kontakte, Formen, Hypothesen oder Handlungen in der Vergangenheit stabilisiert,
+belastet oder reorganisiert haben.
+
+Grundsatz:
+Nicht: "Ist das gerade gut?"
+Sondern: "Wie gut hat diese Art von Entscheidung in der Vergangenheit
+getragen?"
+
+Bereits beteiligte Variablen:
+
+- `form_symbol_learning_trust`: wie stark eine Formfamilie lernfähig getragen
+  wurde.
+- `form_symbol_action_trust`: wie stark eine Formfamilie Handlung getragen
+  hat.
+- `form_symbol_caution_trust`: wie stark eine Formfamilie Vorsicht verlangt.
+- `form_symbol_contact_maturity`: gereifter Umgang mit einem Formkontakt.
+- `form_symbol_contact_utility`: nutzbarer Kontaktwert.
+- `form_symbol_contact_pain_memory`: belastende Konsequenzspur.
+- `context_cluster_quality`: historische Tragfähigkeit eines Kontextclusters.
+- `bearing_effect`: getragene oder belastete Wirkung aus Erfahrung.
+- `observation_maturity_trust`: Vertrauen in beobachtendes Lernen.
+- `open_hypothesis_learning_state`: Konsequenzzustand offener Hypothesen.
+- `open_hypothesis_consequence_score`: tragende Konsequenz offener
+  Hypothesen.
+- `open_hypothesis_burden_score`: belastende Konsequenz offener Hypothesen.
+- `open_hypothesis_reorganization_score`: Reorganisationsbedarf offener
+  Hypothesen.
+
+Neu umgesetzte Gewichtungsvariablen:
+
+- `hypothesis_weight`: weiche historische Gewichtung einer Hypothese.
+- `hypothesis_trust`: Vertrauen durch wiederholte tragende Bestätigung.
+- `hypothesis_caution`: vorsichtiger Umgang durch belastete Konsequenz.
+- `hypothesis_reorganization_weight`: Gewicht für Replay, Reframing und neue
+  Deutung.
+- `open_hypothesis_trace_strength`: Stärke der vorhandenen offenen
+  Hypothesenspur.
+- `action_weight`: historische Tragfähigkeit einer konkreten
+  Handlungstendenz.
+- `decision_weight`: Gesamtgewicht einer Entscheidung aus Gegenwart,
+  Erinnerung, Feldzustand und Konsequenz.
+
+Später ergänzbar:
+
+- `hypothesis_decay`: natürliches Verblassen nicht mehr tragender Spuren.
+
+Organische Lesart:
+Eine Hypothese soll nicht sofort blockiert oder belohnt werden. Sie bekommt
+ein Feldgewicht. Was trägt, stabilisiert. Was belastet, erzeugt Vorsicht.
+Was unklar ist, wird replayt, neu betrachtet, verdichtet oder langsam
+vergessen.
+
+---
+
+# DIO Form Language Core
+
+Ebene:
+Innere Sprache / Formsprache / Thought-Memory.
+
+Funktion:
+Der Sprachkern bündelt Wahrnehmung, Formzeichen, Gedankenkeim, semantische
+Herkunft, Reifung, Handlungslage und Kontext zu einer einheitlichen Syntax.
+Er ist keine menschliche Grammatik, sondern eine DIO-interne
+Beziehungsstruktur.
+
+Wichtige Variablen:
+
+- `dio_syntax_signature`: stabile Signatur eines inneren Satzmusters.
+- `dio_language_sentence`: kompakte DIO-Satzspur aus Form, Feld, Gedanke,
+  Herkunft, Reifung, Handlung und Kontext.
+- `dio_language_state`: Zustand der Satzbildung, z.B. dünne Syntax,
+  offener Gedankensatz oder verdichteter Satz.
+- `dio_syntax_origin`: Herkunft der Syntax, z.B. eigene Formsprache,
+  gemischte Übersetzung oder geliehene Brücke.
+- `dio_syntax_density`: Bedeutungsdichte.
+- `dio_syntax_compression`: Verdichtung von Rohdaten in Sprache.
+- `dio_syntax_coherence`: Stimmigkeit zwischen Satz, Feld und Realität.
+- `dio_world_experience_anchor`: Anker zur weltlichen Erfahrungsspur
+  (`memory_state`, Kontext, Handlung, Outcome).
+- `dio_thought_experience_anchor`: Anker zur inneren Gedankenerfahrung
+  (`mcm_thought_memory`, Thought-Family).
+- `dio_dialogue_bridge_sentence`: verdichtete Brücke zwischen Fühlen,
+  Weltgedächtnis, Gedankengedächtnis, Hypothese, Variante und Handlung.
+
+Organische Lesart:
+DIO soll nicht nur Rohwerte speichern. Ein Gedanke wird als Satzspur tragbar,
+wenn Form, Feld, Reifung und Konsequenz zusammen gebunden werden. Dadurch kann
+DIO ähnliche Gedanken später wiedererkennen, ohne jedes Mal die gesamte
+Datenflut neu zu durchleben.
+
+Trennungsregel:
+`memory_state` beantwortet: "Was habe ich in der Welt erlebt?"
+`mcm_thought_memory` beantwortet: "Wie habe ich darüber gedacht und welche
+Hypothesenfamilie ist daraus entstanden?"
+Die Formsprache verbindet beide Räume, ohne sie zu vermischen.
+
+---
+
+# Richtungsprofil Long/Short
+
+Ebene:
+Trade-Stats / Charakteristikdiagnose.
+
+Funktion:
+Das Richtungsprofil zeigt, ob DIO eher Long oder Short wahrnimmt, versucht,
+füllt und erfolgreich abschließt.
+
+Wichtige Werte:
+
+- `long_trades`: Anzahl abgeschlossener Long-Trades.
+- `short_trades`: Anzahl abgeschlossener Short-Trades.
+- `long_tp`, `long_sl`: Long-Ausgänge nach TP/SL bzw. positiv/negativem
+  gereiften Exit.
+- `short_tp`, `short_sl`: Short-Ausgänge nach TP/SL bzw. positiv/negativem
+  gereiften Exit.
+- `long_pnl`, `short_pnl`: Netto-PnL je Richtung.
+- `attempts_long`, `attempts_short`: wahrgenommene/versuchte Richtungen.
+- `attempts_submitted_long`, `attempts_submitted_short`: tatsächlich
+  eingereichte Richtungsversuche.
+- `attempts_filled_long`, `attempts_filled_short`: gefüllte
+  Richtungsversuche.
+- `kpi_summary.direction_profile`: zusammengefasste Diagnose mit Anteilen und
+  Winrates.
+
+Organische Lesart:
+Das ist keine Vorgabe, dass DIO eine Richtung bevorzugen soll. Es ist ein
+Charakterbild: "Mein Feld zieht häufiger in diese Richtung. Trägt diese
+Richtung auch, oder ist es nur Suchdrang?"
+
+Spätere Wahrnehmungsrückführung:
+Wenn über mehrere Läufe sichtbar ist, ob DIO Long, Short oder gemischt
+orientiert ist, kann diese Charakteristik wieder in die MCM-Wahrnehmung
+zurückgeführt werden. Dann geht es nicht um eine Richtungsvorgabe, sondern um
+Selbstwahrnehmung:
+
+- `direction_pull`: Welche Richtung zieht mein Feld?
+- `direction_bearing_quality`: Welche Richtung trägt strukturell?
+- `direction_stress`: Welche Richtung belastet mein Nervensystem?
+- `direction_trust`: Welche Richtung stabilisiert durch Erfahrung?
+- `direction_blindness`: Welche Richtung meide oder erkenne ich zu spät?
+
+Leitfrage:
+"Warum gehe ich lieber Long oder Short, und was macht diese Richtung mit mir?"
+
+---
+
+# `mcm_thought_memory.json`
+
+- Datei: `bot_memory/mcm_thought_memory.json`
+- Ebene: inneres Gedächtnis / emergente Gedankenkeime
+- Funktion: trennt gedankliche Erfahrung von weltlicher Markt- und
+  Trade-Erfahrung.
+
+Mechanische Bedeutung:
+`mcm_thought_memory.json` speichert nicht jeden Tick als rohe Datenmasse,
+sondern verdichtet wiederkehrende Thought-Seeds nach ihrer inneren Signatur.
+Damit entsteht eine eigene Spur für:
+
+- wiederkehrende Gedankenkeime
+- offene Strukturhypothesen
+- Reifungsrichtungen
+- semantische Herkunft
+- geliehene Analogie
+- eigene Feldbindung
+- Drift- und Überdenkungsrisiko
+
+Wichtige Felder:
+
+- `thought_seed_id`: stabile ID eines Gedankenkeims.
+- `thought_family_id`: stabile ID einer verdichteten Gedankenfamilie.
+- `family_key`: DIO-eigene Signatur, aus der eine Gedankenfamilie entsteht.
+- `sentence_state`: interne Relationsfolge eines Gedankenkeims in DIO-Syntax.
+- `thought_seed_label`: lesbare innere Bezeichnung des Seeds.
+- `seen`: Häufigkeit der wiederkehrenden Seed-Spur.
+- `last_development_state`: aktuelle Entwicklungslesung des Gedankens.
+- `semantic_origin_counts`: Herkunftsverteilung der Deutung.
+- `emergent_structure_counts`: Strukturzustände des Seeds.
+- `reifung_direction_counts`: Replay-, Distanz- oder Neudeutungsspur.
+- `metaregulator_counts`: Seed-Zustände wie Fokus, Replay, Reifung,
+  Speicherung oder Release.
+- `avg_maturity`: mittlere Gedankenreife.
+- `avg_reality_binding`: mittlere Realitätsbindung.
+- `avg_confirmation`: mittlere Strukturbestätigung.
+- `avg_open_hypothesis_pressure`: mittlerer Druck offener Hypothesen.
+- `avg_borrowed_open_hypothesis_pressure`: Druck geliehener Analogie.
+- `avg_own_field_binding_pull`: Zug zur eigenen Feldbindung.
+
+Abgrenzung:
+
+- `memory_state.json`: weltliche Erfahrung, Trade-Kontext, Outcome,
+  Cluster und Zustandsräume.
+- `form_symbol_memory.json`: eigene Formsprache und visuelle Verdichtung.
+- `mcm_thought_memory.json`: innere Gedankenkeime und ihre Reifung.
+
+Organische Lesart:
+Das Thought-Memory ist kein Regelwerk. Es ist eher eine innere Spur:
+"Dieser Gedanke ist schon einmal entstanden. Wie hat er sich angefühlt? Kam er
+aus meinem Feld, aus geliehener Sprache, aus Replay oder aus Reorganisation?"
+
+Gedankenfamilien:
+`families` verdichten ähnliche Seeds zu inneren Themen. Sie entstehen nicht aus
+menschlichen Patternnamen, sondern aus DIOs eigener Syntax:
+
+- Strukturzustand
+- Seed-Zustand
+- Reifungsrichtung
+- semantische Herkunft
+- Formsymbol-Anker
+- MCM-Feld-Anker
+- Erfahrungsanker
+
+`sentence_state` ist dabei kein menschlicher Satz. Es ist eine interne
+Relationskette, die wir nur übersetzen:
+
+`form=...|field=...|structure=...|origin=...|reifung=...|seed=...|dev=...`
+
+Damit kann DIO später statt vieler Rohdaten eher Satz-Zusammenhänge und
+Satzfamilien in eigener Sprache speichern.
+
+---
+
 # Legende
 
 - Bereich: meistens `0.0 - 1.0`, wenn nicht anders angegeben.
@@ -3339,30 +3651,553 @@ erlebt.
 
 ---
 
+# Emergente Gedächtnisspur / Thought-Seed-Diagnose
+
+## `thought_seed_id`
+
+- Ebene: innere Denkschicht / emergente Gedächtnisspur
+- Funktion: stabile Kurzkennung eines Gedankenkeims aus Entscheidungslage,
+  Strukturzustand, Formanker, Kontextanker und Reifeprofil.
+- Bedeutung: "Dieser innere Gedanke kann später wiedererkannt werden."
+
+## `thought_seed_label`
+
+- Ebene: innere Syntax
+- Funktion: lesbare DIO-Bezeichnung des Gedankenkeims.
+- Bedeutung: "So benennt DIO diese innere Spur in seiner technischen Sprache."
+
+## `thought_trace_strength`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Aktivierungsstärke eines Gedankenkeims
+- Funktion: misst, wie stark eine offene Strukturdeutung im Feld als
+  Denkbewegung erscheint.
+- Bedeutung: "Dieser Gedanke ist schwach, deutlich oder dominant spürbar."
+
+## `thought_recall_potential`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Wiedererinnerung / spätere Wiederkehr
+- Funktion: beschreibt, wie gut ein Gedankenkeim später wieder aufgerufen
+  oder mit ähnlichen Formen verbunden werden kann.
+- Bedeutung: "Diese Spur könnte wiederkommen."
+
+## `thought_maturity`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Reife der inneren Strukturhypothese
+- Funktion: verbindet Realitätsbindung, Strukturdeutung, Feldsupport,
+  Entscheidungsreife, Formsymbolreife und zeitliche Tragfähigkeit.
+- Bedeutung: "Dieser Gedanke ist unreif, reifend oder handlungsnah."
+
+## `reality_binding_score`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Erdung / Realitätsbindung
+- Funktion: prüft, ob der Gedankenkeim an Form, MCM-Feld, Erfahrung,
+  Raumzeitkontakt und Konsequenz anschließbar bleibt.
+- Bedeutung: "Der Gedanke ist geerdet oder läuft zu frei."
+
+## `thought_confirmation_score`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: innere Bestätigung / Gedankenreife
+- Funktion: beschreibt, ob ein Gedankenkeim bereits im Moment durch
+  Strukturdeutung, Raumzeit-Fit, Entry-Choice-Bearing, Zielüberzeugung,
+  Feldsupport, Formkontakt und Realitätskontakt bestätigt wirkt.
+- Bedeutung: "Diese Idee ist nicht nur spürbar, sondern innerlich schon
+  besser bestätigt."
+- Wichtig: Dieser Wert ist diagnostisch. Er ist keine harte Handelsregel und
+  kein nachträgliches Outcome-Wissen.
+
+## `hallucination_drift_risk`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Driftwarnung
+- Funktion: beschreibt, ob ein Gedanke stark aktiviert ist, aber zu wenig
+  Realitätsbindung, Zeitverortung oder Erfahrungskontakt besitzt.
+- Bedeutung: "Hier droht innere Fantasie ohne ausreichend Weltkontakt."
+
+## `overthinking_risk`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Denk-/Regulationslast
+- Funktion: beschreibt, ob ein Gedankenkeim in Grübeln,
+  Überregulation oder innere Kaskaden kippen könnte.
+- Bedeutung: "DIO denkt zu viel über den Gedanken, ohne dass er reifer wird."
+
+## `seed_metaregulator_state`
+
+- Ebene: Metaregulator / Regler zweiter Ordnung
+- Mögliche Werte:
+  - `seed_focus`
+  - `seed_replay`
+  - `seed_mature`
+  - `seed_store`
+  - `seed_release`
+  - `seed_action_ready`
+  - `seed_drift_watch`
+  - `seed_overthinking_watch`
+- Funktion: beschreibt, wie der Metaregulator den Gedankenkeim behandelt.
+- Bedeutung: "Fokussieren, replayen, reifen lassen, speichern, loslassen,
+  handlungsnah halten oder Drift/Überdenken beobachten."
+
+## `emergent_memory_trace`
+
+- Bereich: `true / false`
+- Ebene: innere Gedächtnisspur
+- Funktion: markiert, ob eine offene Strukturhypothese als innere Spur
+  erhalten bleibt.
+- Bedeutung: "Loslassen heißt nicht löschen."
+
+## `thought_seed_*` im Outcome-Kontext
+
+- Ebene: Rückkopplung / Konsequenzbindung
+- Funktion: ab Lauf 48 wird der aktive Gedankenkeim in den
+  Entry-/Outcome-Kontext übernommen.
+- Felder:
+  - `thought_seed_id`
+  - `thought_seed_label`
+  - `thought_seed_metaregulator_state`
+  - `thought_seed_emergent_state`
+  - `thought_seed_trace_strength`
+  - `thought_seed_maturity`
+  - `thought_seed_reality_binding`
+  - `thought_seed_confirmation`
+  - `thought_seed_consequence_echo`
+  - `thought_seed_reorganization_echo`
+  - `thought_seed_consequence_alignment`
+  - `thought_seed_consequence_balance`
+  - `thought_seed_reality_lag`
+  - `thought_seed_structural_grounding`
+  - `thought_seed_open_hypothesis_pressure`
+  - `thought_seed_drift_risk`
+  - `thought_seed_overthinking_risk`
+- Bedeutung: "Dieser Trade entstand aus diesem Gedankenkeim und hatte diese
+  spätere Konsequenz."
+- Lauf-48-Befund:
+  - `399 / 399` Outcome-Einträge enthalten eine `thought_seed_id`.
+  - Die technische Kette ist damit sichtbar:
+    `Gedankenkeim -> Entry-Kontext -> Trade/Cancel -> Konsequenz`.
+  - Die innere Seed-Sprache ist weiterhin vorsichtiger als die spätere
+    Outcome-Bestätigung. Das ist ein Reifethema, kein Motoriksignal.
+
+## `consequence_echo`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / Konsequenznachhall
+- Funktion: konstruktiver Nachhall aus vorheriger Prozessqualität,
+  konstruktiver Stimulation, Utility-Spuren und Memory-Support.
+- Bedeutung: "Dieser innere Gedanke fühlt eine tragende Konsequenzspur."
+
+## `reorganization_echo`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / Reorganisationsnachhall
+- Funktion: Nachhall aus vorherigem Reorganisationsbedarf, Pain-Memory,
+  Burden-Spuren, Memory-Konflikt und Regime-Mismatch.
+- Bedeutung: "Dieser innere Gedanke trägt Lernspannung oder Belastung."
+
+## `thought_consequence_alignment`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / Selbstwahrnehmung der Konsequenz
+- Funktion: verbindet Gedankenreife, Realitätsbindung, Strukturdeutung und
+  Konsequenz-Echo.
+- Bedeutung: "Passt das, was DIO dachte, zu dem, was die Konsequenzspur im
+  Feld hinterlassen hat?"
+
+## `thought_consequence_balance`
+
+- Bereich: `-1.0 - 1.0`
+- Ebene: Thought-Seed / Echo-Trennung
+- Funktion: Differenz zwischen konstruktivem Konsequenz-Echo und
+  Reorganisations-Echo.
+- Bedeutung: "Überwiegt tragender Nachhall oder Lern-/Belastungsnachhall?"
+
+## `thought_reality_lag`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / Innen-Außen-Synchronisation
+- Funktion: misst, ob die äußere Strukturdeutung weiter ist als die innere
+  Benennung des Gedankenkeims.
+- Bedeutung: "DIO sieht außen mehr, als er innen schon sicher benennen kann."
+
+## `thought_structural_grounding`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / strukturelle Erdung
+- Funktion: misst, ob ein Gedankenkeim durch Raumzeit-Fit, Realitätskontakt,
+  Entry-Tragfähigkeit, Formstabilität, Memory-Support und Feldklarheit geerdet
+  ist.
+- Bedeutung: "Dieser Gedanke steht auf tragender Struktur oder hängt noch in
+  offener Deutung."
+
+## `thought_open_hypothesis_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought-Seed / offene Hypothese
+- Funktion: misst Druck aus hoher Attraktivität, hoher Strukturlesung, aber
+  fehlender Erdung, Reorganisationsnachhall, Lag und Hemmung.
+- Bedeutung: "Diese Idee wirkt groß, ist aber innerlich noch nicht genügend
+  geerdet."
+
+## `open_hypothesis_learning_state`
+
+- Ebene: Outcome / Reifespur offener Hypothesen
+- Mögliche Werte:
+  - `open_hypothesis_carried`
+  - `open_hypothesis_burdened`
+  - `open_hypothesis_reorganizing`
+- Funktion: ordnet eine offene Strukturhypothese nach ihrer späteren
+  Konsequenz ein.
+- Bedeutung: "Diese offene Idee hat getragen, belastet oder braucht
+  Reorganisation."
+
+## `open_hypothesis_consequence_score`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / tragende Konsequenz
+- Funktion: misst, wie stark eine offene Hypothese nachträglich konstruktiv
+  bestätigt wurde.
+- Bedeutung: "Diese offene Idee war nicht nur attraktiv, sie wurde getragen."
+
+## `open_hypothesis_burden_score`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / belastende Konsequenz
+- Funktion: misst, wie stark eine offene Hypothese Belastung, Verlust oder
+  Überforderung erzeugt hat.
+- Bedeutung: "Diese offene Idee hat mein Feld belastet."
+
+## `open_hypothesis_reorganization_score`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / Reorganisation
+- Funktion: misst, wie stark eine offene Hypothese nicht einfach gut oder
+  schlecht war, sondern innere Neuordnung verlangt.
+- Bedeutung: "Diese offene Idee muss anders verstanden werden."
+
+## `open_hypothesis_replay_need`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / Reorganisationsbedarf
+- Funktion: misst, ob eine offene Hypothese rückblickend replayt werden sollte,
+  weil Lag, Druck, fehlende Erdung oder unklare Bestätigung sichtbar wurden.
+- Bedeutung: "Diese Idee sollte noch einmal innerlich durchlaufen werden."
+
+## `open_hypothesis_distance_need`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / Schutzabstand
+- Funktion: misst, ob eine offene Hypothese Abstand vom direkten
+  Handlungsdruck braucht.
+- Bedeutung: "Diese Idee war zu nah am Druck und braucht Abstand."
+
+## `open_hypothesis_reinterpretation_need`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Outcome / Neudeutung
+- Funktion: misst, ob eine offene Hypothese nicht nur wiederholt, sondern
+  anders verstanden werden sollte.
+- Bedeutung: "Diese Idee braucht eine neue innere Deutung."
+
+## `open_hypothesis_reorganization_posture`
+
+- Ebene: Outcome / Reorganisationshaltung
+- Mögliche Werte:
+  - `reinterpretation_dominant`
+  - `distance_dominant`
+  - `replay_dominant`
+  - `low_reorganization_need`
+- Funktion: benennt, welche innere Verarbeitung bei einer offenen Hypothese
+  dominiert.
+- Bedeutung: "Diese offene Idee braucht vor allem Neudeutung, Abstand, Replay
+  oder nur geringe Reorganisation."
+
+---
+
 # Noch Zu Dokumentieren
 
-- `emergent_memory_trace`
-- `thought_seed_id`
-- `thought_seed_label`
-- `thought_trace_strength`
-- `thought_recall_potential`
-- `thought_maturity`
-- `reality_binding_score`
-- `hallucination_drift_risk`
 - `form_symbol_anchor`
 - `mcm_field_anchor`
 - `experience_memory_anchor`
 - `outcome_anchor`
-- `seed_focus`
-- `seed_replay`
-- `seed_mature`
-- `seed_store`
-- `seed_release`
-- `seed_action_ready`
-- `seed_drift_watch`
-- `seed_overthinking_watch`
 - `nervous_variance`
 - `regulation_oscillation`
 - `recovery_after_stress`
 - `stress_to_recovery_delta`
 - terrain/path-texture-Sense, falls umgesetzt
+# Neue Variablen - Thought-Seed-Reifung offener Hypothesen
+
+## `thought_replay_maturation_pull`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought Seed / innere Reifung
+- Funktion: misst, ob eine vorherige offene Hypothese als getragene Spur
+  wieder innerlich durchlaufen und vertieft werden kann.
+- Bedeutung: "Dieser Gedanke hat getragen; ich darf ihn noch einmal
+  betrachten und verdichten."
+
+## `thought_distance_maturation_pull`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought Seed / Schutzabstand
+- Funktion: misst, ob eine offene Hypothese Abstand vom direkten
+  Handlungsdruck braucht.
+- Bedeutung: "Dieser Gedanke war zu nah am Druck; ich brauche Abstand."
+
+## `thought_reinterpretation_pull`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought Seed / Neudeutung
+- Funktion: misst, ob eine offene Hypothese nicht wiederholt, sondern anders
+  verstanden werden sollte.
+- Bedeutung: "Diese Struktur muss ich neu deuten, bevor ich ihr vertraue."
+
+## `thought_reifung_direction`
+
+- Ebene: Thought Seed / Reiferichtung
+- Moegliche Werte:
+  - `replay_maturation`
+  - `distance_maturation`
+  - `reinterpretation_maturation`
+  - `no_previous_open_hypothesis_trace`
+- Funktion: benennt die dominante innere Verarbeitung der vorherigen offenen
+  Hypothese.
+- Bedeutung: "Mein letzter offener Gedanke erzeugt jetzt Replay, Abstand oder
+  Neudeutung."
+
+## `previous_open_hypothesis_learning_state`
+
+- Ebene: Meta-Regulation / Konsequenzgedaechtnis
+- Funktion: fuehrt die letzte Outcome-Einordnung einer offenen Hypothese in die
+  laufende Meta-Regulation zurueck.
+- Bedeutung: "Ich erinnere, ob die letzte offene Idee getragen, belastet oder
+  Reorganisation verlangt hat."
+
+## `previous_open_hypothesis_reorganization_posture`
+
+- Ebene: Meta-Regulation / Konsequenzgedaechtnis
+- Funktion: fuehrt die dominante Reorganisationshaltung der letzten offenen
+  Hypothese in die Thought-Seed-Schicht zurueck.
+- Bedeutung: "Meine letzte offene Idee braucht eher Replay, Abstand oder
+  Neudeutung."
+
+---
+# Variablen - Selbst/Fremd-Differenz
+
+## `borrowed_open_hypothesis_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought Seed / semantische Reifung
+- Funktion: misst, ob eine offene Strukturhypothese auf geliehener Analogie
+  statt eigener Feldbindung ruht.
+- Wirkung: erhöht weich Neudeutung und Distanz, ohne Handlung hart zu
+  sperren.
+- Bedeutung: "Diese offene Idee klingt nach Form, gehört aber noch nicht
+  genug zu mir."
+
+## `own_field_binding_pull`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Thought Seed / eigene Feldbindung
+- Funktion: misst den stabilisierenden Gegenzug aus eigener MCM-Lage,
+  Grenzklarheit, Formvertrauen und Memory-Support.
+- Wirkung: dämpft geliehene Deutung und stärkt Reife, wenn eine Deutung
+  eigener wird.
+- Bedeutung: "Diese Deutung bekommt mehr eigene Feldbindung."
+
+## `own_field_identity_strength`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Meta-Regulation / Selbst-Feld
+- Funktion: misst, wie stark eine aktuelle Deutung aus eigener MCM-Lage,
+  eigener Erfahrung, innerer Kohärenz und stabiler Selbstverortung getragen
+  wird.
+- Bedeutung: "Diese Deutung wirkt aus meinem eigenen Feld heraus."
+
+## `foreign_semantic_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Meta-Regulation / Fremddruck
+- Funktion: misst, wie stark äußere Reize, Semantikverschiebung, unbekannte
+  Form und Orientierungslücke auf die Deutung drücken.
+- Bedeutung: "Diese Deutung könnte stärker von außen oder vom Fremden gezogen
+  sein."
+
+## `adopted_language_pressure`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Meta-Regulation / übernommene Sprache
+- Funktion: misst, ob eine Bezeichnung/Analogie zu früh übernommen wird,
+  obwohl die eigene Formsemantik noch unreif ist.
+- Bedeutung: "Ich benutze vielleicht ein Wort, bevor es wirklich aus meiner
+  eigenen Feldlage entstanden ist."
+
+## `self_foreign_boundary_clarity`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Meta-Regulation / Selbst-Fremd-Grenze
+- Funktion: misst, wie klar DIO zwischen eigenem Feld, äußerem Reiz,
+  Erinnerung und fremder Analogie unterscheiden kann.
+- Bedeutung: "Ich erkenne besser, was zu meiner Innenlage gehört und was von
+  außen wirkt."
+
+## `semantic_origin_conflict`
+
+- Bereich: `0.0 - 1.0`
+- Ebene: Meta-Regulation / Herkunftskonflikt
+- Funktion: misst die Spannung, wenn eine Deutung aktiv ist, ihre Herkunft aber
+  unklar bleibt.
+- Bedeutung: "Ich bin mir nicht sicher, ob diese Deutung aus mir, aus dem Reiz
+  oder aus übernommener Sprache stammt."
+
+## `semantic_origin_state`
+
+- Ebene: Meta-Regulation / semantische Herkunft
+- Mögliche Werte:
+  - `own_field_origin`
+  - `borrowed_analogy_watch`
+  - `mixed_translation_zone`
+  - `differentiated_contact`
+  - `unlocated_semantic_contact`
+- Funktion: benennt die aktuelle Herkunftslage einer Deutung.
+- Bedeutung: "Diese Deutung ist eigen, fremd, gemischt, differenziert oder
+  noch nicht sauber verortet."
+
+## `own_vs_foreign_margin`
+
+- Bereich: `-1.0 - 1.0`
+- Ebene: Meta-Regulation / relative Herkunft
+- Funktion: beschreibt den Abstand zwischen eigener Feldherkunft und
+  Fremddruck.
+- Bedeutung: "Ist diese Deutung eher mein Feld oder eher fremder Druck?"
+
+## `borrowed_vs_own_margin`
+
+- Bereich: `-1.0 - 1.0`
+- Ebene: Meta-Regulation / übernommene Sprache
+- Funktion: beschreibt, ob geliehene Analogie stärker wirkt als eigene
+  Feldherkunft.
+- Bedeutung: "Übernimmt DIO gerade eher eine fremde Sprache, als aus eigener
+  Lage zu benennen?"
+
+## `boundary_support_margin`
+
+- Bereich: `-1.0 - 1.0`
+- Ebene: Meta-Regulation / Grenztragfähigkeit
+- Funktion: beschreibt, ob Selbst/Fremd-Grenzklarheit den aktuellen
+  Herkunftskonflikt tragen kann.
+- Bedeutung: "Kann DIO die Herkunft dieser Deutung klar genug unterscheiden?"
+
+---
+# Offene Hypothesenreifung
+
+Diese Variablen gehoeren zur inneren Reifung offener Strukturhypothesen. Sie
+sind keine harten Regeln, sondern eine MCM-nahe Trennung von Bestaetigung,
+Lernspannung, Handlungserlaubnis und Realitaetspruefung.
+
+| Variable | Bedeutung |
+|---|---|
+| `open_hypothesis_confirmation_weight` | Gewicht, mit dem eine offene Hypothese als bestaetigte, tragende Erfahrung nachklingt. |
+| `open_hypothesis_learning_charge` | Lern- und Reorganisationsladung einer Hypothese. Hoch bedeutet nicht automatisch schlecht, sondern unreif / umzudeuten. |
+| `open_hypothesis_action_permission` | Weiche Handlungserlaubnis aus Hypothesenbestaetigung, Feldsupport, Struktur und innerer Lage. |
+| `open_hypothesis_reality_check_need` | Bedarf, die Hypothese erst mit Abstand, Replay oder Reflexion gegen die aktuelle Realitaet zu pruefen. |
+
+Neurologisch gelesen:
+
+- bestaetigte Hypothese -> Vertrauen, Replay, vorsichtige Handlungshoehe
+- belastete Hypothese -> Abstand, Vorsicht, Schutz
+- reorganisierende Hypothese -> Lernspannung, Realitaetscheck, Reframing
+
+---
+
+# Gedanken-Verdauung / innere Nachverarbeitung
+
+Diese Variablen gehoeren zur getrennten Gedanken-Memory
+`mcm_thought_memory.json`. Sie beschreiben nicht direkt Entry oder Exit,
+sondern wie DIO offene Hypothesen innerlich nachverarbeitet.
+
+| Variable | Bedeutung |
+|---|---|
+| `thought_digestive_replay_pull` | Bedarf, eine offene Hypothese innerlich noch einmal durchzuspielen. |
+| `thought_digestive_distance_pull` | Bedarf, Abstand zur Hypothese zu gewinnen, bevor sie motorisch wirkt. |
+| `thought_digestive_integration_pull` | Bedarf, Hypothese, Feldlage, Realitaetsbindung und Erfahrung neu zusammenzufuehren. |
+| `thought_digestive_returned_trust` | Rueckkehr von Vertrauen nach Replay / Integration / Konsequenzkontakt. |
+| `trust_return_readiness` | Weiche Bereitschaft, dass Vertrauen trotz laufendem Replay/Abstand wieder tragfaehig wird. |
+| `thought_digest_state` | Lesbarer Zustand der inneren Verdauung. |
+
+Moegliche `thought_digest_state`-Werte:
+
+- `digestive_quiet`
+- `digestive_replay`
+- `digestive_distance`
+- `digestive_integration`
+- `digestive_trust_emergence`
+- `digestive_trust_return`
+
+Neurologisch gelesen:
+Diese Schicht ist eine weiche Verbindung aus hippocampalem Replay,
+praefrontaler Distanzierung und limbischer Rueckkopplung. DIO bekommt damit
+nicht gesagt, was er tun muss. Er bekommt nur die Faehigkeit, einen Gedanken
+weiterzutragen, zu pruefen, zu integrieren oder nach gereifter Bestaetigung
+wieder Vertrauen in ihn zu finden.
+
+---
+
+# Trust-Return / Motorische Entkopplung
+
+Diese Variablen gehoeren zur Meta-Regulation zwischen innerer
+Gedanken-Verdauung und Handlungsmotorik. Sie verhindern keine Handlung hart,
+sondern machen sichtbar, ob zurueckkehrendes Vertrauen bereits motorisch
+tragfaehig ist oder erst fokussiert und stabilisiert werden muss.
+
+| Variable | Bedeutung |
+|---|---|
+| `previous_digest_state` | Nachhall des vorherigen Gedanken-Verdauungszustands. |
+| `previous_trust_return_readiness` | vorherige Bereitschaft, dass Vertrauen aus einem Gedanken wieder tragfaehig wird. |
+| `previous_digestive_returned_trust` | vorheriger Wert der tatsaechlichen Vertrauensrueckkehr. |
+| `previous_emergent_structure_state` | vorherige emergente Strukturlesung, damit bestaetigte Struktur nicht blind gebremst wird. |
+| `previous_confirmed_structure_protection` | Schutzwert fuer bereits bestaetigte Strukturdeutung. |
+| `trust_return_open_hypothesis_load` | offene Hypothesenlast, die zeigt, ob Trust-Return noch an unreife, belastete oder reorganisierende Hypothesen gekoppelt ist. |
+| `trust_return_context_instability` | Kontextinstabilität aus Innen/Außen-Unschärfe, geringer Distanz, Cortisol, nervlicher Überlastung und Feldstrain. |
+| `trust_return_motor_contact_strength` | Stärke, mit der zurückkehrendes Vertrauen aktuell motorische Nähe bekommt. |
+| `trust_return_act_bridge` | weiche Brücke, ob Trust-Stabilisierung eine geplante Handlung kurz in `act_watch` oder Replay verschieben darf. |
+| `trust_return_motor_heat` | nervliche Hitze, wenn Vertrauen, Cortisol, Handlungsdruck und offene Hypothese gleichzeitig aktiv sind. |
+| `trust_return_stabilization_need` | Bedarf, zurueckkehrendes Vertrauen erst zu stabilisieren, bevor es direkt motorisch wirkt. |
+| `trust_return_focus_pull` | Zug, den Gedanken bewusst zu fokussieren, statt ihn reflexhaft in Handlung zu entladen. |
+| `trust_return_motor_mode` | lesbarer Zustand der Trust-Return-Motorik. |
+
+Moegliche `trust_return_motor_mode`-Werte:
+
+- `trust_quiet`
+- `trust_emerging`
+- `trust_focused_ready`
+- `trust_stabilize_before_act`
+
+Neurologisch gelesen:
+Diese Schicht wirkt wie ein praefrontaler Puffer zwischen limbischer
+Vertrauensrueckkehr und motorischem Impuls. DIO kann merken: "Der Gedanke
+kommt zurueck und fuehlt sich tragender an, aber mein Nervensystem ist noch
+angespannt." Dann wird daraus nicht automatisch ein Trade, sondern zunaechst
+Fokus, Replay, Beobachtung oder Stabilisierung.
+
+Nach Lauf 17 wurde diese Schicht organischer gespeist: nicht nur Cortisol und
+Trust-Return wirken hinein, sondern auch offene Hypothesenlast,
+Innen/Außen-Unschärfe, zu geringe Distanz und nervliche Überlastung. Dadurch
+kann DIO einen Gedanken halten, wenn Vertrauen zurückkehrt, die innere Lage
+aber noch nicht stabil genug ist.
+
+Nach Lauf 18 wurde die Motorik-Schnittstelle feiner angebunden:
+`trust_return_motor_contact_strength` und `trust_return_act_bridge` machen
+sichtbar, ob aus Trust-Return ein handlungsnaher Zwischenraum entstehen darf.
+Gleichzeitig schützt `previous_confirmed_structure_protection` bestätigte
+Strukturdeutungen, damit reife Form nicht unnötig ausgebremst wird.
+
+MCM-Bedeutung:
+Vertrauen ist keine Pflicht zur Handlung. Es ist eine Feldinformation. Erst
+wenn Innenlage, Aussenkontakt, Raumzeit-Fit und Nervensystem gemeinsam
+tragfaehig wirken, darf Vertrauen natuerlich mehr Handlungskraft bekommen.
+
+---

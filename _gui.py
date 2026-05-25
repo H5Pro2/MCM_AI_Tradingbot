@@ -24,7 +24,7 @@ except Exception:
 REFRESH_MS = 350
 MAX_CANDLES = 80
 
-WINDOW_SIZE = "1200x780"
+WINDOW_SIZE = "1180x740"
 WINDOW_MIN_SIZE = (960, 560)
 
 MARKET_CARD_SIZE = (800, 450)
@@ -34,7 +34,8 @@ BACKTEST_CARD_SIZE = (104, 160)
 EQUITY_CARD_SIZE = (1192, 240)
 
 
-OPTIONAL = "Optional: debug_lauf_44"
+OPTIONAL = "Optional: debug_lauf_56"
+STARTEQUITY = Config.START_EQUITY if Config else 100.0
 
 C = {
     "bg_root": "#000000",
@@ -150,6 +151,16 @@ def read_equity_curve(path: Path) -> list[float]:
     return values
 
 
+def first_existing_path(*paths: Path) -> Path:
+    for path in paths:
+        try:
+            if path.exists():
+                return path
+        except Exception:
+            continue
+    return paths[0]
+
+
 def resolve_debug_dir(base_dir: Path, preferred: str | None = None) -> Path:
     debug_root = base_dir / "debug"
     if preferred:
@@ -222,9 +233,19 @@ class DIOGui:
         self.base_dir = Path(base_dir).resolve()
         self.debug_run = debug_run
         self.debug_dir = resolve_debug_dir(self.base_dir, self.debug_run)
-        self.visual_path = self.debug_dir / "bot_visual_snapshot.json"
-        self.stats_path = self.debug_dir / "trade_stats.json"
-        self.equity_path = self.debug_dir / "trade_equity.csv"
+        self.gui_dir = self.debug_dir / "gui"
+        self.visual_path = first_existing_path(
+            self.gui_dir / "bot_visual_snapshot.json",
+            self.debug_dir / "bot_visual_snapshot.json",
+        )
+        self.stats_path = first_existing_path(
+            self.gui_dir / "trade_stats.json",
+            self.debug_dir / "trade_stats.json",
+        )
+        self.equity_path = first_existing_path(
+            self.gui_dir / "trade_equity.csv",
+            self.debug_dir / "trade_equity.csv",
+        )
         self._backtest_range: tuple[float, float] | None = None
         self._after_id = None
 
@@ -324,6 +345,7 @@ class DIOGui:
                 ("Withheld", "attempts_withheld"),
                 ("Max DD", "max_drawdown_pct"),
                 ("Eq. Peak", "equity_peak"),
+
             ],
             self.stats_labels,
             value_align="right",
@@ -380,9 +402,19 @@ class DIOGui:
 
     def _refresh(self):
         self.debug_dir = resolve_debug_dir(self.base_dir, self.debug_run)
-        self.visual_path = self.debug_dir / "bot_visual_snapshot.json"
-        self.stats_path = self.debug_dir / "trade_stats.json"
-        self.equity_path = self.debug_dir / "trade_equity.csv"
+        self.gui_dir = self.debug_dir / "gui"
+        self.visual_path = first_existing_path(
+            self.gui_dir / "bot_visual_snapshot.json",
+            self.debug_dir / "bot_visual_snapshot.json",
+        )
+        self.stats_path = first_existing_path(
+            self.gui_dir / "trade_stats.json",
+            self.debug_dir / "trade_stats.json",
+        )
+        self.equity_path = first_existing_path(
+            self.gui_dir / "trade_equity.csv",
+            self.debug_dir / "trade_equity.csv",
+        )
 
         visual = safe_load_json(self.visual_path)
         stats = safe_load_json(self.stats_path)
@@ -504,7 +536,7 @@ class DIOGui:
         sl = safe_int(stats.get("sl"), 0)
         pnl = safe_float(stats.get("pnl_netto"), 0.0)
         values = {
-            "pnl_netto": f"{pnl:+.2f}",
+            "pnl_netto": f"{pnl+STARTEQUITY:+.2f}",
             "wins_loss": f"{tp} / {sl}",
             "trades": str(safe_int(stats.get("trades"), 0)),
             "cancels": str(safe_int(stats.get("cancels"), 0)),

@@ -34,6 +34,78 @@ _WRITE_BUFFER_COUNTS = {}
 _WRITE_BUFFER_LAST_FLUSH = {}
 _BUFFER_FLUSHING = False
 
+_DEBUG_FILE_GROUPS = {
+    "trade_stats.json": "gui",
+    "trade_equity.csv": "gui",
+    "mcm_field_decision_protocol.csv": "core",
+    "mcm_neuro_transition_protocol.csv": "core",
+    "mcm_thought_seed_protocol.csv": "core",
+    "mcm_thought_digest_protocol.csv": "core",
+    "mcm_outcome_debug.csv": "core",
+    "outcome_records.jsonl": "core",
+    "mcm_position_intervention_protocol.csv": "position",
+    "mcm_exit_candidate_observe.csv": "position",
+    "mcm_exit_candidate_replay.csv": "position",
+    "mcm_exit_candidate_replay_debug.log": "position",
+    "mcm_form_symbol_protocol.csv": "language",
+    "mcm_memory_thinking_protocol.csv": "language",
+    "mcm_idle_thinking_protocol.csv": "language",
+    "mcm_visual_cortex_protocol.csv": "perception",
+    "mcm_strategic_window_protocol.csv": "perception",
+    "mcm_active_contact_protocol.csv": "perception",
+    "mcm_target_expectation_protocol.csv": "perception",
+    "mcm_profile.csv": "performance",
+    "mcm_file_write_profile.csv": "performance",
+    "mcm_state_debug.csv": "research",
+    "mcm_decision_debug.csv": "research",
+    "debug.csv": "research",
+    "debug.txt": "research",
+}
+
+_DEBUG_GROUP_NAMES = {
+    "gui",
+    "core",
+    "position",
+    "language",
+    "perception",
+    "performance",
+    "research",
+    "topology",
+}
+
+def _debug_group_for_filename(filename):
+    if not bool(getattr(Config, "DEBUG_GROUPED_DIRS", False)):
+        return ""
+    name = os.path.basename(str(filename or "").replace("\\", "/")).strip()
+    if not name:
+        return ""
+    if name in _DEBUG_FILE_GROUPS:
+        return str(_DEBUG_FILE_GROUPS.get(name, "") or "")
+    if name.startswith("mcm_visual") or "cortex" in name:
+        return "perception"
+    if "thought" in name or "form_symbol" in name or "memory_thinking" in name:
+        return "language"
+    if "position" in name or "exit_candidate" in name:
+        return "position"
+    if "profile" in name or "write" in name:
+        return "performance"
+    if name.startswith("mcm_") or name.startswith("outcome_"):
+        return "research"
+    return ""
+
+def _debug_grouped_parts(parts):
+    cleaned = [str(part).strip("/\\") for part in parts if str(part or "").strip("/\\")]
+    if not cleaned or not bool(getattr(Config, "DEBUG_GROUPED_DIRS", False)):
+        return cleaned
+    if len(cleaned) > 1 and cleaned[0] in _DEBUG_GROUP_NAMES:
+        return cleaned
+    if len(cleaned) > 1:
+        return cleaned
+    group = _debug_group_for_filename(cleaned[-1])
+    if not group:
+        return cleaned
+    return [group] + cleaned
+
 def _debug_write_mode():
     mode = str(getattr(Config, "DEBUG_WRITE_MODE", "immediate") or "immediate").strip().lower()
     if mode not in {"immediate", "buffered", "buffered_safe"}:
@@ -49,6 +121,8 @@ def _buffered_debug_enabled(path=None, mode="a", write_once=False):
         return False
     normalized = str(path or "").replace("\\", "/")
     if normalized.endswith("mcm_file_write_profile.csv"):
+        return False
+    if normalized.endswith("trade_equity.csv"):
         return False
     return True
 
@@ -175,7 +249,7 @@ def dbr_get_debug_dir():
     return str(_DEBUG_RUN_DIR)
 
 def dbr_path(*parts):
-    cleaned = [str(part).strip("/\\") for part in parts if str(part or "").strip("/\\")]
+    cleaned = _debug_grouped_parts(parts)
     return os.path.join(dbr_get_debug_dir(), *cleaned)
 
 def dbr_resolve_path(path):
@@ -191,7 +265,7 @@ def dbr_resolve_path(path):
         parts = normalized.split("/")
         if len(parts) > 1 and parts[1].startswith(prefix):
             return raw
-        return os.path.join(dbr_get_debug_dir(), *normalized.split("/")[1:])
+        return os.path.join(dbr_get_debug_dir(), *_debug_grouped_parts(normalized.split("/")[1:]))
     return raw
 # ─────────────────────────────────────────────
 def _ensure_dir(path: str):

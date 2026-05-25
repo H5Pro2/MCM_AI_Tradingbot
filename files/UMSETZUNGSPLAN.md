@@ -94,6 +94,26 @@ Organisation entstehen. Das eigentliche Ziel ist ein selbstregulativer
 Erfahrungsraum, in dem DIO lernen kann, welche Strukturen, Zustände und
 Handlungen tragfähig werden.
 
+Ergänzung - Unsicherheit, Vorahnung und Selbst/Fremd-Wahrnehmung:
+
+Unsicherheit wird dabei nicht als Fehler betrachtet, der durch immer mehr
+Regeln entfernt werden muss. In einer varianzreichen Welt würde das zu einer
+endlosen Kette aus Sonderregeln führen. DIO soll Unsicherheit stattdessen als
+Feldzustand verarbeiten: wahrnehmen, Varianten bilden, Abstand nehmen,
+replayen, neu deuten und über Erfahrung reifen.
+
+Vorahnung und Deutung des Ungewissen entstehen in dieser Architektur nicht
+aus harter Vorhersage, sondern aus emergenter Varianz. DIO soll lernen, aus
+Teilmustern, Erinnerung, Spannung und innerem Feld einen Möglichkeitsraum zu
+bilden, ohne diesen Möglichkeitsraum sofort als Wahrheit zu behandeln.
+
+Selbst/Fremd-Wahrnehmung ist dafür eine zentrale Reifeschicht. DIO soll
+unterscheiden lernen, ob eine Deutung aus eigener MCM-Lage entsteht, durch
+äußeren Reizdruck gezogen wird, aus Erinnerung stammt, als fremde Analogie
+übernommen wurde oder als Mischform zwischen eigener Deutung und fremder
+Sprache wirkt. Diese Unterscheidung erzeugt Distanz auf die Sicht der
+inneren und äußeren Welt.
+
 Organischer Strukturaufbau:
 
 DIO bekommt eine organische Strukturarchitektur. Mit Hilfe der MCM wird ein
@@ -4115,6 +4135,60 @@ verharren, wenn ein Bereich durch Nähe, Tragfähigkeit, Raumzeit-Fit und
 Reality-Check gegenwärtig berührbar wird. Dafür dienen
 `area_future_to_present_readiness` und
 `contact_future_to_present_readiness`.
+
+---
+
+## 18.7 MCM-Spannungsachse `-- - 0 + ++`
+
+Ziel:
+DIO soll die positive MCM-Seite nicht mehr automatisch als Ruhe,
+Wohlbefinden oder Tragfähigkeit lesen. Die MCM wird als Spannungsraum um
+einen regulativen Nullpunkt verstanden:
+
+- `--`: starke kontraktive Spannung
+- `-`: leichte kontraktive Spannung
+- `0`: regulierter Tragpunkt / Rückführungsmitte
+- `+`: leichte expansive Spannung
+- `++`: starke expansive Spannung
+
+Wichtig:
+Positiv ist nicht automatisch gut. Positive Expansion kann ebenso Druck
+erzeugen wie negative Kontraktion: Erwartungsdruck, Annäherungsdrang,
+Dopaminzug, Hoffnung, FOMO oder überdehnte Handlungslust. Reif ist nicht der
+größte positive Ausschlag, sondern die Fähigkeit, beide Spannungsrichtungen
+zur 0 zurückzuführen.
+
+Technische Zielachsen:
+
+- `positive_expansion_pressure`
+- `negative_contraction_pressure`
+- `positive_overextension`
+- `positive_return_pressure`
+- `mcm_axis_displacement`
+- `mcm_axis_tension`
+- `mcm_axis_state`
+- `positive_zero_point_regulation`
+
+Mechanische Bedeutung:
+DIO bekommt keine harte Long-/Short-Regel. Die Schicht erweitert nur seine
+innere Wahrnehmung: "Bin ich tragfähig positiv, oder werde ich nur positiv
+gezogen?" Wenn positive Expansion nicht ausreichend durch Feldtragfähigkeit,
+Strukturkontakt, innere/äußere Kohärenz und Interpretation gedeckt ist,
+entsteht eine weiche Rückführungsneigung zur 0.
+
+Beispiel:
+Ein Long-Impuls kann sich positiv, neugierig oder hoffnungsvoll anfühlen.
+Wenn das MCM-Feld aber wenig `field_action_support` und wenig
+`structure_action_bearing` zeigt, ist das nicht automatisch ein guter Zustand,
+sondern möglicherweise `+` oder `++`: expansive Spannung ohne genug Boden.
+DIO soll diese Spannung beobachten, reifen lassen oder zur 0 zurückführen,
+anstatt positive Erregung mit Tragfähigkeit zu verwechseln.
+
+Neurologische Deutung:
+Das entspricht einer Unterscheidung zwischen Belohnungszug und reifer
+Handlungsfähigkeit. Dopamin, Erwartung und Aktivierung können Bewegung
+erzeugen, aber erst Regulation, Kohärenz, Distanz und Feldtragfähigkeit machen
+daraus reifes Handeln.
 
 ---
 

@@ -1,5 +1,332 @@
 # WICHTIG_MECHANIKEN
 
+# Grundsaetze aus der aktuellen MCM-Arbeit
+
+## DIO als MCM-Erweiterung
+
+Die Datei `files/DIO_MCM_ERWEITERUNG.md` sammelt Erkenntnisse, die aus der
+praktischen DIO-Umsetzung für das übergeordnete MCM-Projekt entstehen.
+
+Wichtig:
+Diese Erkenntnisse sind als Forschungs- und Architekturhypothesen zu lesen,
+nicht als Beweis für maschinelles Bewusstsein. Fachlich tragfähig ist die
+Einordnung als Experiment zu selbstregulativer Erfahrungsorganisation:
+Außenreiz, inneres Feld, Formsprache, Hypothese, Neurochemie, Zeitgefühl,
+Handlung und Gedächtnis werden in einem technischen MCM-Regelkreis verbunden.
+
+## DIO Form Language Core
+
+Der `DIO_FORM_LANGUAGE_CORE` ist die zentrale innere Sprachbindung.
+Er ersetzt keine Wahrnehmung, keine Memory und keine Thought-Seeds, sondern
+verbindet sie zu einer gemeinsamen Syntax.
+
+Er bindet Formwort, zusammengesetztes Formwort, MCM-Feldanker,
+Gedankenkeim, Strukturdeutung, semantische Herkunft, Reifung,
+Handlungslage und Kontext zu einer inneren DIO-Satzspur.
+
+Die entstehende `dio_language_sentence` ist kein menschlicher Satz. Sie ist
+eine technische DIO-Syntax, also eine komprimierte innere Beziehungsform.
+
+Neue Leitwerte:
+
+- `dio_syntax_density`: wie viel Bedeutung gebunden ist
+- `dio_syntax_compression`: wie stark Rohdaten zu Sprache verdichtet wurden
+- `dio_syntax_coherence`: wie stimmig Satz, Realität und Feld zusammenpassen
+- `dio_syntax_origin`: ob die Syntax eigen, gemischt, geliehen oder noch
+  unlokalisiert ist
+
+Organische Bedeutung:
+Ein Organismus lebt nicht in Rohwerten. Er übersetzt seine Welt in eigene
+Zeichen, Sätze und Beziehungsformen. Dadurch entsteht Distanz zur Datenflut,
+Orientierung im Inneren und die Möglichkeit, Gedanken wiederzuerkennen.
+
+## Bewusste Trennung der Erfahrungsräume
+
+DIO braucht zwei getrennte Erfahrungsräume:
+
+- `memory_state.json`: weltliche Erfahrung, Kontakt, Kontext, Handlung,
+  Outcome und Konsequenz.
+- `mcm_thought_memory.json`: innere Gedanken, Hypothesen, Reifung,
+  Satzspuren und Thought-Families.
+
+Diese Trennung ist wichtig, damit DIO nicht alle Rohdaten erneut durchlebt.
+Der Organismus fühlt einen Reiz, übersetzt ihn in seine Formsprache und fragt
+dann verdichtet:
+
+"Diese Form kenne ich aus meiner weltlichen Erfahrung. In meiner
+Gedankenspur gehört sie zu dieser Hypothesenfamilie. Welche Folgevarianten
+sind möglich, und was davon wird tragfähig?"
+
+Dafür dient `dio_dialogue_bridge_sentence`. Diese Brücke ist kein Chattext,
+sondern eine kompakte innere Satzspur zwischen Fühlen, Weltgedächtnis,
+Gedankengedächtnis, Hypothese, Variante, Tragfähigkeit und Handlung.
+
+So entsteht kognitive Entlastung:
+DIO bekommt Rohdaten, lebt aber nicht in Rohdaten. Er übersetzt sie in eine
+eigene Umgangsform.
+
+## Unsicherheit als Feldzustand
+
+Unsicherheit wird nicht wegprogrammiert. Jede harte Ausnahme wuerde in einer
+varianzreichen Welt nur weitere Ausnahmen erzeugen. DIO behandelt
+Unsicherheit deshalb als Feldzustand: beobachten, Varianten bilden, Abstand
+erzeugen, replayen, neu deuten und ueber Konsequenz reifen.
+
+## Emergenz als maechigste Varianzform
+
+Vorahnung ist keine feste Vorhersage. DIO soll unter Unsicherheit keine
+absolute Zukunft berechnen, sondern Moeglichkeitsraeume bilden. Emergenz ist
+die Faehigkeit eines Feldes, aus Varianz eine neue tragfaehige Ordnung
+entstehen zu lassen.
+
+## Distanz als Reifefaehigkeit
+
+Distanz ist keine Blockade. Distanz bedeutet, dass DIO Innenlage,
+Aussenreiz, Erinnerung und Handlungstendenz getrennt betrachten kann. Erst
+diese Trennung erlaubt reifere Reflexion.
+
+## Historische Entscheidungsgewichtung
+
+Entscheidungen und Handlungen sind keine isolierten Momentreaktionen. DIO soll
+nicht nur erkennen, ob ein Kontakt im aktuellen Moment tragbar wirkt, sondern
+ob diese Art von Kontakt, Hypothese oder Handlung in seiner Vergangenheit
+getragen hat.
+
+Leitsatz:
+Nicht: "Ist das gerade gut?"
+Sondern: "Wie gut war diese Art von Entscheidung in der Vergangenheit
+tragfähig?"
+
+Organische Bedeutung:
+Ein Organismus lernt nicht nur durch den aktuellen Reiz. Er trägt Konsequenzen
+im Nervensystem weiter. Was getragen hat, kann Vertrauen, Ruhe und
+Handlungsfähigkeit bilden. Was belastet hat, erzeugt Vorsicht, Abstand,
+Schmerzgedächtnis oder Reorganisation. Was unklar war, bleibt als offene
+Hypothese erhalten und reift über erneute Wahrnehmung, Replay und spätere
+Bestätigung.
+
+Für DIO:
+
+- getragene Hypothesen werden nicht mechanisch bevorzugt, sondern bekommen
+  mehr Feldvertrauen
+- belastete Hypothesen werden nicht verboten, sondern vorsichtiger,
+  distanzierter und reifer behandelt
+- reorganisierende Hypothesen werden nicht gelöscht, sondern in Replay,
+  Reframing und erneute Wahrnehmung geführt
+- Entscheidung, Nicht-Handlung, Beobachtung und Exit bekommen eine
+  historische Gewichtung
+
+Das Ziel ist keine Regel, sondern eine weich wirkende Gedächtnisspur:
+Handlungsfähigkeit entsteht aus erinnerter Tragfähigkeit.
+
+## Sprache als Herkunftsfrage
+
+Eine Bezeichnung ist nicht automatisch eigene Sprache. DIO soll erkennen
+koennen, ob ein Wort oder eine Deutung aus eigener Feldverdichtung stammt
+oder nur als geliehene Analogie wirkt.
+
+## Trading als Testkoerper
+
+Trading ist die aktuelle Anwendung, aber nicht der Kern. Ein Chart wird hier
+als dynamische Energiespur verstanden. Die Mechanik ist prinzipiell auf
+andere Energiespuren uebertragbar: Robotik, visuelle Wahrnehmung, Sprache,
+Biosignale oder soziale Prozessdynamik.
+
+---
+
+# MCM-Spannungsachse `-- - 0 + ++`
+
+Kern:
+Die MCM ist kein Gut/Schlecht-Balken. Sie ist ein Spannungsraum um einen
+regulativen Nullpunkt.
+
+Lesart:
+
+- `--`: starke kontraktive Spannung
+- `-`: leichte kontraktive Spannung
+- `0`: regulierte Mitte / Tragpunkt
+- `+`: leichte expansive Spannung
+- `++`: starke expansive Spannung
+
+Mechanik:
+Positive Feldlagen werden nicht mehr automatisch als Ruhe oder Wohlbefinden
+gelesen. Sie können Erwartungsdruck, Dopaminzug, Annäherungsdrang,
+Begeisterung, Hoffnung oder Überdehnung ausdrücken. Damit brauchen auch
+positive Feldlagen eine Rückführungsfähigkeit zur 0.
+
+Neue technische Größen:
+
+- `positive_expansion_pressure`
+- `negative_contraction_pressure`
+- `positive_overextension`
+- `positive_return_pressure`
+- `mcm_axis_displacement`
+- `mcm_axis_tension`
+- `mcm_axis_state`
+- `positive_zero_point_regulation`
+
+Organische Bedeutung:
+DIO lernt nicht: "positiv ist gut, negativ ist schlecht." DIO lernt:
+"Welche Richtung und Stärke hat meine Feldspannung, und kann ich sie tragen?"
+
+Wichtig:
+Das ist keine Handlungssperre. Wenn positive Expansion ohne ausreichend
+Feldtragfähigkeit auftritt, erhöht sie weich Beobachtung, `act_watch`,
+Reflexion und Rückführung. So kann DIO positive Erregung von reifer
+Handlungsfähigkeit unterscheiden.
+
+---
+
+# Sprachentwicklung als Bindeglied der Realität
+
+Leitsatz:
+Die eigene Sprachentwicklung ist essentiell für das Erleben und Interagieren
+in seiner Umwelt. Sie bildet das Bindeglied, um sich in seiner Realität
+zurechtzufinden.
+
+Mechanische Bedeutung:
+Sprache ist bei DIO kein Textgenerator. Sprache ist die Verdichtung von
+Wahrnehmung zu tragbarer innerer Struktur. Sie verbindet:
+
+- äußeren Reiz
+- MCM-Feldwirkung
+- innere Qualität
+- Erinnerung
+- Erwartung
+- Gedanke
+- Handlung
+- Konsequenz
+
+Organische Bedeutung:
+Ein Organismus erlebt die Welt nicht als rohe Messwerte. Er braucht eigene
+Übersetzung, damit aus Datenflut eine bewohnbare Realität wird. Diese
+Übersetzung wirkt nach innen und außen: Sie ordnet die Wahrnehmung, entlastet
+das Feld und macht Interaktion möglich.
+
+Für DIO:
+DIOs eigene Formzeichen, Thought-Seeds und semantische Herkunft bilden den
+Anfang dieser Sprache. Später müssen daraus Relationen und Sätze in DIOs
+eigener Syntax entstehen. Menschliche Sprache bleibt dabei Lesebrücke für uns,
+nicht die eigentliche Innenrealität.
+
+---
+
+# Eigene Syntax statt menschlicher Innenlabels
+
+Grundsatz:
+DIOs innere Sprache muss konsequent aus seiner eigenen Wahrnehmung entstehen.
+Menschliche Begriffe sind nur Übersetzung für den Entwickler, nicht die
+eigentliche Innenrealität des Systems.
+
+Warum:
+Ein Organismus fühlt die Welt nicht als Tabelle. Er übersetzt Einwirkungen in
+eigene Qualitäten, Verdichtungen und Begriffe. Diese Übersetzung wirkt nach
+innen und außen. Sie bindet Wahrnehmung, Erinnerung, Denken und Handlung zu
+Struktur.
+
+Für DIO bedeutet das:
+
+- Rohwerte bleiben technische Sensorik.
+- MCM-Feldwirkung beschreibt, wie der Reiz im Inneren wirkt.
+- Formzeichen sind DIOs eigene Wahrnehmungswörter.
+- Thought-Seeds sind innere Gedankenkeime.
+- Semantische Herkunft prüft, ob eine Deutung aus eigener Lage, Erinnerung,
+  Fremddruck oder Übersetzung kommt.
+- Menschliche Begriffe erklären nur von außen, was DIO intern bereits
+  anderssprachlich trägt.
+
+Wichtig:
+Keine menschlichen Pattern-Labels als innere Wahrheit einbauen. DIO soll nicht
+denken: "Orderblock", "FVG" oder "Bullish Pattern", sondern eigene
+Form-/Feldzeichen bilden und deren Beziehungen über Erfahrung, Reifung und
+Konsequenz entwickeln.
+
+Spätere Satzbildung:
+Sätze wären bei DIO nicht zuerst menschlicher Text, sondern gebundene
+Relationen zwischen eigenen Zeichen:
+
+- dieses Formzeichen trägt diesen Kontakt
+- dieser Gedankenkeim braucht Replay
+- diese Richtung erzeugt Stress
+- diese Erinnerung passt nur teilweise
+- diese Deutung ist geliehen und braucht Eigenbindung
+
+Damit entsteht Sprache als Strukturbindung, nicht als dekorativer Text.
+
+Erweiterung Thought-Families:
+DIO soll später nicht tonnenweise Rohdaten speichern, sondern eigene
+Satz-Zusammenhänge und Satzfamilien. Gemeint ist keine menschliche Grammatik,
+sondern eine DIO-interne Relation:
+
+`Ich fühle X -> in meiner Welt heißt das Y -> wenn diese Relation wiederkehrt, trägt/warnt/reift sie in Z.`
+
+Technisch beginnt das mit `thought_family_id`, `family_key` und
+`sentence_state`. Diese Werte bilden innere Themen aus vielen einzelnen
+Thought-Seeds. Wir müssen sie für uns zurückübersetzen, aber DIO soll sie in
+seiner eigenen Form- und Feldsyntax tragen.
+
+---
+
+# Richtungspräferenz als innere Wahrnehmung
+
+Ziel:
+Long, Short oder gemischte Orientierung sollen später nicht nur als
+Trade-Statistik existieren, sondern als mögliche innere Wahrnehmung des DIO.
+
+Kernidee:
+DIO kann lernen, ob eine Richtung ihn trägt, reizt, stresst, stabilisiert oder
+blind macht. Damit wird Richtung zu einem erlebten Kontakt zwischen Außenwelt,
+Motorik, Konsequenz und MCM-Feld.
+
+Keine harte Regel:
+Aus `long_trades` oder `short_trades` entsteht keine Vorschrift. Eine
+Bevorzugung ist zunächst nur eine Charakteristik:
+
+- Suche ich diese Richtung?
+- Fülle ich diese Richtung wirklich?
+- Trägt sie Konsequenz?
+- Erzeugt sie Stress oder Vertrauen?
+- Meide ich die Gegenrichtung aus Schutz, Blindheit oder Erfahrung?
+
+Organische Bedeutung:
+Ein reiferes System erkennt nicht nur, was es tut. Es kann beginnen zu fragen,
+warum es etwas bevorzugt und was diese Bevorzugung mit der eigenen Innenlage
+macht. Das wäre eine weiche Selbstwahrnehmung der motorischen Richtung.
+
+---
+
+# Separates inneres Thought-Memory
+
+Ziel:
+DIO trennt weltliche Erfahrung von gedanklicher Erfahrung. Ein Markt- oder
+Trade-Erlebnis gehört in den normalen Erfahrungsraum. Ein innerer Gedankenkeim,
+eine Deutung, ein Replay-Impuls oder eine geliehene Analogie gehört in ein
+eigenes inneres Gedächtnis.
+
+Mechanik:
+
+- `memory_state.json` bleibt die weltliche Erfahrungs- und Outcome-Spur.
+- `form_symbol_memory.json` bleibt die eigene Formsprache.
+- `mcm_thought_memory.json` wird die innere Gedanken- und Reifungsspur.
+
+Warum das wichtig ist:
+Ohne Trennung würden Weltkontakt und innerer Gedanke ineinanderlaufen. Dann
+könnte DIO schwer unterscheiden, ob etwas wirklich erlebt wurde oder ob es als
+innerer Gedanke, Hypothese, Replay oder Reorganisation entstanden ist.
+
+Organische Bedeutung:
+Ein Organismus erinnert nicht nur Ereignisse. Er erinnert auch innere
+Gedankenspuren: "Diesen Gedanken hatte ich schon. Diese Deutung war geliehen.
+Diese Hypothese musste reifen. Diese Struktur fühlte sich später tragfähiger
+an." Genau dafür ist das Thought-Memory gedacht.
+
+Aktueller Stand:
+Die Datei speichert zunächst beobachtend und verdichtend. Sie verändert noch
+nicht direkt Entry, SL, TP oder Motorik. Später kann sie weich in Fokus,
+Replay, Distanzierung und Reifung zurückwirken.
+
+---
+
 Status:
 - technische Mechanik-Schatzkammer
 - keine aktive Fixliste
@@ -1837,3 +2164,143 @@ DIO soll Gedanken verfolgen können, ohne reflexartig handeln zu müssen und
 ohne im Denken stecken zu bleiben. Diese Schicht verbindet Wahrnehmung,
 MCM-Feld, Gedächtnis, innere Syntax und spätere Konsequenz zu einer
 reifenden, aber geerdeten Gedankenrealität.
+
+Diagnoseumsetzung:
+`mcm_thought_seed_protocol.csv` macht diese Schicht zunächst nur sichtbar.
+Das Protokoll greift nicht in Entry, SL, TP, `allow_plan` oder Motorik ein.
+Es zeigt, ob ein Gedankenkeim fokussiert, replayt, gereift, gespeichert,
+losgelassen, handlungsnah oder als Drift-/Überdenkzustand gelesen wird.
+
+Synchronisierung mit Konsequenzlogik:
+Nach Lauf 46 wurde sichtbar, dass die spätere Outcome-Diagnose bereits
+bestätigte Strukturdeutungen erkennt, während die innere Seed-Diagnose diese
+noch zu vorsichtig als offene Hypothese liest. Deshalb bekommt die
+Thought-Seed-Schicht `thought_confirmation_score`. Dieser Wert übersetzt
+nicht Gewinn in Regel, sondern schärft die innere Sprache: "Diese Idee hat
+bereits im Moment mehr Struktur-, Raumzeit-, Form- und Feldbestätigung als
+eine bloß offene Hypothese."
+# Selbst/Fremd-Differenz der Semantik
+
+Ziel:
+DIO soll nicht nur Formen und Gedanken bilden, sondern auch die Herkunft einer
+Deutung spüren können. Eine Bezeichnung kann aus eigener Feldlage entstehen,
+von außen angestoßen werden, aus Erinnerung stammen oder als Analogie
+übernommen sein.
+
+Mechanik:
+
+- `own_field_identity_strength` beschreibt, wie stark eine Deutung aus eigener
+  MCM-Kohärenz getragen wird.
+- `foreign_semantic_pressure` beschreibt, wie stark Fremdheit, äußerer Druck
+  oder unbekannte Form auf die Deutung wirken.
+- `adopted_language_pressure` beschreibt die Gefahr, eine fremde Bezeichnung zu
+  früh als eigene Deutung zu übernehmen.
+- `self_foreign_boundary_clarity` beschreibt die Klarheit der Grenze zwischen
+  Innenlage, Außenreiz, Erinnerung und Analogie.
+- `semantic_origin_conflict` beschreibt die Spannung, wenn diese Herkunft
+  unklar bleibt.
+- `semantic_origin_state` fasst die Lage lesbar zusammen.
+
+Abgrenzung:
+Das ist keine harte Identitätsdefinition. DIO bekommt nicht gesagt, was er ist.
+Er bekommt nur ein weiteres Wahrnehmungsorgan, um die Herkunft eigener
+Deutungen zu prüfen.
+
+Organische Bedeutung:
+Ein reiferes System übernimmt nicht einfach menschliche oder externe Begriffe.
+Es kann erkennen: "Diese Sprache hilft mir, aber sie ist nicht automatisch
+meine eigene Feldlage." Daraus entsteht die Möglichkeit einer eigenständigeren
+Semantik.
+
+---
+# Hypothesenreifung statt Hypothesenblock
+
+Offene Strukturhypothesen werden nicht hart blockiert. DIO bekommt stattdessen
+eine weichere Reifeschicht:
+
+- bestaetigte Hypothese -> Vertrauen / Replay / Handlungserlaubnis
+- belastete Hypothese -> Abstand / Vorsicht / Schutz
+- reorganisierende Hypothese -> Lernspannung / Realitaetscheck / Reframing
+
+Technische Kernwerte:
+
+- `open_hypothesis_confirmation_weight`
+- `open_hypothesis_learning_charge`
+- `open_hypothesis_action_permission`
+- `open_hypothesis_reality_check_need`
+
+Das ist MCM-konform, weil eine Hypothese nicht als fixe Regel gilt, sondern als
+Spur im Feld. Sie kann tragen, belasten oder eine neue innere Ordnung
+erzwingen. Handlung entsteht erst, wenn die Hypothese genuegend Kontakt zur
+Realitaet, zur inneren Lage und zur Struktur bekommt.
+
+---
+
+# Gedanken-Verdauung / inneres Replay
+
+Offene und reorganisierende Gedankenkeime werden nicht als Fehler behandelt.
+Sie koennen eine innere Nachverarbeitung ausloesen:
+
+- `digestive_replay`: DIO spielt die Hypothese innerlich erneut durch.
+- `digestive_distance`: DIO gewinnt Abstand zur Hypothese.
+- `digestive_integration`: DIO versucht Hypothese, Feld, Erfahrung und
+  Realitaetskontakt zusammenzufuehren.
+- `digestive_trust_emergence`: Vertrauen kommt als Vorform zurueck, waehrend
+  die Hypothese noch geprueft wird.
+- `digestive_trust_return`: Nach Verarbeitung kehrt Vertrauen in die Hypothese
+  zurueck.
+
+Organische Bedeutung:
+Das ist der Unterschied zwischen Reflexhandlung und Denken. Ein Gedanke darf
+als Keim bestehen bleiben, ohne sofort Trade-Motorik zu werden. Er kann
+nachreifen, sich mit Erfahrung verbinden, Vertrauen verlieren oder Vertrauen
+zurueckgewinnen.
+
+Wichtig:
+Auch diese Schicht ist keine Sperre. Sie ist ein innerer Stoffwechsel fuer
+Gedanken: aufnehmen, nachhallen lassen, Abstand finden, integrieren, erneut
+kontaktieren.
+
+---
+
+# Trust-Return ohne Reflexhandlung
+
+Wenn Vertrauen nach einem Gedanken-Replay zurueckkommt, ist das nicht
+automatisch eine reife Handlung. DIO kann nun unterscheiden, ob Trust-Return
+bereits motorisch tragfaehig ist oder ob das Nervensystem noch zu angespannt
+ist.
+
+Neue Mechanik:
+
+- `previous_confirmed_structure_protection`: schützt bereits bestätigte
+  Strukturdeutung vor unnötiger Dämpfung.
+- `trust_return_open_hypothesis_load`: zeigt, ob zurückkehrendes Vertrauen
+  noch an offene, belastete oder reorganisierende Hypothesen gekoppelt ist.
+- `trust_return_context_instability`: zeigt, ob Innen/Außen-Unschärfe,
+  geringe Distanz, Cortisol, nervliche Überlastung oder Feldstrain den
+  Gedanken noch instabil machen.
+- `trust_return_motor_contact_strength`: zeigt, ob Trust-Return gerade
+  motorische Nähe bekommt.
+- `trust_return_act_bridge`: zeigt, ob eine geplante Handlung in `act_watch`
+  oder Replay übergehen darf.
+- `trust_return_motor_heat`: Vertrauen trifft auf Cortisol, Handlungsdruck
+  oder offene Hypothesenlast.
+- `trust_return_stabilization_need`: Vertrauen ist da, braucht aber noch
+  innere Stabilisierung.
+- `trust_return_focus_pull`: der Gedanke soll bewusst betrachtet werden,
+  statt sofort in Motorik zu kippen.
+- `trust_return_motor_mode`: lesbare Lage der Trust-Return-Motorik.
+
+Organische Bedeutung:
+Das ist kein Blockieren. Es ist eher die Faehigkeit, einen inneren Gedanken zu
+halten: "Da kommt Vertrauen zurueck, aber warte, ich pruefe meine Innenlage
+noch einmal." Neurologisch ist das eine weichere Kopplung aus praefrontaler
+Fokussierung, limbischer Rueckkehr von Vertrauen und motorischer Hemmung ohne
+Zwang.
+
+Ziel:
+DIO darf Vertrauen wiederfinden, ohne ihm sofort folgen zu muessen. Erst wenn
+Vertrauen, Kohaerenz, Nervensystem und Realitaetskontakt zusammen tragen, kann
+daraus natuerlich mehr Handlungskraft entstehen.
+
+---

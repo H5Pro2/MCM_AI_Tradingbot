@@ -97,6 +97,7 @@ class TradeStats:
         self.attempt_path = dbr_resolve_path(attempt_path)
         self.outcome_path = dbr_resolve_path(outcome_path)
         self.exit_candidate_replay_path = dbr_resolve_path("debug/mcm_exit_candidate_replay.csv")
+        self._outcome_records_cache = []
 
         start_equity = self._resolve_start_equity()
 
@@ -120,8 +121,22 @@ class TradeStats:
             "attempts_observed": 0,
             "attempts_replanned": 0,
             "attempts_withheld": 0,
+            "attempts_long": 0,
+            "attempts_short": 0,
+            "attempts_submitted_long": 0,
+            "attempts_submitted_short": 0,
+            "attempts_filled_long": 0,
+            "attempts_filled_short": 0,
             "attempt_structure_zone": 0,
             "attempt_non_structure_zone": 0,
+            "long_trades": 0,
+            "short_trades": 0,
+            "long_tp": 0,
+            "long_sl": 0,
+            "short_tp": 0,
+            "short_sl": 0,
+            "long_pnl": 0.0,
+            "short_pnl": 0.0,
             "current_timestamp": None,
             "last_outcome_decomposition": {},
             "recent_attempts": [],
@@ -221,6 +236,11 @@ class TradeStats:
     def _append_record_file(self, path: str, record: dict):
         try:
             os.makedirs(os.path.dirname(path), exist_ok=True)
+            resolved_path = dbr_resolve_path(path)
+            if resolved_path == self.outcome_path:
+                cache = list(getattr(self, "_outcome_records_cache", []) or [])
+                cache.append(dict(record or {}))
+                self._outcome_records_cache = cache[-2000:]
             line = json.dumps(dict(record or {}), ensure_ascii=False) + "\n"
             dbr_append_text(
                 path,
@@ -236,10 +256,18 @@ class TradeStats:
         records = []
 
         try:
-            if not os.path.exists(path):
+            resolved_path = dbr_resolve_path(path)
+            cache = list(getattr(self, "_outcome_records_cache", []) or [])
+            if resolved_path == self.outcome_path and cache:
+                records = [dict(item or {}) for item in cache if isinstance(item, dict)]
+                if limit is not None:
+                    return records[-max(1, int(limit or 1)):]
                 return records
 
-            with open(path, "r", encoding="utf-8") as f:
+            if not os.path.exists(resolved_path):
+                return records
+
+            with open(resolved_path, "r", encoding="utf-8") as f:
                 for line in f:
                     line = str(line or "").strip()
                     if not line:
@@ -273,6 +301,129 @@ class TradeStats:
         return "low"
 
     # ─────────────────────────────────────────────
+    def _derive_open_hypothesis_learning(self, record: dict, emergent_state: str | None = None) -> dict:
+        source = dict(record or {})
+        state = str(emergent_state or source.get("emergent_structure_state", "") or "").strip()
+        reason = str(source.get("reason", "") or "").strip().lower()
+
+        def _f(value, default=0.0):
+            try:
+                if value is None:
+                    return float(default)
+                return float(value)
+            except Exception:
+                return float(default)
+
+        def _clip(value):
+            value = _f(value)
+            if value != value:
+                value = 0.0
+            return max(0.0, min(1.0, float(value)))
+
+        if state != "open_structural_hypothesis":
+            return {
+                "open_hypothesis_learning_state": "-",
+                "open_hypothesis_consequence_score": 0.0,
+                "open_hypothesis_burden_score": 0.0,
+                "open_hypothesis_reorganization_score": 0.0,
+                "open_hypothesis_replay_need": 0.0,
+                "open_hypothesis_distance_need": 0.0,
+                "open_hypothesis_reinterpretation_need": 0.0,
+                "open_hypothesis_reorganization_posture": "-",
+            }
+
+        pnl = _f(source.get("pnl", 0.0))
+        rr_value = _f(source.get("rr_value", 0.0))
+        reading = _clip(source.get("emergent_structure_reading", 0.0))
+        confirmation = _clip(source.get("emergent_structure_confirmation", 0.0))
+        grounding = _clip(source.get("thought_seed_structural_grounding", 0.0))
+        open_pressure = _clip(source.get("thought_seed_open_hypothesis_pressure", 0.0))
+        lag = _clip(source.get("thought_seed_reality_lag", 0.0))
+        balance = max(-1.0, min(1.0, _f(source.get("thought_seed_consequence_balance", 0.0))))
+
+        positive = reason == "tp_hit" or pnl > 0.0
+        negative = reason == "sl_hit" or pnl < 0.0
+        pnl_magnitude = _clip(abs(pnl) / max(0.5, abs(pnl) + 1.0))
+        consequence_score = _clip(
+            (0.42 if positive else 0.0)
+            + (confirmation * 0.18)
+            + (grounding * 0.14)
+            + (max(0.0, balance) * 0.12)
+            + (_clip(rr_value / 4.0) * 0.08)
+            + (pnl_magnitude * 0.06)
+        )
+        burden_score = _clip(
+            (0.42 if negative else 0.0)
+            + (open_pressure * 0.18)
+            + (lag * 0.16)
+            + (max(0.0, -balance) * 0.12)
+            + ((1.0 - grounding) * 0.08)
+            + (pnl_magnitude * 0.04)
+        )
+        reorganization_score = _clip(
+            (open_pressure * 0.26)
+            + (lag * 0.22)
+            + ((1.0 - confirmation) * 0.16)
+            + ((1.0 - grounding) * 0.14)
+            + (reading * 0.12)
+            + (burden_score * 0.10)
+            - (consequence_score * 0.12)
+        )
+        replay_need = _clip(
+            (reorganization_score * 0.38)
+            + (lag * 0.24)
+            + (open_pressure * 0.16)
+            + ((1.0 - grounding) * 0.12)
+            + ((1.0 - confirmation) * 0.10)
+        )
+        distance_need = _clip(
+            (burden_score * 0.34)
+            + (max(0.0, -balance) * 0.20)
+            + (open_pressure * 0.16)
+            + (lag * 0.14)
+            + ((1.0 - grounding) * 0.10)
+            + (0.06 if negative else 0.0)
+        )
+        reinterpretation_need = _clip(
+            (reorganization_score * 0.34)
+            + (max(0.0, burden_score - consequence_score) * 0.20)
+            + ((1.0 - confirmation) * 0.16)
+            + (reading * 0.12)
+            + (lag * 0.10)
+            + ((1.0 - grounding) * 0.08)
+        )
+        if max(replay_need, distance_need, reinterpretation_need) < 0.28:
+            reorganization_posture = "low_reorganization_need"
+        elif reinterpretation_need >= max(replay_need, distance_need):
+            reorganization_posture = "reinterpretation_dominant"
+        elif distance_need >= replay_need:
+            reorganization_posture = "distance_dominant"
+        else:
+            reorganization_posture = "replay_dominant"
+
+        if positive and consequence_score >= max(0.34, burden_score):
+            learning_state = "open_hypothesis_carried"
+        elif reorganization_score >= 0.46 and (burden_score - reorganization_score) < 0.18:
+            learning_state = "open_hypothesis_reorganizing"
+        elif negative and burden_score >= 0.42:
+            learning_state = "open_hypothesis_burdened"
+        elif reorganization_score >= 0.34:
+            learning_state = "open_hypothesis_reorganizing"
+        else:
+            learning_state = "open_hypothesis_reorganizing"
+
+        return {
+            "open_hypothesis_learning_state": str(learning_state),
+            "open_hypothesis_consequence_score": float(consequence_score),
+            "open_hypothesis_burden_score": float(burden_score),
+            "open_hypothesis_reorganization_score": float(reorganization_score),
+            "open_hypothesis_replay_need": float(replay_need),
+            "open_hypothesis_distance_need": float(distance_need),
+            "open_hypothesis_reinterpretation_need": float(reinterpretation_need),
+            "open_hypothesis_reorganization_posture": str(reorganization_posture),
+        }
+
+    # ─────────────────────────────────────────────
     def _rebuild_kpi_summary(self):
         trades = int(self.data.get("trades", 0) or 0)
         tp = int(self.data.get("tp", 0) or 0)
@@ -289,6 +440,14 @@ class TradeStats:
         profit_factor = abs(pnl_tp / pnl_sl) if pnl_sl != 0 else 0.0
         expectancy = (pnl_netto / trades) if trades > 0 else 0.0
         winrate = (tp / trades) if trades > 0 else 0.0
+        long_trades = int(self.data.get("long_trades", 0) or 0)
+        short_trades = int(self.data.get("short_trades", 0) or 0)
+        long_tp = int(self.data.get("long_tp", 0) or 0)
+        long_sl = int(self.data.get("long_sl", 0) or 0)
+        short_tp = int(self.data.get("short_tp", 0) or 0)
+        short_sl = int(self.data.get("short_sl", 0) or 0)
+        long_pnl = float(self.data.get("long_pnl", 0.0) or 0.0)
+        short_pnl = float(self.data.get("short_pnl", 0.0) or 0.0)
 
         attempt_feedback = self.get_attempt_feedback()
 
@@ -304,6 +463,17 @@ class TradeStats:
             "open_structural_hypothesis": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "reading_sum": 0.0, "confirmation_sum": 0.0, "rr_sum": 0.0},
             "wide_target_without_structure": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "reading_sum": 0.0, "confirmation_sum": 0.0, "rr_sum": 0.0},
             "ordinary_structure_reading": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "reading_sum": 0.0, "confirmation_sum": 0.0, "rr_sum": 0.0},
+        }
+        open_hypothesis_learning_stats = {
+            "open_hypothesis_carried": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "consequence_sum": 0.0, "burden_sum": 0.0, "reorganization_sum": 0.0, "replay_sum": 0.0, "distance_sum": 0.0, "reinterpretation_sum": 0.0, "grounding_sum": 0.0, "pressure_sum": 0.0, "lag_sum": 0.0},
+            "open_hypothesis_burdened": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "consequence_sum": 0.0, "burden_sum": 0.0, "reorganization_sum": 0.0, "replay_sum": 0.0, "distance_sum": 0.0, "reinterpretation_sum": 0.0, "grounding_sum": 0.0, "pressure_sum": 0.0, "lag_sum": 0.0},
+            "open_hypothesis_reorganizing": {"count": 0, "tp": 0, "sl": 0, "cancel": 0, "pnl": 0.0, "consequence_sum": 0.0, "burden_sum": 0.0, "reorganization_sum": 0.0, "replay_sum": 0.0, "distance_sum": 0.0, "reinterpretation_sum": 0.0, "grounding_sum": 0.0, "pressure_sum": 0.0, "lag_sum": 0.0},
+        }
+        open_hypothesis_reorganization_posture_stats = {
+            "reinterpretation_dominant": {"count": 0, "pnl": 0.0},
+            "distance_dominant": {"count": 0, "pnl": 0.0},
+            "replay_dominant": {"count": 0, "pnl": 0.0},
+            "low_reorganization_need": {"count": 0, "pnl": 0.0},
         }
 
         def _summary_f(*values, default=0.0):
@@ -410,16 +580,40 @@ class TradeStats:
             emergent_structure_stats[emergent_state]["reading_sum"] += float(emergent.get("reading", 0.0) or 0.0)
             emergent_structure_stats[emergent_state]["confirmation_sum"] += float(emergent.get("confirmation", 0.0) or 0.0)
             emergent_structure_stats[emergent_state]["rr_sum"] += float(emergent.get("rr_value", 0.0) or 0.0)
+            open_learning = self._derive_open_hypothesis_learning(record, emergent_state=emergent_state)
+            open_learning_state = str(open_learning.get("open_hypothesis_learning_state", "-") or "-")
+            if open_learning_state in open_hypothesis_learning_stats:
+                open_hypothesis_learning_stats[open_learning_state]["count"] += 1
+                open_hypothesis_learning_stats[open_learning_state]["pnl"] += float(record.get("pnl", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["consequence_sum"] += float(open_learning.get("open_hypothesis_consequence_score", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["burden_sum"] += float(open_learning.get("open_hypothesis_burden_score", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["reorganization_sum"] += float(open_learning.get("open_hypothesis_reorganization_score", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["replay_sum"] += float(open_learning.get("open_hypothesis_replay_need", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["distance_sum"] += float(open_learning.get("open_hypothesis_distance_need", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["reinterpretation_sum"] += float(open_learning.get("open_hypothesis_reinterpretation_need", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["grounding_sum"] += float(record.get("thought_seed_structural_grounding", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["pressure_sum"] += float(record.get("thought_seed_open_hypothesis_pressure", 0.0) or 0.0)
+                open_hypothesis_learning_stats[open_learning_state]["lag_sum"] += float(record.get("thought_seed_reality_lag", 0.0) or 0.0)
+                posture = str(open_learning.get("open_hypothesis_reorganization_posture", "-") or "-")
+                if posture in open_hypothesis_reorganization_posture_stats:
+                    open_hypothesis_reorganization_posture_stats[posture]["count"] += 1
+                    open_hypothesis_reorganization_posture_stats[posture]["pnl"] += float(record.get("pnl", 0.0) or 0.0)
 
             if reason == "tp_hit":
                 band_stats[band]["tp"] += 1
                 emergent_structure_stats[emergent_state]["tp"] += 1
+                if open_learning_state in open_hypothesis_learning_stats:
+                    open_hypothesis_learning_stats[open_learning_state]["tp"] += 1
             elif reason == "sl_hit":
                 band_stats[band]["sl"] += 1
                 emergent_structure_stats[emergent_state]["sl"] += 1
+                if open_learning_state in open_hypothesis_learning_stats:
+                    open_hypothesis_learning_stats[open_learning_state]["sl"] += 1
             else:
                 band_stats[band]["cancel"] += 1
                 emergent_structure_stats[emergent_state]["cancel"] += 1
+                if open_learning_state in open_hypothesis_learning_stats:
+                    open_hypothesis_learning_stats[open_learning_state]["cancel"] += 1
 
         for band_name, payload in band_stats.items():
             count = int(payload.get("count", 0) or 0)
@@ -435,6 +629,21 @@ class TradeStats:
             payload["avg_reading"] = float(payload.get("reading_sum", 0.0) or 0.0) / count if count > 0 else 0.0
             payload["avg_confirmation"] = float(payload.get("confirmation_sum", 0.0) or 0.0) / count if count > 0 else 0.0
             payload["avg_rr"] = float(payload.get("rr_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+
+        for state_name, payload in open_hypothesis_learning_stats.items():
+            count = int(payload.get("count", 0) or 0)
+            tp_count = int(payload.get("tp", 0) or 0)
+            payload["winrate"] = float(tp_count / count) if count > 0 else 0.0
+            payload["avg_pnl"] = float(payload.get("pnl", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_consequence_score"] = float(payload.get("consequence_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_burden_score"] = float(payload.get("burden_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_reorganization_score"] = float(payload.get("reorganization_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_replay_need"] = float(payload.get("replay_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_distance_need"] = float(payload.get("distance_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_reinterpretation_need"] = float(payload.get("reinterpretation_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_structural_grounding"] = float(payload.get("grounding_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_open_hypothesis_pressure"] = float(payload.get("pressure_sum", 0.0) or 0.0) / count if count > 0 else 0.0
+            payload["avg_reality_lag"] = float(payload.get("lag_sum", 0.0) or 0.0) / count if count > 0 else 0.0
 
         proof = {
             "attempt_density": float(attempt_feedback.get("attempt_density", 0.0) or 0.0),
@@ -469,6 +678,10 @@ class TradeStats:
             "attempt_fill_rate": float(self.data.get("attempts_filled", 0) or 0) / max(1, attempts),
             "attempt_zone_share": float(self.data.get("attempt_structure_zone", 0) or 0) / max(1, attempts),
             "attempts_per_trade": float(attempts / max(1, trades)),
+            "long_trade_share": float(long_trades / max(1, trades)),
+            "short_trade_share": float(short_trades / max(1, trades)),
+            "long_attempt_share": float(self.data.get("attempts_long", 0) or 0) / max(1, attempts),
+            "short_attempt_share": float(self.data.get("attempts_short", 0) or 0) / max(1, attempts),
             "max_drawdown_abs": float(self.data.get("max_drawdown_abs", 0.0) or 0.0),
             "max_drawdown_pct": float(self.data.get("max_drawdown_pct", 0.0) or 0.0),
             "winrate": float(winrate),
@@ -529,6 +742,28 @@ class TradeStats:
                 "max_drawdown_abs": float(proof.get("max_drawdown_abs", 0.0) or 0.0),
                 "max_drawdown_pct": float(proof.get("max_drawdown_pct", 0.0) or 0.0),
             },
+            "direction_profile": {
+                "long_trades": int(long_trades),
+                "short_trades": int(short_trades),
+                "long_tp": int(long_tp),
+                "long_sl": int(long_sl),
+                "short_tp": int(short_tp),
+                "short_sl": int(short_sl),
+                "long_pnl": float(long_pnl),
+                "short_pnl": float(short_pnl),
+                "long_winrate": float(long_tp / max(1, long_trades)),
+                "short_winrate": float(short_tp / max(1, short_trades)),
+                "long_trade_share": float(proof.get("long_trade_share", 0.0) or 0.0),
+                "short_trade_share": float(proof.get("short_trade_share", 0.0) or 0.0),
+                "attempts_long": int(self.data.get("attempts_long", 0) or 0),
+                "attempts_short": int(self.data.get("attempts_short", 0) or 0),
+                "attempts_submitted_long": int(self.data.get("attempts_submitted_long", 0) or 0),
+                "attempts_submitted_short": int(self.data.get("attempts_submitted_short", 0) or 0),
+                "attempts_filled_long": int(self.data.get("attempts_filled_long", 0) or 0),
+                "attempts_filled_short": int(self.data.get("attempts_filled_short", 0) or 0),
+                "long_attempt_share": float(proof.get("long_attempt_share", 0.0) or 0.0),
+                "short_attempt_share": float(proof.get("short_attempt_share", 0.0) or 0.0),
+            },
             "structure_bands": {
                 "high": dict(band_stats["high"]),
                 "mid": dict(band_stats["mid"]),
@@ -536,6 +771,12 @@ class TradeStats:
             },
             "emergent_structure": {
                 key: dict(value) for key, value in emergent_structure_stats.items()
+            },
+            "open_hypothesis_learning": {
+                key: dict(value) for key, value in open_hypothesis_learning_stats.items()
+            },
+            "open_hypothesis_reorganization_posture": {
+                key: dict(value) for key, value in open_hypothesis_reorganization_posture_stats.items()
             },
             "totals": {
                 "trades": int(trades),
@@ -546,6 +787,8 @@ class TradeStats:
                 "attempts_observed": int(self.data.get("attempts_observed", 0) or 0),
                 "attempts_replanned": int(self.data.get("attempts_replanned", 0) or 0),
                 "attempts_withheld": int(self.data.get("attempts_withheld", 0) or 0),
+                "long_trades": int(long_trades),
+                "short_trades": int(short_trades),
                 "pnl_netto": float(pnl_netto),
             },
         }
@@ -1019,6 +1262,54 @@ class TradeStats:
                 "transfer_bearing_delta",
                 "semantic_transfer_stress",
             ]),
+            "thought_seed_state": self._pick_fields(normalized_context.get("thought_seed_state", {}), [
+                "thought_seed_id",
+                "thought_seed_label",
+                "thought_trace_strength",
+                "thought_recall_potential",
+                "thought_maturity",
+                "reality_binding_score",
+                "thought_confirmation_score",
+                "consequence_echo",
+                "reorganization_echo",
+                "thought_consequence_alignment",
+                "thought_consequence_balance",
+                "thought_reality_lag",
+                "thought_structural_grounding",
+                "thought_open_hypothesis_pressure",
+                "thought_replay_maturation_pull",
+                "thought_distance_maturation_pull",
+                "thought_reinterpretation_pull",
+                "thought_digestive_replay_pull",
+                "thought_digestive_distance_pull",
+                "thought_digestive_integration_pull",
+                "thought_digestive_returned_trust",
+                "trust_return_readiness",
+                "thought_digest_state",
+                "thought_reifung_direction",
+                "semantic_origin_state",
+                "borrowed_open_hypothesis_pressure",
+                "own_field_binding_pull",
+                "own_vs_foreign_margin",
+                "borrowed_vs_own_margin",
+                "boundary_support_margin",
+                "previous_open_hypothesis_learning_state",
+                "previous_open_hypothesis_reorganization_posture",
+                "hallucination_drift_risk",
+                "overthinking_risk",
+                "seed_metaregulator_state",
+                "emergent_memory_trace",
+                "emergent_structure_state",
+                "emergent_structure_reading",
+                "form_symbol_anchor",
+                "mcm_field_anchor",
+                "experience_memory_anchor",
+                "outcome_anchor",
+                "decision",
+                "phase",
+                "reason",
+                "rr_value",
+            ]),
             "regulation_snapshot": _compact_snapshot(normalized_context.get("regulation_snapshot", {})) if compact_attempt else self._normalize_record_value(normalized_context.get("regulation_snapshot", {})),
             "state_before": _compact_snapshot(normalized_context.get("state_before", {})) if compact_attempt else self._normalize_record_value(normalized_context.get("state_before", {})),
             "state_after": _compact_snapshot(normalized_context.get("state_after", {})) if compact_attempt else self._normalize_record_value(normalized_context.get("state_after", {})),
@@ -1063,6 +1354,34 @@ class TradeStats:
                 "serotonin_carryover_risk",
                 "emotional_decoupling",
                 "reactive_nervous_drive",
+                "nervous_system_overload",
+                "escape_action_drive",
+                "shock_response_risk",
+                "nervous_overload_reflection_need",
+                "previous_digest_state",
+                "previous_trust_return_readiness",
+                "previous_digestive_returned_trust",
+                "previous_emergent_structure_state",
+                "previous_confirmed_structure_protection",
+                "trust_return_open_hypothesis_load",
+                "trust_return_context_instability",
+                "trust_return_motor_contact_strength",
+                "trust_return_act_bridge",
+                "trust_return_motor_heat",
+                "trust_return_stabilization_need",
+                "trust_return_focus_pull",
+                "trust_return_motor_mode",
+                "active_context_self_certainty",
+                "nervous_context_overcoupling",
+                "own_field_identity_strength",
+                "foreign_semantic_pressure",
+                "adopted_language_pressure",
+                "self_foreign_boundary_clarity",
+                "semantic_origin_conflict",
+                "own_vs_foreign_margin",
+                "borrowed_vs_own_margin",
+                "boundary_support_margin",
+                "semantic_origin_state",
                 "conscious_perception_state",
                 "inner_posture_state",
                 "arousal_load",
@@ -1655,11 +1974,16 @@ class TradeStats:
 
     def _build_attempt_record(self, status_key: str, context: dict, structure_quality: float, structure_bucket: str) -> dict:
         compact_context = self._compact_context(context or {})
+        trade_plan = dict(compact_context.get("trade_plan", {}) or {})
+        side = str(trade_plan.get("decision", "") or "").strip().upper()
+        if side not in ("LONG", "SHORT"):
+            side = "-"
 
         return {
             "event": "attempt",
             "status": str(status_key or "unknown"),
             "timestamp": self.data.get("current_timestamp"),
+            "side": str(side),
             "structure_quality": float(structure_quality),
             "structure_bucket": str(structure_bucket),
             "context": compact_context,
@@ -1932,12 +2256,29 @@ class TradeStats:
         status_key = str(status or "").strip().lower()
         normalized_context = self._normalize_record_value(context or {})
         compact_context = self._compact_context(normalized_context)
+        trade_plan = dict(compact_context.get("trade_plan", {}) or {})
+        side = str(trade_plan.get("decision", "") or "").strip().upper()
+        if side not in ("LONG", "SHORT"):
+            side = "-"
 
         self.data["attempts"] = int(self.data.get("attempts", 0) or 0) + 1
+        if side == "LONG":
+            self.data["attempts_long"] = int(self.data.get("attempts_long", 0) or 0) + 1
+        elif side == "SHORT":
+            self.data["attempts_short"] = int(self.data.get("attempts_short", 0) or 0) + 1
+
         if status_key == "submitted":
             self.data["attempts_submitted"] = int(self.data.get("attempts_submitted", 0) or 0) + 1
+            if side == "LONG":
+                self.data["attempts_submitted_long"] = int(self.data.get("attempts_submitted_long", 0) or 0) + 1
+            elif side == "SHORT":
+                self.data["attempts_submitted_short"] = int(self.data.get("attempts_submitted_short", 0) or 0) + 1
         elif status_key == "filled":
             self.data["attempts_filled"] = int(self.data.get("attempts_filled", 0) or 0) + 1
+            if side == "LONG":
+                self.data["attempts_filled_long"] = int(self.data.get("attempts_filled_long", 0) or 0) + 1
+            elif side == "SHORT":
+                self.data["attempts_filled_short"] = int(self.data.get("attempts_filled_short", 0) or 0) + 1
         elif status_key == "cancelled":
             self.data["attempts_cancelled"] = int(self.data.get("attempts_cancelled", 0) or 0) + 1
         elif status_key == "timeout":
@@ -1989,6 +2330,7 @@ class TradeStats:
         recent.append(
             {
                 "status": status_key or "unknown",
+                "side": str(side),
                 "structure_quality": float(structure_quality),
                 "structure_bucket": structure_bucket,
                 "pressure_to_capacity": float(field_state.get("pressure_to_capacity", snapshot_field.get("pressure_to_capacity", 0.0)) or 0.0),
@@ -2120,6 +2462,20 @@ class TradeStats:
 
         self.data["trades"] += 1
         self.data["last_outcome_decomposition"] = dict(normalized_decomposition or {})
+        if side == "LONG":
+            self.data["long_trades"] = int(self.data.get("long_trades", 0) or 0) + 1
+            self.data["long_pnl"] = float(self.data.get("long_pnl", 0.0) or 0.0) + float(pnl)
+            if reason == "tp_hit" or (reason == "matured_exit" and pnl >= 0.0):
+                self.data["long_tp"] = int(self.data.get("long_tp", 0) or 0) + 1
+            elif reason == "sl_hit" or (reason == "matured_exit" and pnl < 0.0):
+                self.data["long_sl"] = int(self.data.get("long_sl", 0) or 0) + 1
+        elif side == "SHORT":
+            self.data["short_trades"] = int(self.data.get("short_trades", 0) or 0) + 1
+            self.data["short_pnl"] = float(self.data.get("short_pnl", 0.0) or 0.0) + float(pnl)
+            if reason == "tp_hit" or (reason == "matured_exit" and pnl >= 0.0):
+                self.data["short_tp"] = int(self.data.get("short_tp", 0) or 0) + 1
+            elif reason == "sl_hit" or (reason == "matured_exit" and pnl < 0.0):
+                self.data["short_sl"] = int(self.data.get("short_sl", 0) or 0) + 1
 
         if exploration_trade:
             self.data["exploration_trades"] = int(self.data.get("exploration_trades", 0) or 0) + 1
@@ -2147,6 +2503,7 @@ class TradeStats:
         strategic_window_state = _context_section("strategic_window_state")
         trade_plan_state = _context_section("trade_plan")
         target_expectation_state = _context_section("target_expectation_state")
+        thought_seed_state = _context_section("thought_seed_state")
         experience_state = _context_section("experience")
         experience_packet_feedback = dict(normalized_decomposition.get("experience_packet_feedback", {}) or {})
 
@@ -2205,6 +2562,35 @@ class TradeStats:
             emergent_structure_state = "wide_target_without_structure"
         else:
             emergent_structure_state = "ordinary_structure_reading"
+        open_hypothesis_learning = self._derive_open_hypothesis_learning(
+            {
+                "reason": str(reason or "").strip().lower(),
+                "pnl": float(pnl),
+                "rr_value": float(rr_value),
+                "emergent_structure_reading": float(emergent_structure_reading),
+                "emergent_structure_confirmation": float(emergent_structure_confirmation),
+                "emergent_structure_state": str(emergent_structure_state),
+                "thought_seed_structural_grounding": float(thought_seed_state.get("thought_structural_grounding", 0.0) or 0.0),
+                "thought_seed_open_hypothesis_pressure": float(thought_seed_state.get("thought_open_hypothesis_pressure", 0.0) or 0.0),
+                "thought_seed_reality_lag": float(thought_seed_state.get("thought_reality_lag", 0.0) or 0.0),
+                "thought_seed_consequence_balance": float(thought_seed_state.get("thought_consequence_balance", 0.0) or 0.0),
+            },
+            emergent_state=str(emergent_structure_state),
+        )
+        normalized_decomposition.update({
+            "emergent_structure_reading": float(emergent_structure_reading),
+            "emergent_structure_confirmation": float(emergent_structure_confirmation),
+            "emergent_structure_state": str(emergent_structure_state),
+            "open_hypothesis_learning_state": str(open_hypothesis_learning.get("open_hypothesis_learning_state", "-") or "-"),
+            "open_hypothesis_consequence_score": float(open_hypothesis_learning.get("open_hypothesis_consequence_score", 0.0) or 0.0),
+            "open_hypothesis_burden_score": float(open_hypothesis_learning.get("open_hypothesis_burden_score", 0.0) or 0.0),
+            "open_hypothesis_reorganization_score": float(open_hypothesis_learning.get("open_hypothesis_reorganization_score", 0.0) or 0.0),
+            "open_hypothesis_replay_need": float(open_hypothesis_learning.get("open_hypothesis_replay_need", 0.0) or 0.0),
+            "open_hypothesis_distance_need": float(open_hypothesis_learning.get("open_hypothesis_distance_need", 0.0) or 0.0),
+            "open_hypothesis_reinterpretation_need": float(open_hypothesis_learning.get("open_hypothesis_reinterpretation_need", 0.0) or 0.0),
+            "open_hypothesis_reorganization_posture": str(open_hypothesis_learning.get("open_hypothesis_reorganization_posture", "-") or "-"),
+        })
+        self.data["last_outcome_decomposition"] = dict(normalized_decomposition or {})
 
         outcome_record = {
             "event": "trade_exit",
@@ -2222,6 +2608,53 @@ class TradeStats:
             "emergent_structure_reading": float(emergent_structure_reading),
             "emergent_structure_confirmation": float(emergent_structure_confirmation),
             "emergent_structure_state": str(emergent_structure_state),
+            "open_hypothesis_learning_state": str(open_hypothesis_learning.get("open_hypothesis_learning_state", "-") or "-"),
+            "open_hypothesis_consequence_score": float(open_hypothesis_learning.get("open_hypothesis_consequence_score", 0.0) or 0.0),
+            "open_hypothesis_burden_score": float(open_hypothesis_learning.get("open_hypothesis_burden_score", 0.0) or 0.0),
+            "open_hypothesis_reorganization_score": float(open_hypothesis_learning.get("open_hypothesis_reorganization_score", 0.0) or 0.0),
+            "open_hypothesis_replay_need": float(open_hypothesis_learning.get("open_hypothesis_replay_need", 0.0) or 0.0),
+            "open_hypothesis_distance_need": float(open_hypothesis_learning.get("open_hypothesis_distance_need", 0.0) or 0.0),
+            "open_hypothesis_reinterpretation_need": float(open_hypothesis_learning.get("open_hypothesis_reinterpretation_need", 0.0) or 0.0),
+            "open_hypothesis_reorganization_posture": str(open_hypothesis_learning.get("open_hypothesis_reorganization_posture", "-") or "-"),
+            "thought_seed_id": str(thought_seed_state.get("thought_seed_id", "") or ""),
+            "thought_seed_label": str(thought_seed_state.get("thought_seed_label", "") or ""),
+            "thought_seed_metaregulator_state": str(thought_seed_state.get("seed_metaregulator_state", "") or ""),
+            "thought_seed_emergent_state": str(thought_seed_state.get("emergent_structure_state", "") or ""),
+            "thought_seed_trace_strength": float(thought_seed_state.get("thought_trace_strength", 0.0) or 0.0),
+            "thought_seed_maturity": float(thought_seed_state.get("thought_maturity", 0.0) or 0.0),
+            "thought_seed_reality_binding": float(thought_seed_state.get("reality_binding_score", 0.0) or 0.0),
+            "thought_seed_confirmation": float(thought_seed_state.get("thought_confirmation_score", 0.0) or 0.0),
+            "thought_seed_consequence_echo": float(thought_seed_state.get("consequence_echo", 0.0) or 0.0),
+            "thought_seed_reorganization_echo": float(thought_seed_state.get("reorganization_echo", 0.0) or 0.0),
+            "thought_seed_consequence_alignment": float(thought_seed_state.get("thought_consequence_alignment", 0.0) or 0.0),
+            "thought_seed_consequence_balance": float(thought_seed_state.get("thought_consequence_balance", 0.0) or 0.0),
+            "thought_seed_reality_lag": float(thought_seed_state.get("thought_reality_lag", 0.0) or 0.0),
+            "thought_seed_structural_grounding": float(thought_seed_state.get("thought_structural_grounding", 0.0) or 0.0),
+            "thought_seed_open_hypothesis_pressure": float(thought_seed_state.get("thought_open_hypothesis_pressure", 0.0) or 0.0),
+            "thought_seed_replay_maturation_pull": float(thought_seed_state.get("thought_replay_maturation_pull", 0.0) or 0.0),
+            "thought_seed_distance_maturation_pull": float(thought_seed_state.get("thought_distance_maturation_pull", 0.0) or 0.0),
+            "thought_seed_reinterpretation_pull": float(thought_seed_state.get("thought_reinterpretation_pull", 0.0) or 0.0),
+            "thought_seed_digestive_replay_pull": float(thought_seed_state.get("thought_digestive_replay_pull", 0.0) or 0.0),
+            "thought_seed_digestive_distance_pull": float(thought_seed_state.get("thought_digestive_distance_pull", 0.0) or 0.0),
+            "thought_seed_digestive_integration_pull": float(thought_seed_state.get("thought_digestive_integration_pull", 0.0) or 0.0),
+            "thought_seed_digestive_returned_trust": float(thought_seed_state.get("thought_digestive_returned_trust", 0.0) or 0.0),
+            "thought_seed_trust_return_readiness": float(thought_seed_state.get("trust_return_readiness", 0.0) or 0.0),
+            "thought_seed_digest_state": str(thought_seed_state.get("thought_digest_state", "") or ""),
+            "thought_seed_reifung_direction": str(thought_seed_state.get("thought_reifung_direction", "") or ""),
+            "thought_seed_semantic_origin_state": str(thought_seed_state.get("semantic_origin_state", "") or ""),
+            "thought_seed_borrowed_open_hypothesis_pressure": float(thought_seed_state.get("borrowed_open_hypothesis_pressure", 0.0) or 0.0),
+            "thought_seed_own_field_binding_pull": float(thought_seed_state.get("own_field_binding_pull", 0.0) or 0.0),
+            "semantic_origin_state": str(meta_regulation_state.get("semantic_origin_state", "") or ""),
+            "own_field_identity_strength": float(meta_regulation_state.get("own_field_identity_strength", 0.0) or 0.0),
+            "foreign_semantic_pressure": float(meta_regulation_state.get("foreign_semantic_pressure", 0.0) or 0.0),
+            "adopted_language_pressure": float(meta_regulation_state.get("adopted_language_pressure", 0.0) or 0.0),
+            "self_foreign_boundary_clarity": float(meta_regulation_state.get("self_foreign_boundary_clarity", 0.0) or 0.0),
+            "semantic_origin_conflict": float(meta_regulation_state.get("semantic_origin_conflict", 0.0) or 0.0),
+            "own_vs_foreign_margin": float(meta_regulation_state.get("own_vs_foreign_margin", 0.0) or 0.0),
+            "borrowed_vs_own_margin": float(meta_regulation_state.get("borrowed_vs_own_margin", 0.0) or 0.0),
+            "boundary_support_margin": float(meta_regulation_state.get("boundary_support_margin", 0.0) or 0.0),
+            "thought_seed_drift_risk": float(thought_seed_state.get("hallucination_drift_risk", 0.0) or 0.0),
+            "thought_seed_overthinking_risk": float(thought_seed_state.get("overthinking_risk", 0.0) or 0.0),
             "target_expectation_value": float(target_expectation_value),
             "structure_quality": float(structure_quality),
             "structure_bucket": structure_bucket,
@@ -2587,6 +3020,7 @@ class TradeStats:
             meta_regulation_state = dict(compact_context.get("meta_regulation_state", {}) or {})
             active_mcm_contact_state = dict(compact_context.get("active_mcm_contact_state", meta_regulation_state.get("active_mcm_contact", {}) or {}) or {})
             target_expectation_state = dict(compact_context.get("target_expectation_state", {}) or {})
+            thought_seed_state = dict(compact_context.get("thought_seed_state", {}) or {})
 
             def _f(*values, default=0.0):
                 for value in values:
@@ -2638,6 +3072,35 @@ class TradeStats:
                 emergent_structure_state = "wide_target_without_structure"
             else:
                 emergent_structure_state = "ordinary_structure_reading"
+            open_hypothesis_learning = self._derive_open_hypothesis_learning(
+                {
+                    "reason": "cancel",
+                    "pnl": 0.0,
+                    "rr_value": float(rr_value),
+                    "emergent_structure_reading": float(emergent_structure_reading),
+                    "emergent_structure_confirmation": float(emergent_structure_confirmation),
+                    "emergent_structure_state": str(emergent_structure_state),
+                    "thought_seed_structural_grounding": float(thought_seed_state.get("thought_structural_grounding", 0.0) or 0.0),
+                    "thought_seed_open_hypothesis_pressure": float(thought_seed_state.get("thought_open_hypothesis_pressure", 0.0) or 0.0),
+                    "thought_seed_reality_lag": float(thought_seed_state.get("thought_reality_lag", 0.0) or 0.0),
+                    "thought_seed_consequence_balance": float(thought_seed_state.get("thought_consequence_balance", 0.0) or 0.0),
+                },
+                emergent_state=str(emergent_structure_state),
+            )
+            normalized_decomposition.update({
+                "emergent_structure_reading": float(emergent_structure_reading),
+                "emergent_structure_confirmation": float(emergent_structure_confirmation),
+                "emergent_structure_state": str(emergent_structure_state),
+                "open_hypothesis_learning_state": str(open_hypothesis_learning.get("open_hypothesis_learning_state", "-") or "-"),
+                "open_hypothesis_consequence_score": float(open_hypothesis_learning.get("open_hypothesis_consequence_score", 0.0) or 0.0),
+                "open_hypothesis_burden_score": float(open_hypothesis_learning.get("open_hypothesis_burden_score", 0.0) or 0.0),
+                "open_hypothesis_reorganization_score": float(open_hypothesis_learning.get("open_hypothesis_reorganization_score", 0.0) or 0.0),
+                "open_hypothesis_replay_need": float(open_hypothesis_learning.get("open_hypothesis_replay_need", 0.0) or 0.0),
+                "open_hypothesis_distance_need": float(open_hypothesis_learning.get("open_hypothesis_distance_need", 0.0) or 0.0),
+                "open_hypothesis_reinterpretation_need": float(open_hypothesis_learning.get("open_hypothesis_reinterpretation_need", 0.0) or 0.0),
+                "open_hypothesis_reorganization_posture": str(open_hypothesis_learning.get("open_hypothesis_reorganization_posture", "-") or "-"),
+            })
+            self.data["last_outcome_decomposition"] = dict(normalized_decomposition or {})
 
             outcome_record = {
                     "event": "cancel",
@@ -2650,6 +3113,53 @@ class TradeStats:
                     "emergent_structure_reading": float(emergent_structure_reading),
                     "emergent_structure_confirmation": float(emergent_structure_confirmation),
                     "emergent_structure_state": str(emergent_structure_state),
+                    "open_hypothesis_learning_state": str(open_hypothesis_learning.get("open_hypothesis_learning_state", "-") or "-"),
+                    "open_hypothesis_consequence_score": float(open_hypothesis_learning.get("open_hypothesis_consequence_score", 0.0) or 0.0),
+                    "open_hypothesis_burden_score": float(open_hypothesis_learning.get("open_hypothesis_burden_score", 0.0) or 0.0),
+                    "open_hypothesis_reorganization_score": float(open_hypothesis_learning.get("open_hypothesis_reorganization_score", 0.0) or 0.0),
+                    "open_hypothesis_replay_need": float(open_hypothesis_learning.get("open_hypothesis_replay_need", 0.0) or 0.0),
+                    "open_hypothesis_distance_need": float(open_hypothesis_learning.get("open_hypothesis_distance_need", 0.0) or 0.0),
+                    "open_hypothesis_reinterpretation_need": float(open_hypothesis_learning.get("open_hypothesis_reinterpretation_need", 0.0) or 0.0),
+                    "open_hypothesis_reorganization_posture": str(open_hypothesis_learning.get("open_hypothesis_reorganization_posture", "-") or "-"),
+                    "thought_seed_id": str(thought_seed_state.get("thought_seed_id", "") or ""),
+                    "thought_seed_label": str(thought_seed_state.get("thought_seed_label", "") or ""),
+                    "thought_seed_metaregulator_state": str(thought_seed_state.get("seed_metaregulator_state", "") or ""),
+                    "thought_seed_emergent_state": str(thought_seed_state.get("emergent_structure_state", "") or ""),
+                    "thought_seed_trace_strength": float(thought_seed_state.get("thought_trace_strength", 0.0) or 0.0),
+                    "thought_seed_maturity": float(thought_seed_state.get("thought_maturity", 0.0) or 0.0),
+                    "thought_seed_reality_binding": float(thought_seed_state.get("reality_binding_score", 0.0) or 0.0),
+                    "thought_seed_confirmation": float(thought_seed_state.get("thought_confirmation_score", 0.0) or 0.0),
+                    "thought_seed_consequence_echo": float(thought_seed_state.get("consequence_echo", 0.0) or 0.0),
+                    "thought_seed_reorganization_echo": float(thought_seed_state.get("reorganization_echo", 0.0) or 0.0),
+                    "thought_seed_consequence_alignment": float(thought_seed_state.get("thought_consequence_alignment", 0.0) or 0.0),
+                    "thought_seed_consequence_balance": float(thought_seed_state.get("thought_consequence_balance", 0.0) or 0.0),
+                    "thought_seed_reality_lag": float(thought_seed_state.get("thought_reality_lag", 0.0) or 0.0),
+                    "thought_seed_structural_grounding": float(thought_seed_state.get("thought_structural_grounding", 0.0) or 0.0),
+                    "thought_seed_open_hypothesis_pressure": float(thought_seed_state.get("thought_open_hypothesis_pressure", 0.0) or 0.0),
+                    "thought_seed_replay_maturation_pull": float(thought_seed_state.get("thought_replay_maturation_pull", 0.0) or 0.0),
+                    "thought_seed_distance_maturation_pull": float(thought_seed_state.get("thought_distance_maturation_pull", 0.0) or 0.0),
+                    "thought_seed_reinterpretation_pull": float(thought_seed_state.get("thought_reinterpretation_pull", 0.0) or 0.0),
+                    "thought_seed_digestive_replay_pull": float(thought_seed_state.get("thought_digestive_replay_pull", 0.0) or 0.0),
+                    "thought_seed_digestive_distance_pull": float(thought_seed_state.get("thought_digestive_distance_pull", 0.0) or 0.0),
+                    "thought_seed_digestive_integration_pull": float(thought_seed_state.get("thought_digestive_integration_pull", 0.0) or 0.0),
+                    "thought_seed_digestive_returned_trust": float(thought_seed_state.get("thought_digestive_returned_trust", 0.0) or 0.0),
+                    "thought_seed_trust_return_readiness": float(thought_seed_state.get("trust_return_readiness", 0.0) or 0.0),
+                    "thought_seed_digest_state": str(thought_seed_state.get("thought_digest_state", "") or ""),
+                    "thought_seed_reifung_direction": str(thought_seed_state.get("thought_reifung_direction", "") or ""),
+                    "thought_seed_semantic_origin_state": str(thought_seed_state.get("semantic_origin_state", "") or ""),
+                    "thought_seed_borrowed_open_hypothesis_pressure": float(thought_seed_state.get("borrowed_open_hypothesis_pressure", 0.0) or 0.0),
+                    "thought_seed_own_field_binding_pull": float(thought_seed_state.get("own_field_binding_pull", 0.0) or 0.0),
+                    "semantic_origin_state": str(meta_regulation_state.get("semantic_origin_state", "") or ""),
+                    "own_field_identity_strength": float(meta_regulation_state.get("own_field_identity_strength", 0.0) or 0.0),
+                    "foreign_semantic_pressure": float(meta_regulation_state.get("foreign_semantic_pressure", 0.0) or 0.0),
+                    "adopted_language_pressure": float(meta_regulation_state.get("adopted_language_pressure", 0.0) or 0.0),
+                    "self_foreign_boundary_clarity": float(meta_regulation_state.get("self_foreign_boundary_clarity", 0.0) or 0.0),
+                    "semantic_origin_conflict": float(meta_regulation_state.get("semantic_origin_conflict", 0.0) or 0.0),
+                    "own_vs_foreign_margin": float(meta_regulation_state.get("own_vs_foreign_margin", 0.0) or 0.0),
+                    "borrowed_vs_own_margin": float(meta_regulation_state.get("borrowed_vs_own_margin", 0.0) or 0.0),
+                    "boundary_support_margin": float(meta_regulation_state.get("boundary_support_margin", 0.0) or 0.0),
+                    "thought_seed_drift_risk": float(thought_seed_state.get("hallucination_drift_risk", 0.0) or 0.0),
+                    "thought_seed_overthinking_risk": float(thought_seed_state.get("overthinking_risk", 0.0) or 0.0),
                     "target_expectation_value": float(target_expectation_value),
                     "structure_quality": float(structure_quality),
                     "structure_bucket": structure_bucket,

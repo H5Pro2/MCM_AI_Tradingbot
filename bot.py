@@ -25,7 +25,7 @@ from place_orders import place_order, cancel_order_by_id, consume_cancelled_caus
 from debug_reader import dbr_append_text, dbr_debug, dbr_path
 from ph_ohlcv import _build_candle_state
 from bot_gate_funktions import evaluate_entry_decision
-from MCM_Brain_Modell import _flush_form_symbol_memory_if_due, apply_outcome_stimulus, build_runtime_pipeline_snapshot, build_visualization_snapshot_bundle, capture_runtime_regulation_transition, commit_runtime_regulation_snapshot, create_mcm_brain, create_mcm_runtime, mark_runtime_episode_event, prepare_visualization_snapshot_state, step_mcm_runtime, step_mcm_runtime_idle, write_visualization_snapshot_bundle
+from MCM_Brain_Modell import _flush_form_symbol_memory_if_due, _flush_thought_memory_if_due, apply_outcome_stimulus, build_runtime_pipeline_snapshot, build_visualization_snapshot_bundle, capture_runtime_regulation_transition, commit_runtime_regulation_snapshot, create_mcm_brain, create_mcm_runtime, mark_runtime_episode_event, prepare_visualization_snapshot_state, step_mcm_runtime, step_mcm_runtime_idle, write_visualization_snapshot_bundle
 from memory_state import capture_memory_state, ensure_memory_state_loaded, finalize_memory_state_save, flush_memory_state_if_due, initialize_memory_state_bootstrap, mark_memory_state_dirty, write_memory_state_payload
 
 
@@ -159,6 +159,13 @@ class Bot:
         self.action_intent_state = {}
         self.execution_state = {}
         self.last_outcome_decomposition = {}
+        self.mcm_thought_memory = {}
+        self.mcm_thought_family_memory = {}
+        self.mcm_thought_memory_summary = {}
+        self._thought_memory_loaded = False
+        self._thought_memory_dirty = False
+        self._thought_memory_updates = 0
+        self._thought_memory_last_save_ts = 0.0
 
         self.mcm_runtime_snapshot = {}
         self.mcm_runtime_decision_state = {}
@@ -189,6 +196,15 @@ class Bot:
             "external_order_active": bool(payload_state.get("external_order_active", False)),
             "candle_state": dict(payload_state.get("candle_state", {}) or {}),
         }
+    # --------------------------------------------------
+    def _sync_last_outcome_decomposition_from_stats(self):
+        try:
+            stats_data = getattr(self.stats, "data", {}) or {}
+            payload = dict(stats_data.get("last_outcome_decomposition", {}) or {})
+            if payload:
+                self.last_outcome_decomposition = payload
+        except Exception:
+            pass
     # --------------------------------------------------
     def _resolve_runtime_action_window_state(self, action_context):
 
@@ -1752,6 +1768,7 @@ class Bot:
             outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
             context=exit_context,
         )
+        self._sync_last_outcome_decomposition_from_stats()
         self._mark_memory_state_dirty()
         self._commit_regulation_state_snapshot(cancel_state_after)
         self.position = None
@@ -1788,6 +1805,7 @@ class Bot:
             outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
             context=exit_context,
         )
+        self._sync_last_outcome_decomposition_from_stats()
         mark_runtime_episode_event(
             self,
             "resolved",
@@ -3099,6 +3117,7 @@ class Bot:
                     outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
                     context=pending_meta,
                 )
+                self._sync_last_outcome_decomposition_from_stats()
                 self._mark_memory_state_dirty()
                 self._commit_regulation_state_snapshot(cancel_state_after)
                 self.pending_entry = None
@@ -3186,6 +3205,7 @@ class Bot:
                     outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
                     context=pending_meta,
                 )
+                self._sync_last_outcome_decomposition_from_stats()
                 self._mark_memory_state_dirty()
                 self._commit_regulation_state_snapshot(timeout_state_after)
                 self.pending_entry = None
@@ -3245,6 +3265,7 @@ class Bot:
                 outcome_decomposition=dict(getattr(self, "last_outcome_decomposition", {}) or {}),
                 context=pending_meta,
             )
+            self._sync_last_outcome_decomposition_from_stats()
 
             self._mark_memory_state_dirty()
             self._commit_regulation_state_snapshot(timeout_state_after)
@@ -3685,6 +3706,7 @@ class Bot:
             "meta_regulation_state": dict(result.get("meta_regulation_state", {}) or {}),
             "expectation_state": dict(result.get("expectation_state", {}) or {}),
             "form_symbol_state": dict(result.get("form_symbol_state", getattr(self, "form_symbol_state", {}) if self is not None else {}) or {}),
+            "thought_seed_state": dict(result.get("thought_seed_state", getattr(self, "mcm_thought_seed_state", {}) if self is not None else {}) or {}),
             "state_signature": dict(result.get("state_signature", {}) or {}),
             "trade_plan": {
                 "decision": str(result.get("proposed_decision", "WAIT") if str(result.get("decision", "WAIT") or "WAIT").upper().strip() == "WAIT" else result.get("decision", "WAIT")),
@@ -4178,6 +4200,7 @@ class Bot:
             return None
 
         _flush_form_symbol_memory_if_due(self, force=bool(force))
+        _flush_thought_memory_if_due(self, force=bool(force))
 
         payload = capture_memory_state(
             self,

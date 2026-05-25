@@ -21,6 +21,8 @@ _NEUROCHEMICAL_PROTOCOL_HEADER_DONE = set()
 _NEURO_TRANSITION_PROTOCOL_HEADER_DONE = set()
 _STRATEGIC_WINDOW_PROTOCOL_HEADER_DONE = set()
 _ACTIVE_CONTACT_PROTOCOL_HEADER_DONE = set()
+_THOUGHT_SEED_PROTOCOL_HEADER_DONE = set()
+_THOUGHT_DIGEST_PROTOCOL_HEADER_DONE = set()
 
 # --------------------------------------------------
 class MCMBrainRuntime:
@@ -5323,9 +5325,14 @@ def _record_memory_thinking_protocol(bot, runtime_result, meta_regulation_state=
             "neurochemical_state_label;neurochemical_dominant_tone;dopamine_tone;gaba_inhibition;"
             "noradrenaline_arousal;acetylcholine_focus;serotonin_stability;cortisol_load;"
             "endorphin_relief;glutamate_activation;neurochemical_load;neurochemical_support;neurochemical_balance;"
-            "reward_stability_echo;world_shift_evidence;serotonin_carryover_risk;emotional_decoupling;reactive_nervous_drive;"
+            "reward_stability_echo;positive_expansion_pressure;negative_contraction_pressure;positive_overextension;"
+            "positive_return_pressure;mcm_axis_displacement;mcm_axis_tension;mcm_axis_state;positive_zero_point_regulation;"
+            "world_shift_evidence;serotonin_carryover_risk;emotional_decoupling;reactive_nervous_drive;"
             "nervous_system_overload;escape_action_drive;shock_response_risk;nervous_overload_reflection_need;"
             "active_context_self_certainty;nervous_context_overcoupling;"
+            "own_field_identity_strength;foreign_semantic_pressure;adopted_language_pressure;"
+            "self_foreign_boundary_clarity;semantic_origin_conflict;"
+            "own_vs_foreign_margin;borrowed_vs_own_margin;boundary_support_margin;semantic_origin_state;"
             "conscious_perception_state;inner_posture_state;arousal_load;curiosity_tone;fatigue_tone;calm_tone;"
             "stimulus_field_effect;inner_impact_trace;perceived_field_change;felt_afterimage;"
             "object_release_state;inner_outer_reflection;perceptual_distance;object_contact_depth;field_attachment;"
@@ -5333,6 +5340,13 @@ def _record_memory_thinking_protocol(bot, runtime_result, meta_regulation_state=
             "engaged_effort;effort_state;effort_learning_pull;effort_reorganization_pressure;"
             "pre_action_reorganization_pressure;pre_action_context_selectivity;"
             "previous_packet_label;previous_packet_process_reward;previous_packet_reorganization_need;"
+            "previous_open_hypothesis_learning_state;open_hypothesis_trace_strength;"
+            "hypothesis_weight;hypothesis_trust;hypothesis_caution;hypothesis_reorganization_weight;"
+            "action_weight;decision_weight;open_hypothesis_reifung_state;"
+            "open_hypothesis_bearing_echo;open_hypothesis_reifung_pressure;"
+            "open_hypothesis_reflection_pull;open_hypothesis_motor_tension;"
+            "open_hypothesis_confirmation_weight;open_hypothesis_learning_charge;"
+            "open_hypothesis_action_permission;open_hypothesis_reality_check_need;"
             "diffuse_open_development_pressure;posture_development_hint;"
             "metaregulator_state;metaregulator_balance;regulatory_second_order_load;"
             "subconscious_field_pressure;subconscious_habituation;subconscious_filter_strength;"
@@ -5413,6 +5427,14 @@ def _record_memory_thinking_protocol(bot, runtime_result, meta_regulation_state=
         f"{float(meta.get('neurochemical_support', 0.0) or 0.0):.4f}",
         f"{float(meta.get('neurochemical_balance', 0.0) or 0.0):.4f}",
         f"{float(meta.get('reward_stability_echo', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_expansion_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('negative_contraction_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_overextension', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_return_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('mcm_axis_displacement', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('mcm_axis_tension', 0.0) or 0.0):.4f}",
+        _clean(meta.get("mcm_axis_state", "0")),
+        int(bool(meta.get("positive_zero_point_regulation", False))),
         f"{float(meta.get('world_shift_evidence', 0.0) or 0.0):.4f}",
         f"{float(meta.get('serotonin_carryover_risk', 0.0) or 0.0):.4f}",
         f"{float(meta.get('emotional_decoupling', 0.0) or 0.0):.4f}",
@@ -5423,6 +5445,15 @@ def _record_memory_thinking_protocol(bot, runtime_result, meta_regulation_state=
         f"{float(meta.get('nervous_overload_reflection_need', 0.0) or 0.0):.4f}",
         f"{float(meta.get('active_context_self_certainty', 0.0) or 0.0):.4f}",
         f"{float(meta.get('nervous_context_overcoupling', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('own_field_identity_strength', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('foreign_semantic_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('adopted_language_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('self_foreign_boundary_clarity', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('semantic_origin_conflict', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('own_vs_foreign_margin', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('borrowed_vs_own_margin', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('boundary_support_margin', 0.0) or 0.0):.4f}",
+        _clean(meta.get("semantic_origin_state", "unlocated_semantic_contact")),
         _clean(meta.get("conscious_perception_state", "open_perception")),
         _clean(meta.get("inner_posture_state", "uncertain_open")),
         f"{float(meta.get('arousal_load', 0.0) or 0.0):.4f}",
@@ -5452,6 +5483,23 @@ def _record_memory_thinking_protocol(bot, runtime_result, meta_regulation_state=
         _clean(meta.get("previous_packet_label", "-")),
         f"{float(meta.get('previous_packet_process_reward', 0.0) or 0.0):.4f}",
         f"{float(meta.get('previous_packet_reorganization_need', 0.0) or 0.0):.4f}",
+        _clean(meta.get("previous_open_hypothesis_learning_state", "-")),
+        f"{float(meta.get('open_hypothesis_trace_strength', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_trust', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_caution', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_reorganization_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('action_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('decision_weight', 0.0) or 0.0):.4f}",
+        _clean(meta.get("open_hypothesis_reifung_state", "open_hypothesis_neutral_memory")),
+        f"{float(meta.get('open_hypothesis_bearing_echo', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reifung_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reflection_pull', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_motor_tension', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_confirmation_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_learning_charge', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_action_permission', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reality_check_need', 0.0) or 0.0):.4f}",
         f"{float(meta.get('diffuse_open_development_pressure', 0.0) or 0.0):.4f}",
         _clean(meta.get("posture_development_hint", "stable_posture")),
         _clean(meta.get("metaregulator_state", "adaptive_watch")),
@@ -5820,6 +5868,1518 @@ def _record_form_symbol_protocol(bot, runtime_result, meta_regulation_state=None
     )
     return dict(protocol)
 
+def _build_dio_form_language_state(seed_state, form_state=None, meta_regulation_state=None, runtime_result=None):
+    seed = dict(seed_state or {})
+    form = dict(form_state or {})
+    meta = dict(meta_regulation_state or {})
+    result = dict(runtime_result or {})
+
+    def _clean(value):
+        text = str(value or "-").replace("\n", " ").replace(";", "|").strip()
+        return text or "-"
+
+    def _clip(value, default=0.0):
+        try:
+            value = float(value)
+        except Exception:
+            value = float(default)
+        if value != value:
+            value = float(default)
+        return max(0.0, min(1.0, float(value)))
+
+    form_word = _clean(form.get("form_symbol_id", seed.get("form_symbol_anchor", "-")))
+    compound_word = _clean(form.get("form_symbol_compound_id", "-"))
+    field_word = _clean(seed.get("mcm_field_anchor", meta.get("field_perception_label", "-")))
+    thought_word = _clean(seed.get("thought_seed_id", "-"))
+    structure_word = _clean(seed.get("emergent_structure_state", "-"))
+    origin_word = _clean(seed.get("semantic_origin_state", meta.get("semantic_origin_state", "-")))
+    reifung_word = _clean(seed.get("thought_reifung_direction", "-"))
+    posture_word = _clean(seed.get("seed_metaregulator_state", "-"))
+    action_word = _clean(seed.get("decision", result.get("decision", "WAIT")))
+    phase_word = _clean(seed.get("phase", meta.get("pre_action_phase", "hold")))
+    context_word = _clean(seed.get("experience_memory_anchor", result.get("context_cluster_id", "-")))
+    thought_family_word, thought_family_key = _thought_memory_family_key(seed)
+    world_experience_anchor = _clean(context_word)
+    thought_experience_anchor = _clean(thought_family_word)
+
+    form_density = _clip(form.get("form_symbol_semantic_density", 0.0))
+    form_compression = _clip(form.get("form_symbol_semantic_compression", 0.0))
+    form_coherence = _clip(form.get("form_symbol_semantic_coherence", 0.0))
+    thought_trace = _clip(seed.get("thought_trace_strength", 0.0))
+    thought_maturity = _clip(seed.get("thought_maturity", 0.0))
+    reality_binding = _clip(seed.get("reality_binding_score", 0.0))
+    own_binding = _clip(seed.get("own_field_binding_pull", 0.0))
+    borrowed_pressure = _clip(seed.get("borrowed_open_hypothesis_pressure", 0.0))
+    drift_risk = _clip(seed.get("hallucination_drift_risk", 0.0))
+    open_pressure = _clip(seed.get("thought_open_hypothesis_pressure", 0.0))
+
+    syntax_density = _clip(
+        (form_density * 0.26)
+        + (thought_trace * 0.22)
+        + (form_coherence * 0.16)
+        + (thought_maturity * 0.16)
+        + (reality_binding * 0.12)
+        + (own_binding * 0.08)
+    )
+    syntax_compression = _clip(
+        (form_compression * 0.34)
+        + (form_coherence * 0.18)
+        + (reality_binding * 0.16)
+        + (thought_maturity * 0.14)
+        + (own_binding * 0.10)
+        - (open_pressure * 0.08)
+        - (drift_risk * 0.06)
+    )
+    syntax_coherence = _clip(
+        (syntax_density * 0.22)
+        + (syntax_compression * 0.22)
+        + (reality_binding * 0.22)
+        + (thought_maturity * 0.18)
+        + (own_binding * 0.12)
+        - (borrowed_pressure * 0.10)
+        - (drift_risk * 0.10)
+    )
+
+    syntax_origin = "unlocated_syntax"
+    if own_binding >= 0.36 and syntax_coherence >= 0.42 and borrowed_pressure < 0.34:
+        syntax_origin = "own_form_language"
+    elif borrowed_pressure >= 0.42 and own_binding < 0.34:
+        syntax_origin = "borrowed_translation_bridge"
+    elif syntax_coherence >= 0.34 and borrowed_pressure >= 0.28:
+        syntax_origin = "mixed_form_translation"
+    elif syntax_density >= 0.38:
+        syntax_origin = "emerging_form_language"
+
+    syntax_state = "thin_syntax"
+    if syntax_coherence >= 0.56 and syntax_compression >= 0.48:
+        syntax_state = "condensed_sentence"
+    elif syntax_density >= 0.46 and syntax_coherence >= 0.40:
+        syntax_state = "formed_sentence"
+    elif open_pressure >= 0.42 or reifung_word in ("replay_maturation", "reinterpretation_maturation", "distance_maturation"):
+        syntax_state = "open_thought_sentence"
+    elif drift_risk >= 0.52:
+        syntax_state = "ungrounded_sentence_watch"
+
+    syntax_parts = [
+        f"fs:{form_word}",
+        f"fc:{compound_word}",
+        f"field:{field_word}",
+        f"ts:{thought_word}",
+        f"tf:{thought_family_word}",
+        f"struct:{structure_word}",
+        f"origin:{origin_word}",
+        f"ripe:{reifung_word}",
+        f"posture:{posture_word}",
+        f"act:{action_word}",
+        f"phase:{phase_word}",
+        f"world:{world_experience_anchor}",
+        f"thought:{thought_experience_anchor}",
+    ]
+    syntax_sentence = "|".join(syntax_parts)
+    dialogue_bridge_sentence = "|".join(
+        [
+            f"feel:{form_word}",
+            f"world_memory:{world_experience_anchor}",
+            f"thought_memory:{thought_experience_anchor}",
+            f"hypothesis:{structure_word}",
+            f"variant:{reifung_word}",
+            f"bearing:{posture_word}",
+            f"action:{action_word}",
+        ]
+    )
+    signature_basis = "|".join([form_word, compound_word, field_word, structure_word, origin_word, reifung_word, posture_word, action_word, phase_word])
+    syntax_signature = "ds_" + hashlib.sha1(signature_basis.encode("utf-8", errors="ignore")).hexdigest()[:10]
+
+    return {
+        "dio_syntax_signature": str(syntax_signature),
+        "dio_language_sentence": str(syntax_sentence),
+        "dio_dialogue_bridge_sentence": str(dialogue_bridge_sentence),
+        "dio_language_state": str(syntax_state),
+        "dio_syntax_origin": str(syntax_origin),
+        "dio_syntax_density": float(syntax_density),
+        "dio_syntax_compression": float(syntax_compression),
+        "dio_syntax_coherence": float(syntax_coherence),
+        "dio_form_word": str(form_word),
+        "dio_compound_word": str(compound_word),
+        "dio_field_word": str(field_word),
+        "dio_thought_word": str(thought_word),
+        "dio_thought_family_word": str(thought_family_word),
+        "dio_thought_family_key": str(thought_family_key),
+        "dio_structure_word": str(structure_word),
+        "dio_origin_word": str(origin_word),
+        "dio_reifung_word": str(reifung_word),
+        "dio_posture_word": str(posture_word),
+        "dio_action_word": str(action_word),
+        "dio_phase_word": str(phase_word),
+        "dio_world_experience_anchor": str(world_experience_anchor),
+        "dio_thought_experience_anchor": str(thought_experience_anchor),
+        "dio_context_word": str(context_word),
+    }
+
+def _build_thought_seed_state(runtime_result, meta_regulation_state=None, processing_state=None, felt_state=None, thought_state=None):
+    result = dict(runtime_result or {})
+    meta = dict(meta_regulation_state or result.get("meta_regulation_state", {}) or {})
+    processing = dict(processing_state or result.get("processing_state", {}) or {})
+    felt = dict(felt_state or result.get("felt_state", {}) or {})
+    thought = dict(thought_state or result.get("thought_state", {}) or {})
+    form_state = dict(result.get("form_symbol_state", meta.get("form_symbol_state", {}) or {}) or {})
+    strategic = dict(result.get("strategic_window_state", meta.get("strategic_window_state", {}) or {}) or {})
+    active_contact = dict(result.get("active_mcm_contact_state", meta.get("active_mcm_contact", {}) or {}) or {})
+
+    def _clip(value, lo=0.0, hi=1.0):
+        try:
+            value = float(value)
+        except Exception:
+            value = 0.0
+        if value != value:
+            value = 0.0
+        return max(float(lo), min(float(hi), float(value)))
+
+    def _clean(value):
+        return str(value).replace("\n", " ").replace(";", "|").strip()
+
+    def _field(*keys, default=0.0):
+        for source in (meta, active_contact, strategic, form_state, thought, felt, processing, result):
+            for key in keys:
+                if isinstance(source, dict) and key in source:
+                    return _clip(source.get(key, default))
+        return _clip(default)
+
+    decision = _clean(result.get("proposed_decision", result.get("decision", meta.get("decision", "WAIT")) or "WAIT")).upper()
+    phase = _clean(meta.get("pre_action_phase", result.get("decision_tendency", "hold")) or "hold").lower()
+    reason = _clean(meta.get("rejection_reason", result.get("rejection_reason", "-")) or "-")
+    rr_value = max(0.0, float(result.get("rr_value", 0.0) or 0.0))
+    rr_norm = _clip(rr_value / 4.0)
+
+    structure_quality = _field("structure_quality")
+    context_confidence = _field("context_confidence")
+    field_action_support = _field("field_action_support")
+    field_observation_need = _field("field_observation_need")
+    field_replan_pressure = _field("field_replan_pressure")
+    action_clearance = _field("action_clearance")
+    action_inhibition = _field("action_inhibition")
+    decision_readiness = _field("decision_readiness")
+    decision_strength = _field("decision_strength")
+    future_projection_depth = _field("future_projection_depth")
+    mcm_spacetime_depth = _field("mcm_spacetime_depth")
+    spacetime_unlocated_pressure = _field("spacetime_unlocated_pressure")
+    area_bearing_quality = _field("area_bearing_quality")
+    area_spacetime_fit = _field("area_spacetime_fit")
+    contact_reality_check = _field("contact_reality_check")
+    contact_temporal_bearing = _field("contact_temporal_bearing")
+    contact_regime_mismatch = _field("contact_regime_mismatch")
+    emotional_decoupling = _field("emotional_decoupling")
+    regulation_load = _field("regulatory_second_order_load", "neurochemical_load", "processing_load")
+    rumination_depth = _field("rumination_depth")
+    field_pressure = _field("field_perception_pressure", "felt_pressure")
+    field_clarity = _field("field_perception_clarity")
+    form_maturity = _field("form_symbol_maturity")
+    form_stability = _field("form_symbol_stability")
+    form_novelty = _field("form_symbol_novelty", default=1.0)
+    form_action_binding = _field("form_symbol_action_binding", "form_symbol_action_affinity")
+    form_learning_trust = _field("form_symbol_learning_trust")
+    form_contact_utility = _field("form_symbol_contact_utility")
+    form_contact_utility_evidence = _field("form_symbol_contact_utility_evidence")
+    form_contact_pain_memory = _field("form_symbol_contact_pain_memory")
+    form_contact_burden_evidence = _field("form_symbol_contact_burden_evidence")
+    memory_support = _field("memory_support")
+    memory_conflict = _field("memory_conflict")
+    entry_choice_bearing = _field("entry_choice_bearing")
+    target_conviction = _field("target_conviction")
+    target_recovery_confirmation = _field("target_recovery_confirmation")
+    previous_packet_process_reward = _field("previous_packet_process_reward")
+    previous_packet_reorganization_need = _field("previous_packet_reorganization_need")
+    previous_constructive_stimulation = _field("previous_constructive_stimulation")
+    previous_open_hypothesis_learning_state = _clean(meta.get("previous_open_hypothesis_learning_state", "-") or "-")
+    previous_open_hypothesis_reorganization_posture = _clean(meta.get("previous_open_hypothesis_reorganization_posture", "-") or "-")
+    previous_open_hypothesis_replay_need = _field("previous_open_hypothesis_replay_need")
+    previous_open_hypothesis_distance_need = _field("previous_open_hypothesis_distance_need")
+    previous_open_hypothesis_reinterpretation_need = _field("previous_open_hypothesis_reinterpretation_need")
+    previous_open_hypothesis_consequence_score = _field("previous_open_hypothesis_consequence_score")
+    previous_open_hypothesis_burden_score = _field("previous_open_hypothesis_burden_score")
+    previous_open_hypothesis_reorganization_score = _field("previous_open_hypothesis_reorganization_score")
+    semantic_origin_state = _clean(meta.get("semantic_origin_state", "unlocated_semantic_contact") or "unlocated_semantic_contact")
+    own_field_identity_strength = _field("own_field_identity_strength")
+    foreign_semantic_pressure = _field("foreign_semantic_pressure")
+    adopted_language_pressure = _field("adopted_language_pressure")
+    self_foreign_boundary_clarity = _field("self_foreign_boundary_clarity")
+    semantic_origin_conflict = _field("semantic_origin_conflict")
+    own_vs_foreign_margin = max(-1.0, min(1.0, float(meta.get("own_vs_foreign_margin", own_field_identity_strength - foreign_semantic_pressure) or 0.0)))
+    borrowed_vs_own_margin = max(-1.0, min(1.0, float(meta.get("borrowed_vs_own_margin", adopted_language_pressure - own_field_identity_strength) or 0.0)))
+    boundary_support_margin = max(-1.0, min(1.0, float(meta.get("boundary_support_margin", self_foreign_boundary_clarity - semantic_origin_conflict) or 0.0)))
+    consequence_echo = _clip(
+        (previous_packet_process_reward * 0.34)
+        + (previous_constructive_stimulation * 0.24)
+        + (form_contact_utility_evidence * 0.14)
+        + (form_contact_utility * 0.10)
+        + (memory_support * 0.08)
+        + (target_recovery_confirmation * 0.08)
+        - (previous_packet_reorganization_need * 0.18)
+        - (form_contact_burden_evidence * 0.08)
+    )
+    reorganization_echo = _clip(
+        (previous_packet_reorganization_need * 0.36)
+        + (form_contact_pain_memory * 0.18)
+        + (form_contact_burden_evidence * 0.16)
+        + (memory_conflict * 0.12)
+        + (contact_regime_mismatch * 0.10)
+        + (spacetime_unlocated_pressure * 0.08)
+        - (previous_packet_process_reward * 0.12)
+    )
+
+    structure_reading = _clip(
+        (_clip((rr_value - 1.6) / 3.2) * 0.18)
+        + (area_bearing_quality * 0.16)
+        + (future_projection_depth * 0.15)
+        + (mcm_spacetime_depth * 0.13)
+        + (structure_quality * 0.12)
+        + (context_confidence * 0.09)
+        + (entry_choice_bearing * 0.10)
+        + (contact_temporal_bearing * 0.09)
+        + (contact_reality_check * 0.08)
+        + (form_maturity * 0.04)
+        - (spacetime_unlocated_pressure * 0.10)
+        - (contact_regime_mismatch * 0.08)
+    )
+    thought_confirmation_score = _clip(
+        (structure_reading * 0.34)
+        + (area_spacetime_fit * 0.12)
+        + (entry_choice_bearing * 0.11)
+        + (target_conviction * 0.09)
+        + (target_recovery_confirmation * 0.07)
+        + (field_action_support * 0.07)
+        + (contact_reality_check * 0.06)
+        + (form_action_binding * 0.05)
+        + (form_learning_trust * 0.04)
+        + (form_contact_utility * 0.04)
+        + (form_contact_utility_evidence * 0.04)
+        + (consequence_echo * 0.08)
+        - (form_contact_pain_memory * 0.05)
+        - (form_contact_burden_evidence * 0.05)
+        - (contact_regime_mismatch * 0.04)
+        - (reorganization_echo * 0.05)
+    )
+    reality_binding_score = _clip(
+        (thought_confirmation_score * 0.22)
+        + (contact_reality_check * 0.18)
+        + (area_spacetime_fit * 0.15)
+        + (context_confidence * 0.12)
+        + (field_clarity * 0.09)
+        + (form_stability * 0.08)
+        + (memory_support * 0.07)
+        + (emotional_decoupling * 0.05)
+        + (action_clearance * 0.04)
+        + (consequence_echo * 0.05)
+        - (memory_conflict * 0.08)
+        - (spacetime_unlocated_pressure * 0.07)
+        - (reorganization_echo * 0.04)
+    )
+    thought_trace_strength = _clip(
+        (structure_reading * 0.42)
+        + (decision_strength * 0.14)
+        + (future_projection_depth * 0.12)
+        + (field_pressure * 0.10)
+        + (rr_norm * 0.09)
+        + (form_novelty * 0.05)
+        + (field_observation_need * 0.05)
+        + (field_replan_pressure * 0.03)
+    )
+    thought_maturity = _clip(
+        (reality_binding_score * 0.36)
+        + (structure_reading * 0.22)
+        + (field_action_support * 0.12)
+        + (decision_readiness * 0.10)
+        + (form_maturity * 0.10)
+        + (contact_temporal_bearing * 0.10)
+        + (consequence_echo * 0.07)
+        - (action_inhibition * 0.10)
+        - (reorganization_echo * 0.05)
+    )
+    thought_consequence_alignment = _clip(
+        (thought_confirmation_score * 0.26)
+        + (reality_binding_score * 0.22)
+        + (thought_maturity * 0.18)
+        + (consequence_echo * 0.18)
+        + (structure_reading * 0.12)
+        - (reorganization_echo * 0.12)
+    )
+    thought_consequence_balance = max(-1.0, min(1.0, float(consequence_echo - reorganization_echo)))
+    thought_reality_lag = _clip(
+        (max(0.0, structure_reading - thought_confirmation_score) * 0.46)
+        + (max(0.0, thought_maturity - reality_binding_score) * 0.20)
+        + (max(0.0, reorganization_echo - consequence_echo) * 0.18)
+        + (max(0.0, field_pressure - field_clarity) * 0.10)
+        + (memory_conflict * 0.06)
+    )
+    thought_structural_grounding = _clip(
+        (area_spacetime_fit * 0.18)
+        + (contact_reality_check * 0.16)
+        + (entry_choice_bearing * 0.14)
+        + (target_recovery_confirmation * 0.12)
+        + (form_stability * 0.10)
+        + (memory_support * 0.08)
+        + (emotional_decoupling * 0.08)
+        + (field_clarity * 0.06)
+        + (consequence_echo * 0.06)
+        - (spacetime_unlocated_pressure * 0.10)
+        - (contact_regime_mismatch * 0.10)
+        - (reorganization_echo * 0.08)
+        - (memory_conflict * 0.06)
+    )
+    thought_open_hypothesis_pressure = _clip(
+        (rr_norm * 0.20)
+        + (structure_reading * 0.18)
+        + (max(0.0, 0.48 - thought_structural_grounding) * 0.22)
+        + (max(0.0, reorganization_echo - consequence_echo) * 0.16)
+        + (thought_reality_lag * 0.14)
+        + (action_inhibition * 0.10)
+    )
+    borrowed_open_hypothesis_pressure = _clip(
+        ((1.0 if semantic_origin_state == "borrowed_analogy_watch" else 0.0) * 0.34)
+        + (max(0.0, borrowed_vs_own_margin) * 0.28)
+        + (adopted_language_pressure * 0.18)
+        + (semantic_origin_conflict * 0.14)
+        + (max(0.0, 0.0 - boundary_support_margin) * 0.12)
+        + (thought_open_hypothesis_pressure * 0.10)
+        - (own_field_identity_strength * 0.08)
+        - (self_foreign_boundary_clarity * 0.06)
+    )
+    own_field_binding_pull = _clip(
+        (own_field_identity_strength * 0.30)
+        + (self_foreign_boundary_clarity * 0.22)
+        + (max(0.0, own_vs_foreign_margin) * 0.18)
+        + (form_learning_trust * 0.10)
+        + (memory_support * 0.08)
+        + (emotional_decoupling * 0.06)
+        - (adopted_language_pressure * 0.10)
+        - (semantic_origin_conflict * 0.08)
+    )
+    thought_recall_potential = _clip(
+        (thought_trace_strength * 0.36)
+        + (form_stability * 0.17)
+        + (memory_support * 0.14)
+        + (mcm_spacetime_depth * 0.13)
+        + (contact_temporal_bearing * 0.10)
+        + (field_clarity * 0.10)
+    )
+    hallucination_drift_risk = _clip(
+        (thought_trace_strength * 0.24)
+        + (spacetime_unlocated_pressure * 0.22)
+        + (form_novelty * 0.12)
+        + (memory_conflict * 0.12)
+        + (max(0.0, 0.42 - reality_binding_score) * 0.36)
+        - (contact_reality_check * 0.10)
+        - (emotional_decoupling * 0.08)
+    )
+    overthinking_risk = _clip(
+        (rumination_depth * 0.28)
+        + (regulation_load * 0.20)
+        + (field_replan_pressure * 0.16)
+        + (field_observation_need * 0.12)
+        + (action_inhibition * 0.12)
+        + (max(0.0, thought_trace_strength - thought_maturity) * 0.12)
+    )
+    thought_replay_maturation_pull = _clip(
+        previous_open_hypothesis_replay_need
+        + (0.18 if previous_open_hypothesis_reorganization_posture == "replay_dominant" else 0.0)
+        + (0.10 if previous_open_hypothesis_learning_state == "open_hypothesis_carried" else 0.0)
+        + (previous_open_hypothesis_consequence_score * 0.08)
+        - (previous_open_hypothesis_burden_score * 0.06)
+    )
+    thought_distance_maturation_pull = _clip(
+        previous_open_hypothesis_distance_need
+        + (0.14 if previous_open_hypothesis_reorganization_posture == "distance_dominant" else 0.0)
+        + (0.10 if previous_open_hypothesis_learning_state in ("open_hypothesis_burdened", "open_hypothesis_reorganizing") else 0.0)
+        + (previous_open_hypothesis_burden_score * 0.08)
+        + (borrowed_open_hypothesis_pressure * 0.08)
+    )
+    thought_reinterpretation_pull = _clip(
+        previous_open_hypothesis_reinterpretation_need
+        + (0.18 if previous_open_hypothesis_reorganization_posture == "reinterpretation_dominant" else 0.0)
+        + (previous_open_hypothesis_reorganization_score * 0.12)
+        + (max(0.0, previous_open_hypothesis_burden_score - previous_open_hypothesis_consequence_score) * 0.08)
+        + (borrowed_open_hypothesis_pressure * 0.12)
+        - (own_field_binding_pull * 0.04)
+    )
+    thought_digestive_replay_pull = _clip(
+        (previous_open_hypothesis_replay_need * 0.24)
+        + (previous_open_hypothesis_reinterpretation_need * 0.18)
+        + (previous_open_hypothesis_reorganization_score * 0.18)
+        + (thought_open_hypothesis_pressure * 0.12)
+        + (max(0.0, reorganization_echo - consequence_echo) * 0.12)
+        + (thought_reality_lag * 0.10)
+        - (thought_confirmation_score * 0.08)
+    )
+    thought_digestive_distance_pull = _clip(
+        (previous_open_hypothesis_distance_need * 0.26)
+        + (previous_open_hypothesis_burden_score * 0.18)
+        + (max(0.0, previous_open_hypothesis_burden_score - previous_open_hypothesis_consequence_score) * 0.16)
+        + (borrowed_open_hypothesis_pressure * 0.10)
+        + (hallucination_drift_risk * 0.08)
+        - (reality_binding_score * 0.08)
+    )
+    thought_digestive_integration_pull = _clip(
+        (thought_digestive_replay_pull * 0.24)
+        + (thought_digestive_distance_pull * 0.16)
+        + (thought_reinterpretation_pull * 0.16)
+        + (thought_structural_grounding * 0.14)
+        + (reality_binding_score * 0.12)
+        + (own_field_binding_pull * 0.08)
+        - (hallucination_drift_risk * 0.08)
+        - (overthinking_risk * 0.06)
+    )
+    thought_digestive_returned_trust = _clip(
+        (previous_open_hypothesis_consequence_score * 0.20)
+        + (thought_confirmation_score * 0.18)
+        + (thought_digestive_integration_pull * 0.14)
+        + (reality_binding_score * 0.14)
+        + (thought_structural_grounding * 0.12)
+        + (max(0.0, previous_open_hypothesis_replay_need - previous_open_hypothesis_distance_need) * 0.08)
+        - (previous_open_hypothesis_burden_score * 0.10)
+        - (previous_open_hypothesis_reorganization_score * 0.08)
+    )
+    trust_return_readiness = _clip(
+        (thought_digestive_returned_trust * 0.34)
+        + (thought_confirmation_score * 0.20)
+        + (reality_binding_score * 0.16)
+        + (thought_digestive_integration_pull * 0.12)
+        + (thought_structural_grounding * 0.10)
+        - (thought_digestive_distance_pull * 0.05)
+        - (previous_open_hypothesis_burden_score * 0.05)
+    )
+    if (
+        thought_digestive_returned_trust >= 0.25
+        and trust_return_readiness >= 0.28
+        and reality_binding_score >= 0.30
+        and thought_confirmation_score >= 0.22
+        and previous_open_hypothesis_burden_score < 0.46
+    ):
+        thought_digest_state = "digestive_trust_return"
+    elif (
+        thought_digestive_returned_trust >= 0.21
+        and trust_return_readiness >= 0.24
+        and reality_binding_score >= 0.28
+        and thought_confirmation_score >= 0.18
+    ):
+        thought_digest_state = "digestive_trust_emergence"
+    elif thought_digestive_integration_pull >= 0.34 and thought_digestive_integration_pull >= max(thought_digestive_replay_pull, thought_digestive_distance_pull):
+        thought_digest_state = "digestive_integration"
+    elif thought_digestive_distance_pull >= 0.32 and thought_digestive_distance_pull >= thought_digestive_replay_pull:
+        thought_digest_state = "digestive_distance"
+    elif thought_digestive_replay_pull >= 0.30:
+        thought_digest_state = "digestive_replay"
+    else:
+        thought_digest_state = "digestive_quiet"
+    if max(thought_replay_maturation_pull, thought_distance_maturation_pull, thought_reinterpretation_pull) < 0.22:
+        thought_reifung_direction = "no_previous_open_hypothesis_trace"
+    elif thought_reinterpretation_pull >= thought_replay_maturation_pull and thought_reinterpretation_pull >= thought_distance_maturation_pull:
+        thought_reifung_direction = "reinterpretation_maturation"
+    elif thought_replay_maturation_pull >= thought_distance_maturation_pull:
+        thought_reifung_direction = "replay_maturation"
+    else:
+        thought_reifung_direction = "distance_maturation"
+
+    if (
+        thought_confirmation_score >= 0.52
+        and thought_maturity >= 0.44
+        and reality_binding_score >= 0.40
+    ) or (
+        thought_consequence_alignment >= 0.46
+        and thought_maturity >= 0.44
+        and reality_binding_score >= 0.39
+        and reorganization_echo < 0.42
+    ):
+        seed_metaregulator_state = "seed_action_ready"
+    elif hallucination_drift_risk >= 0.58 and reality_binding_score < 0.44:
+        seed_metaregulator_state = "seed_drift_watch"
+    elif overthinking_risk >= 0.58 and thought_maturity < 0.50:
+        seed_metaregulator_state = "seed_overthinking_watch"
+    elif thought_digestive_integration_pull >= 0.38 and thought_digestive_returned_trust < 0.28:
+        seed_metaregulator_state = "seed_digest"
+    elif field_replan_pressure >= 0.48 or phase == "replan":
+        seed_metaregulator_state = "seed_replay"
+    elif borrowed_open_hypothesis_pressure >= 0.42 and thought_open_hypothesis_pressure >= 0.34:
+        seed_metaregulator_state = "seed_reinterpret"
+    elif thought_reinterpretation_pull >= 0.46:
+        seed_metaregulator_state = "seed_reinterpret"
+    elif thought_replay_maturation_pull >= 0.44:
+        seed_metaregulator_state = "seed_replay"
+    elif thought_maturity >= 0.44 and reality_binding_score >= 0.38:
+        seed_metaregulator_state = "seed_mature"
+    elif thought_trace_strength >= 0.44 and field_observation_need >= 0.36:
+        seed_metaregulator_state = "seed_focus"
+    elif thought_trace_strength >= 0.34:
+        seed_metaregulator_state = "seed_store"
+    else:
+        seed_metaregulator_state = "seed_release"
+
+    emergent_structure_state = "ordinary_structure_reading"
+    if (
+        structure_reading >= 0.52
+        and thought_confirmation_score >= 0.50
+        and reality_binding_score >= 0.38
+    ) or (
+        structure_reading >= 0.50
+        and thought_consequence_alignment >= 0.46
+        and reality_binding_score >= 0.38
+        and reorganization_echo < 0.42
+    ):
+        emergent_structure_state = "confirmed_structural_interpretation"
+    elif structure_reading >= 0.44 and rr_value >= 2.4:
+        emergent_structure_state = "open_structural_hypothesis"
+    elif rr_value >= 2.4 and structure_reading < 0.34:
+        emergent_structure_state = "wide_target_without_structure"
+
+    basis = "|".join(
+        [
+            _clean(decision),
+            _clean(phase),
+            _clean(emergent_structure_state),
+            _clean(form_state.get("form_symbol_id", result.get("form_symbol_id", "-")) or "-"),
+            _clean(result.get("context_cluster_id", "-") or "-"),
+            f"{round(structure_reading, 2):.2f}",
+            f"{round(reality_binding_score, 2):.2f}",
+        ]
+    )
+    thought_seed_id = "ts_" + hashlib.sha1(basis.encode("utf-8", errors="ignore")).hexdigest()[:10]
+    thought_seed_label = "_".join(
+        item
+        for item in (
+            "seed",
+            emergent_structure_state.replace("_structural_", "_").replace("_interpretation", ""),
+            seed_metaregulator_state.replace("seed_", ""),
+        )
+        if item
+    )
+
+    seed_state = {
+        "thought_seed_id": str(thought_seed_id),
+        "thought_seed_label": str(thought_seed_label),
+        "thought_trace_strength": float(thought_trace_strength),
+        "thought_recall_potential": float(thought_recall_potential),
+        "thought_maturity": float(thought_maturity),
+        "reality_binding_score": float(reality_binding_score),
+        "thought_confirmation_score": float(thought_confirmation_score),
+        "consequence_echo": float(consequence_echo),
+        "reorganization_echo": float(reorganization_echo),
+        "thought_consequence_alignment": float(thought_consequence_alignment),
+        "thought_consequence_balance": float(thought_consequence_balance),
+        "thought_reality_lag": float(thought_reality_lag),
+        "thought_structural_grounding": float(thought_structural_grounding),
+        "thought_open_hypothesis_pressure": float(thought_open_hypothesis_pressure),
+        "thought_replay_maturation_pull": float(thought_replay_maturation_pull),
+        "thought_distance_maturation_pull": float(thought_distance_maturation_pull),
+        "thought_reinterpretation_pull": float(thought_reinterpretation_pull),
+        "thought_digestive_replay_pull": float(thought_digestive_replay_pull),
+        "thought_digestive_distance_pull": float(thought_digestive_distance_pull),
+        "thought_digestive_integration_pull": float(thought_digestive_integration_pull),
+        "thought_digestive_returned_trust": float(thought_digestive_returned_trust),
+        "trust_return_readiness": float(trust_return_readiness),
+        "thought_digest_state": str(thought_digest_state),
+        "thought_reifung_direction": str(thought_reifung_direction),
+        "semantic_origin_state": str(semantic_origin_state),
+        "borrowed_open_hypothesis_pressure": float(borrowed_open_hypothesis_pressure),
+        "own_field_binding_pull": float(own_field_binding_pull),
+        "own_vs_foreign_margin": float(own_vs_foreign_margin),
+        "borrowed_vs_own_margin": float(borrowed_vs_own_margin),
+        "boundary_support_margin": float(boundary_support_margin),
+        "previous_open_hypothesis_learning_state": str(previous_open_hypothesis_learning_state),
+        "previous_open_hypothesis_reorganization_posture": str(previous_open_hypothesis_reorganization_posture),
+        "hallucination_drift_risk": float(hallucination_drift_risk),
+        "overthinking_risk": float(overthinking_risk),
+        "seed_metaregulator_state": str(seed_metaregulator_state),
+        "emergent_memory_trace": bool(thought_trace_strength >= 0.34 or emergent_structure_state == "open_structural_hypothesis"),
+        "emergent_structure_state": str(emergent_structure_state),
+        "emergent_structure_reading": float(structure_reading),
+        "form_symbol_anchor": str(form_state.get("form_symbol_id", result.get("form_symbol_id", "-")) or "-"),
+        "mcm_field_anchor": str(meta.get("field_perception_label", felt.get("field_perception_label", "-")) or "-"),
+        "experience_memory_anchor": str(result.get("context_cluster_id", meta.get("inner_context_cluster_id", "-")) or "-"),
+        "outcome_anchor": "pending",
+        "decision": str(decision),
+        "phase": str(phase),
+        "reason": str(reason),
+        "rr_value": float(rr_value),
+    }
+    seed_state.update(_build_dio_form_language_state(
+        seed_state,
+        form_state=form_state,
+        meta_regulation_state=meta,
+        runtime_result=result,
+    ))
+    return dict(seed_state)
+
+def _thought_memory_path(path=None):
+
+    if path is not None:
+        return str(path)
+
+    configured = getattr(Config, "MCM_THOUGHT_MEMORY_PATH", "bot_memory/mcm_thought_memory.json")
+    return str(configured or "bot_memory/mcm_thought_memory.json")
+
+def _empty_thought_memory_payload():
+
+    return {
+        "version": 1,
+        "summary": {
+            "seed_count": 0,
+            "family_count": 0,
+            "total_seen": 0,
+            "family_total_seen": 0,
+            "last_saved_ts": None,
+        },
+        "seeds": {},
+        "families": {},
+    }
+
+def _thought_memory_family_key(seed_state):
+
+    state = dict(seed_state or {})
+
+    def _clean(value):
+        text = str(value or "-").strip()
+        text = text.replace("\n", " ").replace(";", "|")
+        return text or "-"
+
+    basis = "|".join(
+        [
+            _clean(state.get("emergent_structure_state", "-")),
+            _clean(state.get("seed_metaregulator_state", "-")),
+            _clean(state.get("thought_reifung_direction", "-")),
+            _clean(state.get("semantic_origin_state", "-")),
+            _clean(state.get("form_symbol_anchor", "-")),
+            _clean(state.get("mcm_field_anchor", "-")),
+            _clean(state.get("experience_memory_anchor", "-")),
+        ]
+    )
+    family_id = "tf_" + hashlib.sha1(basis.encode("utf-8", errors="ignore")).hexdigest()[:10]
+    return str(family_id), str(basis)
+
+def _thought_memory_sentence_state(seed_state, development_state):
+
+    state = dict(seed_state or {})
+    emergent = str(state.get("emergent_structure_state", "-") or "-")
+    semantic = str(state.get("semantic_origin_state", "-") or "-")
+    reifung = str(state.get("thought_reifung_direction", "-") or "-")
+    digest = str(state.get("thought_digest_state", "-") or "-")
+    metaregulator = str(state.get("seed_metaregulator_state", "-") or "-")
+    phase = str(state.get("phase", "-") or "-")
+    decision = str(state.get("decision", "-") or "-")
+
+    return "|".join(
+        [
+            f"form={state.get('form_symbol_anchor', '-')}",
+            f"field={state.get('mcm_field_anchor', '-')}",
+            f"structure={emergent}",
+            f"origin={semantic}",
+            f"reifung={reifung}",
+            f"digest={digest}",
+            f"seed={metaregulator}",
+            f"dev={development_state}",
+            f"phase={phase}",
+            f"decision={decision}",
+        ]
+    )
+
+def _normalize_thought_memory_families(families):
+
+    if not isinstance(families, dict):
+        return {}
+
+    max_families = max(16, int(getattr(Config, "MCM_THOUGHT_MEMORY_MAX_FAMILIES", 768) or 768))
+
+    def _num(item, key, default=0.0):
+        try:
+            value = float((item or {}).get(key, default) or default)
+        except Exception:
+            value = float(default)
+        if value != value:
+            value = float(default)
+        return value
+
+    candidates = []
+    for family_id, raw_item in dict(families or {}).items():
+        if not isinstance(raw_item, dict):
+            continue
+        family_key = str(family_id or raw_item.get("thought_family_id", "") or "").strip()
+        if not family_key:
+            continue
+        item = dict(raw_item or {})
+        seen = max(0, int(_num(item, "seen", 0)))
+        cleaned = {
+            "thought_family_id": family_key,
+            "family_key": str(item.get("family_key", "") or ""),
+            "family_syntax": str(item.get("family_syntax", "") or ""),
+            "last_dio_language_sentence": str(item.get("last_dio_language_sentence", "") or ""),
+            "last_dio_dialogue_bridge_sentence": str(item.get("last_dio_dialogue_bridge_sentence", "") or ""),
+            "last_dio_language_state": str(item.get("last_dio_language_state", "") or ""),
+            "last_dio_syntax_origin": str(item.get("last_dio_syntax_origin", "") or ""),
+            "last_dio_syntax_signature": str(item.get("last_dio_syntax_signature", "") or ""),
+            "seen": int(seen),
+            "unique_seed_count": max(0, int(_num(item, "unique_seed_count", 0))),
+            "first_seen_ts": item.get("first_seen_ts", None),
+            "last_seen_ts": item.get("last_seen_ts", None),
+            "last_runtime_tick": max(0, int(_num(item, "last_runtime_tick", 0))),
+            "last_development_state": str(item.get("last_development_state", "thought_seed_observed") or "thought_seed_observed"),
+            "last_semantic_origin_state": str(item.get("last_semantic_origin_state", "") or ""),
+            "last_emergent_structure_state": str(item.get("last_emergent_structure_state", "") or ""),
+            "last_reifung_direction": str(item.get("last_reifung_direction", "") or ""),
+            "last_digest_state": str(item.get("last_digest_state", "") or ""),
+            "last_seed_metaregulator_state": str(item.get("last_seed_metaregulator_state", "") or ""),
+            "last_sentence_state": str(item.get("last_sentence_state", "") or ""),
+            "seed_ids": [str(value) for value in list(item.get("seed_ids", []) or [])[:32]],
+            "semantic_origin_counts": dict(item.get("semantic_origin_counts", {}) or {}),
+            "emergent_structure_counts": dict(item.get("emergent_structure_counts", {}) or {}),
+            "reifung_direction_counts": dict(item.get("reifung_direction_counts", {}) or {}),
+            "digest_state_counts": dict(item.get("digest_state_counts", {}) or {}),
+            "metaregulator_counts": dict(item.get("metaregulator_counts", {}) or {}),
+            "development_state_counts": dict(item.get("development_state_counts", {}) or {}),
+            "avg_trace_strength": max(0.0, min(1.0, _num(item, "avg_trace_strength", 0.0))),
+            "avg_recall_potential": max(0.0, min(1.0, _num(item, "avg_recall_potential", 0.0))),
+            "avg_maturity": max(0.0, min(1.0, _num(item, "avg_maturity", 0.0))),
+            "avg_reality_binding": max(0.0, min(1.0, _num(item, "avg_reality_binding", 0.0))),
+            "avg_confirmation": max(0.0, min(1.0, _num(item, "avg_confirmation", 0.0))),
+            "avg_open_hypothesis_pressure": max(0.0, min(1.0, _num(item, "avg_open_hypothesis_pressure", 0.0))),
+            "avg_borrowed_open_hypothesis_pressure": max(0.0, min(1.0, _num(item, "avg_borrowed_open_hypothesis_pressure", 0.0))),
+            "avg_own_field_binding_pull": max(0.0, min(1.0, _num(item, "avg_own_field_binding_pull", 0.0))),
+            "avg_consequence_balance": max(-1.0, min(1.0, _num(item, "avg_consequence_balance", 0.0))),
+            "avg_reality_lag": max(0.0, min(1.0, _num(item, "avg_reality_lag", 0.0))),
+            "avg_structural_grounding": max(0.0, min(1.0, _num(item, "avg_structural_grounding", 0.0))),
+            "avg_drift_risk": max(0.0, min(1.0, _num(item, "avg_drift_risk", 0.0))),
+            "avg_overthinking_risk": max(0.0, min(1.0, _num(item, "avg_overthinking_risk", 0.0))),
+            "avg_digestive_replay_pull": max(0.0, min(1.0, _num(item, "avg_digestive_replay_pull", 0.0))),
+            "avg_digestive_distance_pull": max(0.0, min(1.0, _num(item, "avg_digestive_distance_pull", 0.0))),
+            "avg_digestive_integration_pull": max(0.0, min(1.0, _num(item, "avg_digestive_integration_pull", 0.0))),
+            "avg_digestive_returned_trust": max(0.0, min(1.0, _num(item, "avg_digestive_returned_trust", 0.0))),
+            "avg_trust_return_readiness": max(0.0, min(1.0, _num(item, "avg_trust_return_readiness", 0.0))),
+            "avg_dio_syntax_density": max(0.0, min(1.0, _num(item, "avg_dio_syntax_density", 0.0))),
+            "avg_dio_syntax_compression": max(0.0, min(1.0, _num(item, "avg_dio_syntax_compression", 0.0))),
+            "avg_dio_syntax_coherence": max(0.0, min(1.0, _num(item, "avg_dio_syntax_coherence", 0.0))),
+        }
+        score = (float(seen) * 1.0) + (float(cleaned.get("avg_maturity", 0.0) or 0.0) * 32.0) + (float(cleaned.get("unique_seed_count", 0) or 0) * 0.4)
+        candidates.append((score, cleaned.get("last_runtime_tick", 0), family_key, cleaned))
+
+    normalized = {}
+    for _, _, family_key, cleaned in sorted(candidates, reverse=True)[:max_families]:
+        normalized[str(family_key)] = dict(cleaned or {})
+
+    return normalized
+
+def _normalize_thought_memory(memory):
+
+    if not isinstance(memory, dict):
+        return _empty_thought_memory_payload()
+
+    raw_seeds = dict(memory.get("seeds", {}) or {})
+    raw_families = dict(memory.get("families", {}) or {})
+    max_seeds = max(32, int(getattr(Config, "MCM_THOUGHT_MEMORY_MAX_SEEDS", 2048) or 2048))
+    normalized = {}
+
+    def _num(item, key, default=0.0):
+        try:
+            value = float((item or {}).get(key, default) or default)
+        except Exception:
+            value = float(default)
+        if value != value:
+            value = float(default)
+        return value
+
+    candidates = []
+    for seed_id, raw_item in raw_seeds.items():
+        if not isinstance(raw_item, dict):
+            continue
+        seed_key = str(seed_id or raw_item.get("thought_seed_id", "") or "").strip()
+        if not seed_key:
+            continue
+        item = dict(raw_item or {})
+        seen = max(0, int(_num(item, "seen", 0)))
+        cleaned = {
+            "thought_seed_id": seed_key,
+            "thought_family_id": str(item.get("thought_family_id", "") or ""),
+            "family_key": str(item.get("family_key", "") or ""),
+            "sentence_state": str(item.get("sentence_state", "") or ""),
+            "dio_language_sentence": str(item.get("dio_language_sentence", "") or ""),
+            "dio_dialogue_bridge_sentence": str(item.get("dio_dialogue_bridge_sentence", "") or ""),
+            "dio_language_state": str(item.get("dio_language_state", "") or ""),
+            "dio_syntax_origin": str(item.get("dio_syntax_origin", "") or ""),
+            "dio_syntax_signature": str(item.get("dio_syntax_signature", "") or ""),
+            "thought_seed_label": str(item.get("thought_seed_label", "") or ""),
+            "seen": int(seen),
+            "first_seen_ts": item.get("first_seen_ts", None),
+            "last_seen_ts": item.get("last_seen_ts", None),
+            "last_runtime_tick": max(0, int(_num(item, "last_runtime_tick", 0))),
+            "last_development_state": str(item.get("last_development_state", "thought_seed_observed") or "thought_seed_observed"),
+            "last_semantic_origin_state": str(item.get("last_semantic_origin_state", "") or ""),
+            "last_emergent_structure_state": str(item.get("last_emergent_structure_state", "") or ""),
+            "last_reifung_direction": str(item.get("last_reifung_direction", "") or ""),
+            "last_digest_state": str(item.get("last_digest_state", "") or ""),
+            "last_seed_metaregulator_state": str(item.get("last_seed_metaregulator_state", "") or ""),
+            "semantic_origin_counts": dict(item.get("semantic_origin_counts", {}) or {}),
+            "emergent_structure_counts": dict(item.get("emergent_structure_counts", {}) or {}),
+            "reifung_direction_counts": dict(item.get("reifung_direction_counts", {}) or {}),
+            "digest_state_counts": dict(item.get("digest_state_counts", {}) or {}),
+            "metaregulator_counts": dict(item.get("metaregulator_counts", {}) or {}),
+            "development_state_counts": dict(item.get("development_state_counts", {}) or {}),
+            "avg_trace_strength": max(0.0, min(1.0, _num(item, "avg_trace_strength", 0.0))),
+            "avg_recall_potential": max(0.0, min(1.0, _num(item, "avg_recall_potential", 0.0))),
+            "avg_maturity": max(0.0, min(1.0, _num(item, "avg_maturity", 0.0))),
+            "avg_reality_binding": max(0.0, min(1.0, _num(item, "avg_reality_binding", 0.0))),
+            "avg_confirmation": max(0.0, min(1.0, _num(item, "avg_confirmation", 0.0))),
+            "avg_open_hypothesis_pressure": max(0.0, min(1.0, _num(item, "avg_open_hypothesis_pressure", 0.0))),
+            "avg_borrowed_open_hypothesis_pressure": max(0.0, min(1.0, _num(item, "avg_borrowed_open_hypothesis_pressure", 0.0))),
+            "avg_own_field_binding_pull": max(0.0, min(1.0, _num(item, "avg_own_field_binding_pull", 0.0))),
+            "avg_consequence_balance": max(-1.0, min(1.0, _num(item, "avg_consequence_balance", 0.0))),
+            "avg_reality_lag": max(0.0, min(1.0, _num(item, "avg_reality_lag", 0.0))),
+            "avg_structural_grounding": max(0.0, min(1.0, _num(item, "avg_structural_grounding", 0.0))),
+            "avg_drift_risk": max(0.0, min(1.0, _num(item, "avg_drift_risk", 0.0))),
+            "avg_overthinking_risk": max(0.0, min(1.0, _num(item, "avg_overthinking_risk", 0.0))),
+            "avg_digestive_replay_pull": max(0.0, min(1.0, _num(item, "avg_digestive_replay_pull", 0.0))),
+            "avg_digestive_distance_pull": max(0.0, min(1.0, _num(item, "avg_digestive_distance_pull", 0.0))),
+            "avg_digestive_integration_pull": max(0.0, min(1.0, _num(item, "avg_digestive_integration_pull", 0.0))),
+            "avg_digestive_returned_trust": max(0.0, min(1.0, _num(item, "avg_digestive_returned_trust", 0.0))),
+            "avg_trust_return_readiness": max(0.0, min(1.0, _num(item, "avg_trust_return_readiness", 0.0))),
+            "avg_dio_syntax_density": max(0.0, min(1.0, _num(item, "avg_dio_syntax_density", 0.0))),
+            "avg_dio_syntax_compression": max(0.0, min(1.0, _num(item, "avg_dio_syntax_compression", 0.0))),
+            "avg_dio_syntax_coherence": max(0.0, min(1.0, _num(item, "avg_dio_syntax_coherence", 0.0))),
+        }
+        score = (float(seen) * 1.0) + (float(cleaned.get("avg_maturity", 0.0) or 0.0) * 24.0)
+        candidates.append((score, cleaned.get("last_runtime_tick", 0), seed_key, cleaned))
+
+    for _, _, seed_key, cleaned in sorted(candidates, reverse=True)[:max_seeds]:
+        normalized[str(seed_key)] = dict(cleaned or {})
+
+    families = _normalize_thought_memory_families(raw_families)
+    total_seen = sum(int((item or {}).get("seen", 0) or 0) for item in normalized.values())
+    family_total_seen = sum(int((item or {}).get("seen", 0) or 0) for item in families.values())
+    payload = {
+        "version": 1,
+        "summary": {
+            "seed_count": int(len(normalized or {})),
+            "family_count": int(len(families or {})),
+            "total_seen": int(total_seen),
+            "family_total_seen": int(family_total_seen),
+            "last_saved_ts": (memory.get("summary", {}) or {}).get("last_saved_ts", None) if isinstance(memory.get("summary", {}), dict) else None,
+        },
+        "seeds": dict(normalized or {}),
+        "families": dict(families or {}),
+    }
+    return payload
+
+def _read_thought_memory(path=None):
+
+    if not bool(getattr(Config, "MCM_THOUGHT_MEMORY_ENABLED", True)):
+        return _empty_thought_memory_payload()
+
+    filepath = _thought_memory_path(path)
+    if not os.path.exists(filepath):
+        return _empty_thought_memory_payload()
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as handle:
+            raw = json.load(handle)
+    except Exception:
+        return _empty_thought_memory_payload()
+
+    payload = _normalize_thought_memory(raw or {})
+    payload.setdefault("summary", {})["loaded_from"] = str(filepath)
+    return payload
+
+def _ensure_thought_memory_loaded(bot):
+
+    if bot is None:
+        return {}
+
+    if bool(getattr(bot, "_thought_memory_loaded", False)):
+        return dict(getattr(bot, "mcm_thought_memory", {}) or {})
+
+    payload = _read_thought_memory()
+    bot.mcm_thought_memory = dict(payload.get("seeds", {}) or {})
+    bot.mcm_thought_family_memory = dict(payload.get("families", {}) or {})
+    bot.mcm_thought_memory_summary = dict(payload.get("summary", {}) or {})
+    bot._thought_memory_loaded = True
+    bot._thought_memory_dirty = False
+    bot._thought_memory_updates = 0
+    bot._thought_memory_last_save_ts = float(time.time())
+    return dict(bot.mcm_thought_memory or {})
+
+def _thought_memory_development_state(seed_state):
+
+    state = dict(seed_state or {})
+    semantic_origin = str(state.get("semantic_origin_state", "") or "")
+    reifung_direction = str(state.get("thought_reifung_direction", "") or "")
+    digest_state = str(state.get("thought_digest_state", "") or "")
+    metaregulator_state = str(state.get("seed_metaregulator_state", "") or "")
+
+    borrowed_pressure = max(0.0, min(1.0, float(state.get("borrowed_open_hypothesis_pressure", 0.0) or 0.0)))
+    open_pressure = max(0.0, min(1.0, float(state.get("thought_open_hypothesis_pressure", 0.0) or 0.0)))
+    own_binding = max(0.0, min(1.0, float(state.get("own_field_binding_pull", 0.0) or 0.0)))
+    maturity = max(0.0, min(1.0, float(state.get("thought_maturity", 0.0) or 0.0)))
+    reality_binding = max(0.0, min(1.0, float(state.get("reality_binding_score", 0.0) or 0.0)))
+    digestive_integration = max(0.0, min(1.0, float(state.get("thought_digestive_integration_pull", 0.0) or 0.0)))
+    digestive_returned_trust = max(0.0, min(1.0, float(state.get("thought_digestive_returned_trust", 0.0) or 0.0)))
+
+    if digest_state == "digestive_trust_return" or digestive_returned_trust >= 0.34:
+        return "digested_trust_return"
+    if digest_state == "digestive_trust_emergence" or digestive_returned_trust >= 0.24:
+        return "trust_return_emergence_memory_trace"
+    if semantic_origin == "borrowed_analogy_watch" and (borrowed_pressure >= 0.34 or open_pressure >= 0.44):
+        return "borrowed_reinterpretation_needed"
+    if digest_state in ("digestive_replay", "digestive_integration") or digestive_integration >= 0.34:
+        return "reorganizing_digest_memory_trace"
+    if metaregulator_state == "seed_reinterpret" or reifung_direction == "reinterpretation_maturation":
+        return "reinterpretation_memory_trace"
+    if metaregulator_state == "seed_replay" or reifung_direction == "replay_maturation":
+        return "replay_memory_trace"
+    if reifung_direction == "distance_maturation":
+        return "distance_memory_trace"
+    if own_binding >= 0.32 and maturity >= 0.40 and reality_binding >= 0.36:
+        return "own_field_binding_developing"
+    if semantic_origin == "mixed_translation_zone":
+        return "mixed_translation_learning"
+    return "thought_seed_observed"
+
+def _update_thought_memory(bot, seed_state, timestamp=None, runtime_tick=0):
+
+    if bot is None or not bool(getattr(Config, "MCM_THOUGHT_MEMORY_ENABLED", True)):
+        return {}
+
+    state = dict(seed_state or {})
+    seed_id = str(state.get("thought_seed_id", "") or "").strip()
+    if not seed_id or seed_id == "-":
+        return {}
+
+    _ensure_thought_memory_loaded(bot)
+    memory = dict(getattr(bot, "mcm_thought_memory", {}) or {})
+    item = dict(memory.get(seed_id, {}) or {})
+    prior_seen = max(0, int(item.get("seen", 0) or 0))
+    seen = prior_seen + 1
+
+    def _clip(value, lo=0.0, hi=1.0):
+        try:
+            value = float(value)
+        except Exception:
+            value = 0.0
+        if value != value:
+            value = 0.0
+        return max(float(lo), min(float(hi), float(value)))
+
+    def _mean(key, value, lo=0.0, hi=1.0):
+        current = _clip(item.get(key, 0.0), lo=lo, hi=hi)
+        next_value = _clip(value, lo=lo, hi=hi)
+        item[key] = float(current + ((next_value - current) / float(seen)))
+
+    def _count(bucket_key, value):
+        bucket = dict(item.get(bucket_key, {}) or {})
+        key = str(value or "-")
+        bucket[key] = int(bucket.get(key, 0) or 0) + 1
+        item[bucket_key] = dict(bucket)
+
+    development_state = _thought_memory_development_state(state)
+    family_id, family_key = _thought_memory_family_key(state)
+    sentence_state = _thought_memory_sentence_state(state, development_state)
+    dio_language_sentence = str(state.get("dio_language_sentence", "") or "")
+    dio_dialogue_bridge_sentence = str(state.get("dio_dialogue_bridge_sentence", "") or "")
+    dio_language_state = str(state.get("dio_language_state", "") or "")
+    dio_syntax_origin = str(state.get("dio_syntax_origin", "") or "")
+    dio_syntax_signature = str(state.get("dio_syntax_signature", "") or "")
+    semantic_origin = str(state.get("semantic_origin_state", "") or "-")
+    emergent_state = str(state.get("emergent_structure_state", "") or "-")
+    reifung_direction = str(state.get("thought_reifung_direction", "") or "-")
+    digest_state = str(state.get("thought_digest_state", "") or "-")
+    metaregulator_state = str(state.get("seed_metaregulator_state", "") or "-")
+
+    item.update({
+        "thought_seed_id": str(seed_id),
+        "thought_family_id": str(family_id),
+        "family_key": str(family_key),
+        "sentence_state": str(sentence_state),
+        "dio_language_sentence": str(dio_language_sentence),
+        "dio_dialogue_bridge_sentence": str(dio_dialogue_bridge_sentence),
+        "dio_language_state": str(dio_language_state),
+        "dio_syntax_origin": str(dio_syntax_origin),
+        "dio_syntax_signature": str(dio_syntax_signature),
+        "thought_seed_label": str(state.get("thought_seed_label", item.get("thought_seed_label", "")) or ""),
+        "seen": int(seen),
+        "first_seen_ts": item.get("first_seen_ts", timestamp),
+        "last_seen_ts": timestamp,
+        "last_runtime_tick": int(runtime_tick or 0),
+        "last_development_state": str(development_state),
+        "last_semantic_origin_state": str(semantic_origin),
+        "last_emergent_structure_state": str(emergent_state),
+        "last_reifung_direction": str(reifung_direction),
+        "last_digest_state": str(digest_state),
+        "last_seed_metaregulator_state": str(metaregulator_state),
+    })
+    _count("semantic_origin_counts", semantic_origin)
+    _count("emergent_structure_counts", emergent_state)
+    _count("reifung_direction_counts", reifung_direction)
+    _count("digest_state_counts", digest_state)
+    _count("metaregulator_counts", metaregulator_state)
+    _count("development_state_counts", development_state)
+
+    _mean("avg_trace_strength", state.get("thought_trace_strength", 0.0))
+    _mean("avg_recall_potential", state.get("thought_recall_potential", 0.0))
+    _mean("avg_maturity", state.get("thought_maturity", 0.0))
+    _mean("avg_reality_binding", state.get("reality_binding_score", 0.0))
+    _mean("avg_confirmation", state.get("thought_confirmation_score", 0.0))
+    _mean("avg_open_hypothesis_pressure", state.get("thought_open_hypothesis_pressure", 0.0))
+    _mean("avg_borrowed_open_hypothesis_pressure", state.get("borrowed_open_hypothesis_pressure", 0.0))
+    _mean("avg_own_field_binding_pull", state.get("own_field_binding_pull", 0.0))
+    _mean("avg_consequence_balance", state.get("thought_consequence_balance", 0.0), lo=-1.0, hi=1.0)
+    _mean("avg_reality_lag", state.get("thought_reality_lag", 0.0))
+    _mean("avg_structural_grounding", state.get("thought_structural_grounding", 0.0))
+    _mean("avg_drift_risk", state.get("hallucination_drift_risk", 0.0))
+    _mean("avg_overthinking_risk", state.get("overthinking_risk", 0.0))
+    _mean("avg_digestive_replay_pull", state.get("thought_digestive_replay_pull", 0.0))
+    _mean("avg_digestive_distance_pull", state.get("thought_digestive_distance_pull", 0.0))
+    _mean("avg_digestive_integration_pull", state.get("thought_digestive_integration_pull", 0.0))
+    _mean("avg_digestive_returned_trust", state.get("thought_digestive_returned_trust", 0.0))
+    _mean("avg_trust_return_readiness", state.get("trust_return_readiness", 0.0))
+    _mean("avg_dio_syntax_density", state.get("dio_syntax_density", 0.0))
+    _mean("avg_dio_syntax_compression", state.get("dio_syntax_compression", 0.0))
+    _mean("avg_dio_syntax_coherence", state.get("dio_syntax_coherence", 0.0))
+
+    memory[seed_id] = dict(item or {})
+
+    families = dict(getattr(bot, "mcm_thought_family_memory", {}) or {})
+    family = dict(families.get(family_id, {}) or {})
+    family_seen = max(0, int(family.get("seen", 0) or 0)) + 1
+
+    def _family_mean(key, value, lo=0.0, hi=1.0):
+        current = _clip(family.get(key, 0.0), lo=lo, hi=hi)
+        next_value = _clip(value, lo=lo, hi=hi)
+        family[key] = float(current + ((next_value - current) / float(family_seen)))
+
+    def _family_count(bucket_key, value):
+        bucket = dict(family.get(bucket_key, {}) or {})
+        key = str(value or "-")
+        bucket[key] = int(bucket.get(key, 0) or 0) + 1
+        family[bucket_key] = dict(bucket)
+
+    seed_ids = [str(value) for value in list(family.get("seed_ids", []) or []) if str(value or "").strip()]
+    if seed_id not in seed_ids:
+        seed_ids.append(seed_id)
+    seed_ids = seed_ids[-32:]
+    family.update({
+        "thought_family_id": str(family_id),
+        "family_key": str(family_key),
+        "family_syntax": str(family_key),
+        "last_dio_language_sentence": str(dio_language_sentence),
+        "last_dio_dialogue_bridge_sentence": str(dio_dialogue_bridge_sentence),
+        "last_dio_language_state": str(dio_language_state),
+        "last_dio_syntax_origin": str(dio_syntax_origin),
+        "last_dio_syntax_signature": str(dio_syntax_signature),
+        "seen": int(family_seen),
+        "unique_seed_count": int(len(set(seed_ids))),
+        "seed_ids": list(seed_ids),
+        "first_seen_ts": family.get("first_seen_ts", timestamp),
+        "last_seen_ts": timestamp,
+        "last_runtime_tick": int(runtime_tick or 0),
+        "last_development_state": str(development_state),
+        "last_semantic_origin_state": str(semantic_origin),
+        "last_emergent_structure_state": str(emergent_state),
+        "last_reifung_direction": str(reifung_direction),
+        "last_digest_state": str(digest_state),
+        "last_seed_metaregulator_state": str(metaregulator_state),
+        "last_sentence_state": str(sentence_state),
+    })
+    _family_count("semantic_origin_counts", semantic_origin)
+    _family_count("emergent_structure_counts", emergent_state)
+    _family_count("reifung_direction_counts", reifung_direction)
+    _family_count("digest_state_counts", digest_state)
+    _family_count("metaregulator_counts", metaregulator_state)
+    _family_count("development_state_counts", development_state)
+    _family_mean("avg_trace_strength", state.get("thought_trace_strength", 0.0))
+    _family_mean("avg_recall_potential", state.get("thought_recall_potential", 0.0))
+    _family_mean("avg_maturity", state.get("thought_maturity", 0.0))
+    _family_mean("avg_reality_binding", state.get("reality_binding_score", 0.0))
+    _family_mean("avg_confirmation", state.get("thought_confirmation_score", 0.0))
+    _family_mean("avg_open_hypothesis_pressure", state.get("thought_open_hypothesis_pressure", 0.0))
+    _family_mean("avg_borrowed_open_hypothesis_pressure", state.get("borrowed_open_hypothesis_pressure", 0.0))
+    _family_mean("avg_own_field_binding_pull", state.get("own_field_binding_pull", 0.0))
+    _family_mean("avg_consequence_balance", state.get("thought_consequence_balance", 0.0), lo=-1.0, hi=1.0)
+    _family_mean("avg_reality_lag", state.get("thought_reality_lag", 0.0))
+    _family_mean("avg_structural_grounding", state.get("thought_structural_grounding", 0.0))
+    _family_mean("avg_drift_risk", state.get("hallucination_drift_risk", 0.0))
+    _family_mean("avg_overthinking_risk", state.get("overthinking_risk", 0.0))
+    _family_mean("avg_digestive_replay_pull", state.get("thought_digestive_replay_pull", 0.0))
+    _family_mean("avg_digestive_distance_pull", state.get("thought_digestive_distance_pull", 0.0))
+    _family_mean("avg_digestive_integration_pull", state.get("thought_digestive_integration_pull", 0.0))
+    _family_mean("avg_digestive_returned_trust", state.get("thought_digestive_returned_trust", 0.0))
+    _family_mean("avg_trust_return_readiness", state.get("trust_return_readiness", 0.0))
+    _family_mean("avg_dio_syntax_density", state.get("dio_syntax_density", 0.0))
+    _family_mean("avg_dio_syntax_compression", state.get("dio_syntax_compression", 0.0))
+    _family_mean("avg_dio_syntax_coherence", state.get("dio_syntax_coherence", 0.0))
+    families[family_id] = dict(family or {})
+
+    max_seeds = max(32, int(getattr(Config, "MCM_THOUGHT_MEMORY_MAX_SEEDS", 2048) or 2048))
+    max_families = max(16, int(getattr(Config, "MCM_THOUGHT_MEMORY_MAX_FAMILIES", 768) or 768))
+    needs_trim = bool(len(memory or {}) > (max_seeds + 128) or len(families or {}) > (max_families + 64))
+    if needs_trim:
+        normalized = _normalize_thought_memory({"seeds": memory, "families": families})
+        memory = dict(normalized.get("seeds", {}) or {})
+        families = dict(normalized.get("families", {}) or {})
+        summary = dict(normalized.get("summary", {}) or {})
+    else:
+        summary = {
+            "seed_count": int(len(memory or {})),
+            "family_count": int(len(families or {})),
+            "total_seen": int(sum(int((entry or {}).get("seen", 0) or 0) for entry in memory.values())),
+            "family_total_seen": int(sum(int((entry or {}).get("seen", 0) or 0) for entry in families.values())),
+        }
+
+    bot.mcm_thought_memory = dict(memory or {})
+    bot.mcm_thought_family_memory = dict(families or {})
+    bot.mcm_thought_memory_summary = dict(summary or {})
+    bot._thought_memory_dirty = True
+    bot._thought_memory_updates = int(getattr(bot, "_thought_memory_updates", 0) or 0) + 1
+    _flush_thought_memory_if_due(bot, force=False)
+    return dict(item or {})
+
+def _write_thought_memory(bot, force=False):
+
+    if bot is None or not bool(getattr(Config, "MCM_THOUGHT_MEMORY_ENABLED", True)):
+        return None
+
+    if not bool(force) and not bool(getattr(bot, "_thought_memory_dirty", False)):
+        return None
+
+    payload = _normalize_thought_memory({
+        "seeds": getattr(bot, "mcm_thought_memory", {}) or {},
+        "families": getattr(bot, "mcm_thought_family_memory", {}) or {},
+    })
+    payload.setdefault("summary", {})["last_saved_ts"] = float(time.time())
+    text = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
+    filepath = _thought_memory_path()
+    written = _write_text_atomic_with_retry(
+        filepath,
+        text,
+        operation="thought_memory_write",
+        extra=(
+            f"seeds={int(payload.get('summary', {}).get('seed_count', 0) or 0)}"
+            f"|families={int(payload.get('summary', {}).get('family_count', 0) or 0)}"
+            f"|total_seen={int(payload.get('summary', {}).get('total_seen', 0) or 0)}"
+            f"|family_total_seen={int(payload.get('summary', {}).get('family_total_seen', 0) or 0)}"
+        ),
+    )
+    if not written:
+        bot._thought_memory_dirty = True
+        return None
+
+    bot.mcm_thought_memory = dict(payload.get("seeds", {}) or {})
+    bot.mcm_thought_family_memory = dict(payload.get("families", {}) or {})
+    bot.mcm_thought_memory_summary = dict(payload.get("summary", {}) or {})
+    bot._thought_memory_dirty = False
+    bot._thought_memory_last_save_ts = float(time.time())
+    return dict(payload or {})
+
+def _flush_thought_memory_if_due(bot, force=False):
+
+    if bot is None or not bool(getattr(Config, "MCM_THOUGHT_MEMORY_ENABLED", True)):
+        return None
+
+    if not bool(force) and not bool(getattr(bot, "_thought_memory_dirty", False)):
+        return None
+
+    updates = int(getattr(bot, "_thought_memory_updates", 0) or 0)
+    every_n = max(1, int(getattr(Config, "MCM_THOUGHT_MEMORY_SAVE_EVERY_N", 64) or 64))
+    if not bool(force) and updates % every_n != 0:
+        return None
+
+    return _write_thought_memory(bot, force=True)
+
+def _record_thought_digest_protocol(bot, seed_state, meta_regulation_state=None, timestamp=None, runtime_tick=0):
+
+    if bot is None or not bool(getattr(Config, "MCM_THOUGHT_DIGEST_PROTOCOL_DEBUG", True)):
+        return None
+
+    seed = dict(seed_state or {})
+    meta = dict(meta_regulation_state or {})
+    protocol = dict(getattr(bot, "mcm_thought_digest_protocol", {}) or {})
+    sequence = int(protocol.get("sequence", 0) or 0) + 1
+    key = "|".join(
+        [
+            str(seed.get("thought_seed_id", "-")),
+            str(seed.get("thought_digest_state", "-")),
+            str(seed.get("thought_reifung_direction", "-")),
+            str(meta.get("open_hypothesis_reifung_state", "-")),
+            str(seed.get("phase", "-")),
+        ]
+    )
+    prior_key = str(protocol.get("last_key", "") or "")
+    changed = bool(key != prior_key)
+    every_n = max(1, int(getattr(Config, "MCM_THOUGHT_DIGEST_PROTOCOL_EVERY_N", 5) or 5))
+    protocol.update({
+        "sequence": int(sequence),
+        "last_key": str(key),
+        "last_timestamp": timestamp,
+        "last_runtime_tick": int(runtime_tick),
+        "last_digest_state": str(seed.get("thought_digest_state", "-") or "-"),
+    })
+    setattr(bot, "mcm_thought_digest_protocol", dict(protocol))
+
+    if not changed and (sequence % every_n) != 0:
+        return dict(protocol)
+
+    path = dbr_path("mcm_thought_digest_protocol.csv")
+    if path not in _THOUGHT_DIGEST_PROTOCOL_HEADER_DONE:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        header_text = (
+            "timestamp;runtime_tick;sequence;decision;phase;reason;"
+            "thought_seed_id;thought_seed_label;seed_metaregulator_state;emergent_structure_state;"
+            "thought_digest_state;thought_reifung_direction;"
+            "thought_digestive_replay_pull;thought_digestive_distance_pull;"
+            "thought_digestive_integration_pull;thought_digestive_returned_trust;"
+            "trust_return_readiness;"
+            "thought_confirmation_score;thought_open_hypothesis_pressure;thought_reality_lag;"
+            "previous_open_hypothesis_learning_state;previous_open_hypothesis_reorganization_posture;"
+            "semantic_origin_state;dio_syntax_signature;"
+            "open_hypothesis_reifung_state;open_hypothesis_confirmation_weight;"
+            "open_hypothesis_learning_charge;open_hypothesis_action_permission;"
+            "open_hypothesis_reality_check_need;inner_outer_alignment;"
+            "previous_digest_state;previous_trust_return_readiness;previous_digestive_returned_trust;"
+            "trust_return_open_hypothesis_load;trust_return_context_instability;"
+            "trust_return_motor_contact_strength;trust_return_act_bridge;"
+            "trust_return_motor_heat;trust_return_stabilization_need;trust_return_focus_pull;trust_return_motor_mode;"
+            "cortisol_load;serotonin_stability;dopamine_drive;mcm_axis_state;mcm_axis_tension;"
+            "field_perception_label;form_symbol_anchor;mcm_field_anchor;experience_memory_anchor\n"
+        )
+        write_start = time.perf_counter()
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write(header_text)
+        dbr_file_write_profile(
+            path,
+            (time.perf_counter() - write_start) * 1000.0,
+            bytes_written=len(header_text.encode("utf-8")),
+            operation="thought_digest_protocol_header",
+        )
+        _THOUGHT_DIGEST_PROTOCOL_HEADER_DONE.add(path)
+
+    def _clean(value):
+        return str(value).replace("\n", " ").replace(";", "|")
+
+    row = [
+        _clean(timestamp),
+        int(runtime_tick),
+        int(sequence),
+        _clean(seed.get("decision", "WAIT")),
+        _clean(seed.get("phase", "hold")),
+        _clean(seed.get("reason", "-")),
+        _clean(seed.get("thought_seed_id", "-")),
+        _clean(seed.get("thought_seed_label", "-")),
+        _clean(seed.get("seed_metaregulator_state", "seed_release")),
+        _clean(seed.get("emergent_structure_state", "ordinary_structure_reading")),
+        _clean(seed.get("thought_digest_state", "digestive_quiet")),
+        _clean(seed.get("thought_reifung_direction", "no_previous_open_hypothesis_trace")),
+        f"{float(seed.get('thought_digestive_replay_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_digestive_distance_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_digestive_integration_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_digestive_returned_trust', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('trust_return_readiness', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_confirmation_score', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_open_hypothesis_pressure', 0.0) or 0.0):.4f}",
+        f"{float(seed.get('thought_reality_lag', 0.0) or 0.0):.4f}",
+        _clean(seed.get("previous_open_hypothesis_learning_state", "-")),
+        _clean(seed.get("previous_open_hypothesis_reorganization_posture", "-")),
+        _clean(seed.get("semantic_origin_state", "unlocated_semantic_contact")),
+        _clean(seed.get("dio_syntax_signature", "-")),
+        _clean(meta.get("open_hypothesis_reifung_state", "open_hypothesis_neutral_memory")),
+        f"{float(meta.get('open_hypothesis_confirmation_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_learning_charge', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_action_permission', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reality_check_need', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('inner_outer_alignment', 0.0) or 0.0):.4f}",
+        _clean(meta.get("previous_digest_state", "-")),
+        f"{float(meta.get('previous_trust_return_readiness', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('previous_digestive_returned_trust', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_open_hypothesis_load', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_context_instability', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_motor_contact_strength', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_act_bridge', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_motor_heat', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_stabilization_need', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('trust_return_focus_pull', 0.0) or 0.0):.4f}",
+        _clean(meta.get("trust_return_motor_mode", "trust_quiet")),
+        f"{float(meta.get('cortisol_load', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('serotonin_stability', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('dopamine_drive', 0.0) or 0.0):.4f}",
+        _clean(meta.get("mcm_axis_state", "0")),
+        f"{float(meta.get('mcm_axis_tension', 0.0) or 0.0):.4f}",
+        _clean(meta.get("field_perception_label", seed.get("mcm_field_anchor", "-"))),
+        _clean(seed.get("form_symbol_anchor", "-")),
+        _clean(seed.get("mcm_field_anchor", "-")),
+        _clean(seed.get("experience_memory_anchor", "-")),
+    ]
+    dbr_append_text(
+        path,
+        ";".join(str(item) for item in row) + "\n",
+        operation="thought_digest_protocol_append",
+        extra=f"digest={seed.get('thought_digest_state', '-')}",
+    )
+    return dict(protocol)
+
+def _record_thought_seed_protocol(bot, runtime_result, meta_regulation_state=None, processing_state=None, felt_state=None, thought_state=None):
+    if bot is None:
+        return None
+
+    result = dict(runtime_result or {})
+    meta = dict(meta_regulation_state or result.get("meta_regulation_state", {}) or {})
+    seed_state = _build_thought_seed_state(
+        result,
+        meta_regulation_state=meta,
+        processing_state=processing_state,
+        felt_state=felt_state,
+        thought_state=thought_state,
+    )
+    setattr(bot, "mcm_thought_seed_state", dict(seed_state or {}))
+    if isinstance(runtime_result, dict):
+        runtime_result["thought_seed_state"] = dict(seed_state or {})
+
+    protocol = dict(getattr(bot, "mcm_thought_seed_protocol", {}) or {})
+    sequence = int(protocol.get("sequence", 0) or 0) + 1
+    timestamp = result.get("timestamp", getattr(bot, "current_timestamp", None))
+    runtime_tick = int(getattr(bot, "mcm_runtime_market_ticks", 0) or 0)
+    _update_thought_memory(bot, seed_state, timestamp=timestamp, runtime_tick=runtime_tick)
+    _record_thought_digest_protocol(
+        bot,
+        seed_state,
+        meta_regulation_state=meta,
+        timestamp=timestamp,
+        runtime_tick=runtime_tick,
+    )
+
+    if not bool(getattr(Config, "MCM_THOUGHT_SEED_PROTOCOL_DEBUG", True)):
+        return dict(getattr(bot, "mcm_thought_seed_protocol", {}) or {})
+
+    key = "|".join(
+        [
+            str(seed_state.get("thought_seed_id", "-")),
+            str(seed_state.get("seed_metaregulator_state", "-")),
+            str(seed_state.get("emergent_structure_state", "-")),
+            str(seed_state.get("phase", "-")),
+        ]
+    )
+    prior_key = str(protocol.get("last_key", "") or "")
+    changed = bool(key != prior_key)
+    every_n = max(1, int(getattr(Config, "MCM_THOUGHT_SEED_PROTOCOL_EVERY_N", 5) or 5))
+    protocol.update({
+        "sequence": int(sequence),
+        "last_key": str(key),
+        "last_timestamp": timestamp,
+        "last_runtime_tick": int(runtime_tick),
+        "last_seed_state": dict(seed_state or {}),
+    })
+    setattr(bot, "mcm_thought_seed_protocol", dict(protocol))
+
+    if not changed and (sequence % every_n) != 0:
+        return dict(protocol)
+
+    path = dbr_path("mcm_thought_seed_protocol.csv")
+    if path not in _THOUGHT_SEED_PROTOCOL_HEADER_DONE:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        header_text = (
+            "timestamp;runtime_tick;sequence;thought_seed_id;thought_seed_label;decision;phase;reason;"
+            "seed_metaregulator_state;emergent_memory_trace;emergent_structure_state;"
+            "thought_trace_strength;thought_recall_potential;thought_maturity;reality_binding_score;"
+            "thought_confirmation_score;consequence_echo;reorganization_echo;thought_consequence_alignment;"
+            "thought_consequence_balance;thought_reality_lag;"
+            "thought_structural_grounding;thought_open_hypothesis_pressure;"
+            "thought_replay_maturation_pull;thought_distance_maturation_pull;thought_reinterpretation_pull;"
+            "thought_digestive_replay_pull;thought_digestive_distance_pull;thought_digestive_integration_pull;"
+            "thought_digestive_returned_trust;trust_return_readiness;thought_digest_state;"
+            "thought_reifung_direction;previous_open_hypothesis_learning_state;previous_open_hypothesis_reorganization_posture;"
+            "semantic_origin_state;borrowed_open_hypothesis_pressure;own_field_binding_pull;"
+            "own_vs_foreign_margin;borrowed_vs_own_margin;boundary_support_margin;"
+            "dio_syntax_signature;dio_language_state;dio_syntax_origin;"
+            "dio_syntax_density;dio_syntax_compression;dio_syntax_coherence;"
+            "dio_world_experience_anchor;dio_thought_experience_anchor;"
+            "dio_language_sentence;dio_dialogue_bridge_sentence;"
+            "hallucination_drift_risk;overthinking_risk;emergent_structure_reading;rr_value;"
+            "form_symbol_anchor;mcm_field_anchor;experience_memory_anchor;outcome_anchor\n"
+        )
+        write_start = time.perf_counter()
+        with open(path, "w", encoding="utf-8") as handle:
+            handle.write(header_text)
+        dbr_file_write_profile(
+            path,
+            (time.perf_counter() - write_start) * 1000.0,
+            bytes_written=len(header_text.encode("utf-8")),
+            operation="thought_seed_protocol_header",
+        )
+        _THOUGHT_SEED_PROTOCOL_HEADER_DONE.add(path)
+
+    def _clean(value):
+        return str(value).replace("\n", " ").replace(";", "|")
+
+    row = [
+        _clean(timestamp),
+        int(runtime_tick),
+        int(sequence),
+        _clean(seed_state.get("thought_seed_id", "-")),
+        _clean(seed_state.get("thought_seed_label", "-")),
+        _clean(seed_state.get("decision", "WAIT")),
+        _clean(seed_state.get("phase", "hold")),
+        _clean(seed_state.get("reason", "-")),
+        _clean(seed_state.get("seed_metaregulator_state", "seed_release")),
+        int(bool(seed_state.get("emergent_memory_trace", False))),
+        _clean(seed_state.get("emergent_structure_state", "ordinary_structure_reading")),
+        f"{float(seed_state.get('thought_trace_strength', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_recall_potential', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_maturity', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('reality_binding_score', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_confirmation_score', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('consequence_echo', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('reorganization_echo', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_consequence_alignment', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_consequence_balance', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_reality_lag', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_structural_grounding', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_open_hypothesis_pressure', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_replay_maturation_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_distance_maturation_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_reinterpretation_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_digestive_replay_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_digestive_distance_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_digestive_integration_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('thought_digestive_returned_trust', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('trust_return_readiness', 0.0) or 0.0):.4f}",
+        _clean(seed_state.get("thought_digest_state", "digestive_quiet")),
+        _clean(seed_state.get("thought_reifung_direction", "no_previous_open_hypothesis_trace")),
+        _clean(seed_state.get("previous_open_hypothesis_learning_state", "-")),
+        _clean(seed_state.get("previous_open_hypothesis_reorganization_posture", "-")),
+        _clean(seed_state.get("semantic_origin_state", "unlocated_semantic_contact")),
+        f"{float(seed_state.get('borrowed_open_hypothesis_pressure', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('own_field_binding_pull', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('own_vs_foreign_margin', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('borrowed_vs_own_margin', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('boundary_support_margin', 0.0) or 0.0):.4f}",
+        _clean(seed_state.get("dio_syntax_signature", "-")),
+        _clean(seed_state.get("dio_language_state", "-")),
+        _clean(seed_state.get("dio_syntax_origin", "-")),
+        f"{float(seed_state.get('dio_syntax_density', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('dio_syntax_compression', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('dio_syntax_coherence', 0.0) or 0.0):.4f}",
+        _clean(seed_state.get("dio_world_experience_anchor", "-")),
+        _clean(seed_state.get("dio_thought_experience_anchor", "-")),
+        _clean(seed_state.get("dio_language_sentence", "-")),
+        _clean(seed_state.get("dio_dialogue_bridge_sentence", "-")),
+        f"{float(seed_state.get('hallucination_drift_risk', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('overthinking_risk', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('emergent_structure_reading', 0.0) or 0.0):.4f}",
+        f"{float(seed_state.get('rr_value', 0.0) or 0.0):.4f}",
+        _clean(seed_state.get("form_symbol_anchor", "-")),
+        _clean(seed_state.get("mcm_field_anchor", "-")),
+        _clean(seed_state.get("experience_memory_anchor", "-")),
+        _clean(seed_state.get("outcome_anchor", "pending")),
+    ]
+    line = ";".join(str(item) for item in row) + "\n"
+    dbr_append_text(
+        path,
+        line,
+        operation="thought_seed_protocol_append",
+        extra=f"seed={seed_state.get('thought_seed_id', '-')}|state={seed_state.get('seed_metaregulator_state', '-')}",
+    )
+    return dict(protocol)
+
 def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=None, processing_state=None, felt_state=None, thought_state=None):
 
     if bot is None:
@@ -5834,6 +7394,15 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
     )
 
     _record_memory_thinking_protocol(
+        bot,
+        runtime_result,
+        meta_regulation_state=meta_regulation_state,
+        processing_state=processing_state,
+        felt_state=felt_state,
+        thought_state=thought_state,
+    )
+
+    _record_thought_seed_protocol(
         bot,
         runtime_result,
         meta_regulation_state=meta_regulation_state,
@@ -5899,9 +7468,14 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
             "neurochemical_state_label;neurochemical_dominant_tone;dopamine_tone;gaba_inhibition;"
             "noradrenaline_arousal;acetylcholine_focus;serotonin_stability;cortisol_load;"
             "endorphin_relief;glutamate_activation;neurochemical_load;neurochemical_support;neurochemical_balance;"
-            "reward_stability_echo;world_shift_evidence;serotonin_carryover_risk;emotional_decoupling;reactive_nervous_drive;"
+            "reward_stability_echo;positive_expansion_pressure;negative_contraction_pressure;positive_overextension;"
+            "positive_return_pressure;mcm_axis_displacement;mcm_axis_tension;mcm_axis_state;positive_zero_point_regulation;"
+            "world_shift_evidence;serotonin_carryover_risk;emotional_decoupling;reactive_nervous_drive;"
             "nervous_system_overload;escape_action_drive;shock_response_risk;nervous_overload_reflection_need;"
             "active_context_self_certainty;nervous_context_overcoupling;"
+            "own_field_identity_strength;foreign_semantic_pressure;adopted_language_pressure;"
+            "self_foreign_boundary_clarity;semantic_origin_conflict;"
+            "own_vs_foreign_margin;borrowed_vs_own_margin;boundary_support_margin;semantic_origin_state;"
             "conscious_perception_state;inner_posture_state;arousal_load;curiosity_tone;fatigue_tone;calm_tone;"
             "stimulus_field_effect;inner_impact_trace;perceived_field_change;felt_afterimage;"
             "object_release_state;inner_outer_reflection;perceptual_distance;object_contact_depth;field_attachment;"
@@ -5909,6 +7483,13 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
             "engaged_effort;effort_state;effort_learning_pull;effort_reorganization_pressure;"
             "pre_action_reorganization_pressure;pre_action_context_selectivity;"
             "previous_packet_label;previous_packet_process_reward;previous_packet_reorganization_need;"
+            "previous_open_hypothesis_learning_state;open_hypothesis_trace_strength;"
+            "hypothesis_weight;hypothesis_trust;hypothesis_caution;hypothesis_reorganization_weight;"
+            "action_weight;decision_weight;open_hypothesis_reifung_state;"
+            "open_hypothesis_bearing_echo;open_hypothesis_reifung_pressure;"
+            "open_hypothesis_reflection_pull;open_hypothesis_motor_tension;"
+            "open_hypothesis_confirmation_weight;open_hypothesis_learning_charge;"
+            "open_hypothesis_action_permission;open_hypothesis_reality_check_need;"
             "diffuse_open_development_pressure;posture_development_hint;"
             "metaregulator_state;metaregulator_balance;regulatory_second_order_load;"
             "subconscious_field_pressure;subconscious_habituation;subconscious_filter_strength;"
@@ -5975,6 +7556,14 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
         f"{float(meta.get('neurochemical_support', 0.0) or 0.0):.4f}",
         f"{float(meta.get('neurochemical_balance', 0.0) or 0.0):.4f}",
         f"{float(meta.get('reward_stability_echo', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_expansion_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('negative_contraction_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_overextension', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('positive_return_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('mcm_axis_displacement', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('mcm_axis_tension', 0.0) or 0.0):.4f}",
+        _clean(meta.get("mcm_axis_state", "0")),
+        int(bool(meta.get("positive_zero_point_regulation", False))),
         f"{float(meta.get('world_shift_evidence', 0.0) or 0.0):.4f}",
         f"{float(meta.get('serotonin_carryover_risk', 0.0) or 0.0):.4f}",
         f"{float(meta.get('emotional_decoupling', 0.0) or 0.0):.4f}",
@@ -5985,6 +7574,15 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
         f"{float(meta.get('nervous_overload_reflection_need', 0.0) or 0.0):.4f}",
         f"{float(meta.get('active_context_self_certainty', 0.0) or 0.0):.4f}",
         f"{float(meta.get('nervous_context_overcoupling', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('own_field_identity_strength', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('foreign_semantic_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('adopted_language_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('self_foreign_boundary_clarity', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('semantic_origin_conflict', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('own_vs_foreign_margin', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('borrowed_vs_own_margin', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('boundary_support_margin', 0.0) or 0.0):.4f}",
+        _clean(meta.get("semantic_origin_state", "unlocated_semantic_contact")),
         _clean(meta.get("conscious_perception_state", "open_perception")),
         _clean(meta.get("inner_posture_state", "uncertain_open")),
         f"{float(meta.get('arousal_load', 0.0) or 0.0):.4f}",
@@ -6014,6 +7612,23 @@ def _record_field_decision_protocol(bot, runtime_result, meta_regulation_state=N
         _clean(meta.get("previous_packet_label", "-")),
         f"{float(meta.get('previous_packet_process_reward', 0.0) or 0.0):.4f}",
         f"{float(meta.get('previous_packet_reorganization_need', 0.0) or 0.0):.4f}",
+        _clean(meta.get("previous_open_hypothesis_learning_state", "-")),
+        f"{float(meta.get('open_hypothesis_trace_strength', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_trust', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_caution', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('hypothesis_reorganization_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('action_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('decision_weight', 0.0) or 0.0):.4f}",
+        _clean(meta.get("open_hypothesis_reifung_state", "open_hypothesis_neutral_memory")),
+        f"{float(meta.get('open_hypothesis_bearing_echo', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reifung_pressure', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reflection_pull', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_motor_tension', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_confirmation_weight', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_learning_charge', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_action_permission', 0.0) or 0.0):.4f}",
+        f"{float(meta.get('open_hypothesis_reality_check_need', 0.0) or 0.0):.4f}",
         f"{float(meta.get('diffuse_open_development_pressure', 0.0) or 0.0):.4f}",
         _clean(meta.get("posture_development_hint", "stable_posture")),
         _clean(meta.get("metaregulator_state", "adaptive_watch")),
@@ -11376,6 +12991,64 @@ def _ensure_form_symbol_memory_loaded(bot):
     bot.form_symbol_memory_summary = dict(payload.get("summary", {}) or {})
     return dict(bot.form_symbol_space or {})
 
+def _write_text_atomic_with_retry(filepath, text, operation="atomic_write", extra=None, attempts=6, sleep_seconds=0.08):
+    directory = os.path.dirname(filepath)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+    payload = str(text or "")
+    encoded_len = len(payload.encode("utf-8"))
+    last_error = None
+    write_start = time.perf_counter()
+
+    for attempt in range(max(1, int(attempts or 1))):
+        temp_path = f"{filepath}.{os.getpid()}.{int(time.time() * 1000)}.{attempt}.tmp"
+        try:
+            with open(temp_path, "w", encoding="utf-8") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temp_path, filepath)
+            elapsed_ms = (time.perf_counter() - write_start) * 1000.0
+            dbr_file_write_profile(
+                filepath,
+                elapsed_ms,
+                bytes_written=encoded_len,
+                operation=operation,
+                extra=extra,
+            )
+            return True
+        except PermissionError as exc:
+            last_error = exc
+            try:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+            except Exception:
+                pass
+            time.sleep(max(0.0, float(sleep_seconds or 0.0)) * float(attempt + 1))
+        except Exception as exc:
+            last_error = exc
+            try:
+                if os.path.exists(temp_path):
+                    os.remove(temp_path)
+            except Exception:
+                pass
+            break
+
+    try:
+        dbr_append_text(
+            dbr_path("memory_write_errors.log"),
+            (
+                f"{time.time():.6f};{operation};{str(filepath).replace(';', '|')};"
+                f"{type(last_error).__name__ if last_error else 'UnknownError'};"
+                f"{str(last_error).replace(';', '|') if last_error else ''}\n"
+            ),
+            operation="memory_write_error",
+        )
+    except Exception:
+        pass
+    return False
+
 def _write_form_symbol_memory(bot, force=False):
 
     if bot is None or not bool(getattr(Config, "MCM_FORM_SYMBOL_MEMORY_ENABLED", True)):
@@ -11402,21 +13075,16 @@ def _write_form_symbol_memory(bot, force=False):
         "compounds": dict(compounds or {}),
     }
 
-    directory = os.path.dirname(filepath)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-
     text = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
-    write_start = time.perf_counter()
-    with open(filepath, "w", encoding="utf-8") as handle:
-        handle.write(text)
-    dbr_file_write_profile(
+    written = _write_text_atomic_with_retry(
         filepath,
-        (time.perf_counter() - write_start) * 1000.0,
-        bytes_written=len(text.encode("utf-8")),
+        text,
         operation="form_symbol_memory_write",
         extra=f"symbols={int(len(symbols or {}))}|total_seen={int(total_seen)}",
     )
+    if not written:
+        bot._form_symbol_memory_dirty = True
+        return None
 
     bot.form_symbol_space = dict(symbols or {})
     bot.form_symbol_compound_space = dict(compounds or {})
@@ -14371,8 +16039,59 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
         + (field_action_support * 0.04)
     )
 
+    positive_expansion_pressure = _clip01(
+        (dopamine_tone * 0.24)
+        + (reward_stability_echo * 0.18 if "reward_stability_echo" in locals() else 0.0)
+        + (glutamate_activation * 0.16)
+        + (max(0.0, action_clearance - action_inhibition) * 0.12)
+        + (plan_pressure * 0.10)
+        + (form_symbol_action_trust * 0.08)
+        + (trust_transfer_support * 0.06)
+        + (previous_constructive_stimulation * 0.06 if "previous_constructive_stimulation" in locals() else 0.0)
+    )
+    negative_contraction_pressure = _clip01(
+        (cortisol_load * 0.26)
+        + (noradrenaline_arousal * 0.22)
+        + (gaba_inhibition * 0.16)
+        + (field_strain * 0.12)
+        + (field_fragmentation * 0.10)
+        + (orientation_gap * 0.08)
+        + (visual_blind_action_load * 0.06)
+    )
+    positive_overextension = _clip01(
+        positive_expansion_pressure
+        * (
+            0.24
+            + (max(0.0, 0.48 - field_action_support) * 0.22)
+            + (max(0.0, 0.46 - field_clarity) * 0.16)
+            + (max(0.0, 0.44 - interpretation_quality) * 0.16)
+            + (serotonin_carryover_risk * 0.14 if "serotonin_carryover_risk" in locals() else 0.0)
+            + (max(0.0, action_clearance - action_inhibition) * 0.10)
+        )
+    )
+    positive_return_pressure = _clip01(
+        (positive_overextension * 0.44)
+        + (positive_expansion_pressure * max(0.0, 0.42 - field_action_support) * 0.18)
+        + (positive_expansion_pressure * max(0.0, 0.38 - emotional_decoupling) * 0.12 if "emotional_decoupling" in locals() else 0.0)
+        + (positive_expansion_pressure * max(0.0, 0.40 - interpretation_quality) * 0.12)
+        + (serotonin_carryover_risk * 0.12 if "serotonin_carryover_risk" in locals() else 0.0)
+    )
+    mcm_axis_displacement = max(-1.0, min(1.0, positive_expansion_pressure - negative_contraction_pressure))
+    mcm_axis_tension = _clip01(max(positive_expansion_pressure, negative_contraction_pressure))
+    if mcm_axis_displacement >= 0.45:
+        mcm_axis_state = "++"
+    elif mcm_axis_displacement >= 0.18:
+        mcm_axis_state = "+"
+    elif mcm_axis_displacement <= -0.45:
+        mcm_axis_state = "--"
+    elif mcm_axis_displacement <= -0.18:
+        mcm_axis_state = "-"
+    else:
+        mcm_axis_state = "0"
+
     neurochemical_load = _clip01((cortisol_load * 0.42) + (gaba_inhibition * 0.24) + (noradrenaline_arousal * 0.18) + (glutamate_activation * 0.16))
-    neurochemical_support = _clip01((serotonin_stability * 0.30) + (endorphin_relief * 0.24) + (acetylcholine_focus * 0.18) + (dopamine_tone * 0.16) + (gaba_inhibition * 0.06) + (memory_orientation * 0.06))
+    neurochemical_load = _clip01(neurochemical_load + (positive_return_pressure * 0.10))
+    neurochemical_support = _clip01((serotonin_stability * 0.30) + (endorphin_relief * 0.24) + (acetylcholine_focus * 0.18) + (dopamine_tone * 0.16) + (gaba_inhibition * 0.06) + (memory_orientation * 0.06) - (positive_overextension * 0.10))
     neurochemical_balance = max(-1.0, min(1.0, neurochemical_support - neurochemical_load))
     reward_stability_echo = _clip01(
         (serotonin_stability * 0.34)
@@ -14382,6 +16101,7 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
         + (action_clearance * 0.10)
         + (max(0.0, 1.0 - transfer_break_fatigue) * 0.07)
         - (gaba_inhibition * 0.10)
+        - (positive_overextension * 0.12)
     )
     world_shift_evidence = _clip01(
         (semantic_shift_pressure * 0.22)
@@ -14414,6 +16134,7 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
         + (action_clearance * 0.16)
         + (plan_pressure * 0.12)
         + (serotonin_carryover_risk * 0.14)
+        + (positive_overextension * 0.14)
         - (emotional_decoupling * 0.16)
     )
     nervous_system_overload = _clip01(
@@ -14422,6 +16143,7 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
         + (glutamate_activation * 0.16)
         + (serotonin_carryover_risk * 0.16)
         + (reactive_nervous_drive * 0.14)
+        + (positive_return_pressure * 0.10)
         + (max(0.0, -neurochemical_balance) * 0.14)
         - (emotional_decoupling * 0.18)
         - (gaba_inhibition * 0.05)
@@ -14457,6 +16179,8 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
     dominant_tone = max(tone_map, key=tone_map.get)
     if shock_response_risk >= 0.44 and nervous_system_overload >= 0.38:
         state_label = "overloaded_neurochemistry"
+    elif positive_overextension >= 0.34 and positive_return_pressure >= 0.24:
+        state_label = "positive_overextension_neurochemistry"
     elif neurochemical_balance <= -0.22 and cortisol_load >= max(serotonin_stability, endorphin_relief):
         state_label = "strained_neurochemistry"
     elif gaba_inhibition >= 0.56 and action_clearance < 0.48:
@@ -14489,6 +16213,13 @@ def build_neurochemical_state(perception_state=None, processing_state=None, felt
         "neurochemical_support": float(neurochemical_support),
         "neurochemical_balance": float(neurochemical_balance),
         "reward_stability_echo": float(reward_stability_echo),
+        "positive_expansion_pressure": float(positive_expansion_pressure),
+        "negative_contraction_pressure": float(negative_contraction_pressure),
+        "positive_overextension": float(positive_overextension),
+        "positive_return_pressure": float(positive_return_pressure),
+        "mcm_axis_displacement": float(mcm_axis_displacement),
+        "mcm_axis_tension": float(mcm_axis_tension),
+        "mcm_axis_state": str(mcm_axis_state),
         "world_shift_evidence": float(world_shift_evidence),
         "serotonin_carryover_risk": float(serotonin_carryover_risk),
         "emotional_decoupling": float(emotional_decoupling),
@@ -16373,6 +18104,69 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
             + (max(0.0, action_inhibition - action_clearance) * 0.08),
         ),
     )
+    pre_conscious_inner_outer_alignment = _clip01(
+        (field_perception_clarity * 0.24)
+        + (interpretation_quality * 0.22)
+        + (memory_orientation * 0.16)
+        + (processing_alignment * 0.14)
+        + (known_form_support * 0.10)
+        + (route_familiarity * 0.08)
+        + (max(0.0, 1.0 - orientation_gap) * 0.06)
+    )
+    positive_expansion_pressure = _clip01(
+        (plan_pressure * 0.22)
+        + (max(0.0, action_clearance - action_inhibition) * 0.16)
+        + (form_symbol_action_trust * 0.12)
+        + (trust_transfer_support * 0.10)
+        + (previous_constructive_stimulation * 0.10 if "previous_constructive_stimulation" in locals() else 0.0)
+        + (previous_packet_process_reward * 0.08 if "previous_packet_process_reward" in locals() else 0.0)
+        + (max(0.0, decision_strength - 1.0) * 0.10)
+        + (field_action_support * 0.08)
+    )
+    negative_contraction_pressure = _clip01(
+        (field_perception_pressure * 0.18)
+        + (field_perception_strain * 0.16)
+        + (action_inhibition * 0.15)
+        + (orientation_gap * 0.13)
+        + (processing_load * 0.12)
+        + (visual_blind_action_load * 0.10)
+        + (structure_action_uncertainty * 0.10)
+        + (max(0.0, 0.42 - regulated_courage) * 0.06)
+    )
+    positive_overextension = _clip01(
+        positive_expansion_pressure
+        * (
+            0.22
+            + (max(0.0, 0.48 - field_action_support) * 0.24)
+            + (max(0.0, 0.48 - structure_action_bearing) * 0.20)
+            + (max(0.0, 0.42 - pre_conscious_inner_outer_alignment) * 0.16)
+            + (max(0.0, action_clearance - action_inhibition) * 0.12)
+        )
+    )
+    positive_return_pressure = _clip01(
+        (positive_overextension * 0.46)
+        + (positive_expansion_pressure * max(0.0, 0.44 - field_action_support) * 0.20)
+        + (positive_expansion_pressure * max(0.0, 0.42 - structure_action_bearing) * 0.16)
+        + (positive_expansion_pressure * max(0.0, 0.36 - pre_conscious_inner_outer_alignment) * 0.12)
+    )
+    mcm_axis_displacement = max(-1.0, min(1.0, positive_expansion_pressure - negative_contraction_pressure))
+    mcm_axis_tension = _clip01(max(positive_expansion_pressure, negative_contraction_pressure))
+    if mcm_axis_displacement >= 0.45:
+        mcm_axis_state = "++"
+    elif mcm_axis_displacement >= 0.18:
+        mcm_axis_state = "+"
+    elif mcm_axis_displacement <= -0.45:
+        mcm_axis_state = "--"
+    elif mcm_axis_displacement <= -0.18:
+        mcm_axis_state = "-"
+    else:
+        mcm_axis_state = "0"
+    if positive_return_pressure > 0.0:
+        field_observation_need = _clip01(field_observation_need + (positive_return_pressure * 0.055))
+        act_watch_readiness = _clip01(act_watch_readiness + (positive_return_pressure * 0.050))
+        action_inhibition = _clip01(action_inhibition + (positive_return_pressure * 0.040))
+        action_clearance = _clip01(action_clearance - (positive_return_pressure * 0.030))
+
     orientation_gap = max(
         0.0,
         min(
@@ -16404,6 +18198,12 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         and memory_orientation < 0.22
         and decision_strength < 1.22
     )
+    positive_zero_point_regulation = bool(
+        positive_return_pressure >= 0.30
+        and field_action_support < 0.46
+        and structure_action_bearing < 0.50
+        and decision_strength < 1.28
+    )
     structure_orientation_guard = bool(
         structure_orientation_gap >= 0.20
         and structure_quality < 0.56
@@ -16423,6 +18223,180 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
                 and decision_strength < 1.42
             )
         )
+
+    outcome_decomposition = dict(getattr(bot, "last_outcome_decomposition", {}) or {}) if bot is not None else {}
+
+    def _outcome_clip(key, default=0.0):
+        try:
+            value = float(outcome_decomposition.get(key, default) or default)
+        except Exception:
+            value = float(default)
+        if value != value:
+            value = float(default)
+        return max(0.0, min(1.0, float(value)))
+
+    previous_open_hypothesis_learning_state = str(outcome_decomposition.get("open_hypothesis_learning_state", "-") or "-").strip().lower() or "-"
+    previous_open_hypothesis_reorganization_posture = str(outcome_decomposition.get("open_hypothesis_reorganization_posture", "-") or "-").strip().lower() or "-"
+    previous_open_hypothesis_consequence_score = _outcome_clip("open_hypothesis_consequence_score")
+    previous_open_hypothesis_burden_score = _outcome_clip("open_hypothesis_burden_score")
+    previous_open_hypothesis_reorganization_score = _outcome_clip("open_hypothesis_reorganization_score")
+    previous_open_hypothesis_replay_need = _outcome_clip("open_hypothesis_replay_need")
+    previous_open_hypothesis_distance_need = _outcome_clip("open_hypothesis_distance_need")
+    previous_open_hypothesis_reinterpretation_need = _outcome_clip("open_hypothesis_reinterpretation_need")
+    open_hypothesis_has_trace = bool(
+        previous_open_hypothesis_learning_state
+        in ("open_hypothesis_carried", "open_hypothesis_burdened", "open_hypothesis_reorganizing")
+        or max(
+            previous_open_hypothesis_consequence_score,
+            previous_open_hypothesis_burden_score,
+            previous_open_hypothesis_reorganization_score,
+            previous_open_hypothesis_replay_need,
+            previous_open_hypothesis_distance_need,
+            previous_open_hypothesis_reinterpretation_need,
+        )
+        > 0.01
+    )
+    open_hypothesis_trace_strength = _clip01(
+        (0.24 if open_hypothesis_has_trace else 0.0)
+        + (previous_open_hypothesis_consequence_score * 0.26)
+        + (previous_open_hypothesis_burden_score * 0.20)
+        + (previous_open_hypothesis_reorganization_score * 0.18)
+        + (previous_open_hypothesis_replay_need * 0.06)
+        + (previous_open_hypothesis_distance_need * 0.05)
+        + (previous_open_hypothesis_reinterpretation_need * 0.05)
+    )
+    open_hypothesis_bearing_echo = _clip01(
+        open_hypothesis_trace_strength
+        * (
+            ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_carried" else 0.0) * 0.32)
+            + (previous_open_hypothesis_consequence_score * 0.38)
+            + (max(0.0, 1.0 - previous_open_hypothesis_burden_score) * 0.10)
+            + (max(0.0, 1.0 - previous_open_hypothesis_reorganization_score) * 0.08)
+        )
+    )
+    hypothesis_trust = _clip01(
+        (open_hypothesis_bearing_echo * 0.45)
+        + (previous_open_hypothesis_consequence_score * 0.36)
+        + ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_carried" else 0.0) * 0.20)
+        - (previous_open_hypothesis_burden_score * 0.14)
+        - (previous_open_hypothesis_reorganization_score * 0.10)
+    )
+    hypothesis_caution = _clip01(
+        open_hypothesis_trace_strength
+        * (
+            ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_burdened" else 0.0) * 0.24)
+            + (previous_open_hypothesis_burden_score * 0.36)
+            + (previous_open_hypothesis_distance_need * 0.16)
+            + (max(0.0, previous_open_hypothesis_burden_score - previous_open_hypothesis_consequence_score) * 0.18)
+        )
+    )
+    hypothesis_reorganization_weight = _clip01(
+        open_hypothesis_trace_strength
+        * (
+            ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_reorganizing" else 0.0) * 0.26)
+            + (previous_open_hypothesis_reorganization_score * 0.34)
+            + (previous_open_hypothesis_replay_need * 0.16)
+            + (previous_open_hypothesis_reinterpretation_need * 0.16)
+            + (max(0.0, previous_open_hypothesis_burden_score - previous_open_hypothesis_consequence_score) * 0.10)
+        )
+    )
+    open_hypothesis_confirmation_weight = _clip01(
+        (hypothesis_trust * 0.32)
+        + (open_hypothesis_bearing_echo * 0.24)
+        + (previous_open_hypothesis_consequence_score * 0.20)
+        + ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_carried" else 0.0) * 0.12)
+        + (max(0.0, previous_open_hypothesis_replay_need - previous_open_hypothesis_distance_need) * 0.06)
+        - (previous_open_hypothesis_burden_score * 0.08)
+        - (previous_open_hypothesis_reorganization_score * 0.06)
+    )
+    open_hypothesis_learning_charge = _clip01(
+        (hypothesis_reorganization_weight * 0.30)
+        + (previous_open_hypothesis_reorganization_score * 0.24)
+        + (previous_open_hypothesis_reinterpretation_need * 0.18)
+        + (previous_open_hypothesis_distance_need * 0.12)
+        + (max(0.0, previous_open_hypothesis_burden_score - previous_open_hypothesis_consequence_score) * 0.12)
+        + ((1.0 if previous_open_hypothesis_learning_state == "open_hypothesis_reorganizing" else 0.0) * 0.08)
+        - (open_hypothesis_confirmation_weight * 0.10)
+    )
+    open_hypothesis_action_permission = _clip01(
+        (open_hypothesis_confirmation_weight * 0.34)
+        + (field_action_support * 0.18)
+        + (structure_action_bearing * 0.18)
+        + (inner_outer_alignment if "inner_outer_alignment" in locals() else field_perception_clarity) * 0.12
+        + (decision_readiness * 0.10)
+        - (hypothesis_caution * 0.12)
+        - (open_hypothesis_learning_charge * 0.14)
+        - (previous_open_hypothesis_burden_score * 0.08)
+    )
+    open_hypothesis_reality_check_need = _clip01(
+        (open_hypothesis_learning_charge * 0.34)
+        + (hypothesis_caution * 0.22)
+        + (max(0.0, previous_open_hypothesis_reorganization_score - previous_open_hypothesis_consequence_score) * 0.18)
+        + (max(0.0, 0.42 - field_perception_clarity) * 0.10)
+        + (max(0.0, 0.36 - memory_orientation) * 0.08)
+        + (max(0.0, 0.40 - open_hypothesis_action_permission) * 0.08)
+    )
+    hypothesis_weight = _clip01(
+        0.50
+        + (hypothesis_trust * 0.24)
+        + (open_hypothesis_confirmation_weight * 0.12)
+        - (hypothesis_caution * 0.18)
+        - (open_hypothesis_learning_charge * 0.12)
+    )
+    action_weight = _clip01(
+        0.50
+        + (hypothesis_trust * 0.12)
+        + (open_hypothesis_action_permission * 0.16)
+        + (form_symbol_action_trust * 0.08)
+        + (field_action_support * 0.08)
+        + (structure_action_bearing * 0.06)
+        - (hypothesis_caution * 0.16)
+        - (open_hypothesis_learning_charge * 0.12)
+        - (structure_action_uncertainty * 0.06)
+    )
+    decision_weight = _clip01(
+        0.42
+        + (action_weight * 0.24)
+        + (decision_readiness * 0.16)
+        + (state_maturity * 0.12)
+        + (memory_orientation * 0.08)
+        + (inner_outer_alignment if "inner_outer_alignment" in locals() else field_perception_clarity) * 0.08
+        - (action_inhibition * 0.08)
+    )
+    open_hypothesis_reifung_pressure = _clip01(
+        (hypothesis_caution * 0.24)
+        + (open_hypothesis_learning_charge * 0.30)
+        + (previous_open_hypothesis_replay_need * 0.05)
+        + (previous_open_hypothesis_distance_need * 0.05)
+        + (previous_open_hypothesis_reinterpretation_need * 0.05)
+        - (open_hypothesis_confirmation_weight * 0.18)
+    )
+    open_hypothesis_reflection_pull = _clip01(
+        (open_hypothesis_reifung_pressure * 0.26)
+        + (open_hypothesis_learning_charge * 0.28)
+        + (previous_open_hypothesis_replay_need * 0.20)
+        + (previous_open_hypothesis_distance_need * 0.18)
+        + (previous_open_hypothesis_reinterpretation_need * 0.16)
+        + (max(0.0, 0.42 - field_perception_clarity) * 0.06)
+        + (max(0.0, 0.34 - memory_orientation) * 0.06)
+        + (max(0.0, 0.40 - experience_regulation) * 0.05)
+    )
+    open_hypothesis_motor_tension = _clip01(
+        (hypothesis_caution * 0.22)
+        + (open_hypothesis_reifung_pressure * 0.12)
+        + (structure_action_uncertainty * 0.18)
+        + (max(0.0, decision_strength - 1.0) * 0.10)
+        + (max(0.0, 0.46 - field_action_support) * 0.12)
+        - (open_hypothesis_confirmation_weight * 0.18)
+        - (open_hypothesis_learning_charge * 0.08)
+    )
+    open_hypothesis_reifung_state = "open_hypothesis_neutral_memory"
+    if open_hypothesis_confirmation_weight >= max(0.34, hypothesis_caution + 0.08, open_hypothesis_learning_charge + 0.05):
+        open_hypothesis_reifung_state = "open_hypothesis_carried_memory"
+    elif hypothesis_caution >= max(0.38, hypothesis_trust + 0.08):
+        open_hypothesis_reifung_state = "open_hypothesis_burden_memory"
+    elif open_hypothesis_learning_charge >= 0.32:
+        open_hypothesis_reifung_state = "open_hypothesis_reorganizing_memory"
 
     allow_observe = False
     allow_ruminate = False
@@ -16523,6 +18497,22 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         allow_ruminate = True
         rejection_reason = "field_perception_replan"
         pre_action_phase = "replan"
+    elif open_hypothesis_reifung_state == "open_hypothesis_reorganizing_memory" and open_hypothesis_reality_check_need >= 0.46 and open_hypothesis_action_permission < 0.44 and decision_strength < 1.16:
+        allow_ruminate = True
+        rejection_reason = "open_hypothesis_reality_check"
+        pre_action_phase = "replan"
+    elif open_hypothesis_reifung_state == "open_hypothesis_burden_memory" and open_hypothesis_motor_tension >= 0.50 and action_weight < 0.48 and decision_strength < 1.12:
+        allow_observe = True
+        rejection_reason = "open_hypothesis_weighted_observe"
+        pre_action_phase = "observe"
+    elif positive_zero_point_regulation:
+        allow_observe = True
+        rejection_reason = "positive_expansion_zero_point"
+        pre_action_phase = "observe"
+    elif positive_overextension >= 0.26 and positive_return_pressure >= 0.20 and decision_strength < 1.20:
+        allow_observe = True
+        rejection_reason = "positive_expansion_observe"
+        pre_action_phase = "observe"
     elif field_perception_clarity >= 0.58 and field_perception_stability >= 0.56 and field_action_support >= 0.48 and action_clearance >= 0.44:
         allow_plan = True
         rejection_reason = "field_perception_clear_act"
@@ -16931,7 +18921,12 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
             + (max(0.0, 0.48 - field_action_support) * 0.14)
             + (max(0.0, 0.46 - interpretation_quality) * 0.08)
             + (max(0.0, 0.42 - inner_outer_alignment) * 0.06)
+            + (open_hypothesis_reifung_pressure * 0.10)
+            + (open_hypothesis_reality_check_need * 0.14)
+            + (open_hypothesis_motor_tension * 0.06)
             - (previous_constructive_stimulation * 0.08)
+            - (open_hypothesis_bearing_echo * 0.06)
+            - (open_hypothesis_action_permission * 0.10)
             - (max(0.0, structure_quality - 0.62) * 0.18)
             - (max(0.0, context_confidence - 0.52) * 0.10)
             - (max(0.0, structure_action_bearing - 0.54) * 0.10)
@@ -16949,8 +18944,12 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
             + (interpretation_quality * 0.16)
             + (inner_outer_alignment * 0.12)
             + (engaged_effort * 0.12)
+            + (open_hypothesis_bearing_echo * 0.10)
+            + (open_hypothesis_action_permission * 0.08)
             + (previous_packet_process_reward * 0.10)
             + (previous_constructive_stimulation * 0.08)
+            - (open_hypothesis_reifung_pressure * 0.12)
+            - (open_hypothesis_reality_check_need * 0.08)
             - (pre_action_reorganization_pressure * 0.18),
         ),
     )
@@ -17021,6 +19020,59 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         action_clearance = max(0.0, min(1.0, action_clearance - (diffuse_open_development_pressure * 0.040)))
         act_watch_readiness = max(0.0, min(1.0, act_watch_readiness + (diffuse_open_development_pressure * 0.080)))
 
+    if open_hypothesis_reifung_pressure > 0.0:
+        field_observation_need = _clip01(
+            field_observation_need
+            + (open_hypothesis_reflection_pull * 0.050)
+            + (open_hypothesis_reality_check_need * 0.030)
+            + (open_hypothesis_motor_tension * 0.014)
+            - (open_hypothesis_confirmation_weight * 0.020)
+        )
+        field_replan_pressure = _clip01(
+            field_replan_pressure
+            + (open_hypothesis_reflection_pull * 0.050)
+            + (open_hypothesis_learning_charge * 0.034)
+            + (open_hypothesis_reality_check_need * 0.024)
+            - (open_hypothesis_confirmation_weight * 0.018)
+        )
+        action_inhibition = _clip01(
+            action_inhibition
+            + (open_hypothesis_motor_tension * 0.024)
+            + (hypothesis_caution * 0.020)
+            + (open_hypothesis_reality_check_need * 0.012)
+            - (open_hypothesis_confirmation_weight * 0.014)
+        )
+        action_clearance = _clip01(
+            action_clearance
+            - (open_hypothesis_motor_tension * 0.018)
+            - (open_hypothesis_reifung_pressure * 0.012)
+            - (open_hypothesis_reality_check_need * 0.010)
+            + (open_hypothesis_action_permission * 0.026)
+        )
+        regulated_courage = _clip01(
+            regulated_courage
+            - (open_hypothesis_reifung_pressure * 0.014)
+            + (open_hypothesis_confirmation_weight * 0.018)
+            + (open_hypothesis_action_permission * 0.012)
+        )
+        act_watch_readiness = _clip01(
+            act_watch_readiness
+            + (open_hypothesis_reflection_pull * 0.052)
+            + (open_hypothesis_learning_charge * 0.040)
+            + (open_hypothesis_reality_check_need * 0.030)
+            - (open_hypothesis_confirmation_weight * 0.016)
+        )
+
+    if open_hypothesis_bearing_echo > 0.0:
+        field_action_support = _clip01(
+            field_action_support
+            + (open_hypothesis_confirmation_weight * 0.032)
+            + (open_hypothesis_action_permission * 0.022)
+            - (open_hypothesis_reality_check_need * 0.012)
+        )
+        action_clearance = _clip01(action_clearance + (open_hypothesis_action_permission * 0.026))
+        regulated_courage = _clip01(regulated_courage + (open_hypothesis_confirmation_weight * 0.024))
+
     dopamine_tone = float(neurochemical_state.get("dopamine_tone", 0.0) or 0.0)
     gaba_inhibition = float(neurochemical_state.get("gaba_inhibition", 0.0) or 0.0)
     acetylcholine_focus = float(neurochemical_state.get("acetylcholine_focus", 0.0) or 0.0)
@@ -17034,6 +19086,45 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
     nervous_system_overload = float(neurochemical_state.get("nervous_system_overload", 0.0) or 0.0)
     escape_action_drive = float(neurochemical_state.get("escape_action_drive", 0.0) or 0.0)
     shock_response_risk = float(neurochemical_state.get("shock_response_risk", 0.0) or 0.0)
+    positive_expansion_pressure = max(
+        float(positive_expansion_pressure),
+        float(neurochemical_state.get("positive_expansion_pressure", 0.0) or 0.0),
+    )
+    negative_contraction_pressure = max(
+        float(negative_contraction_pressure),
+        float(neurochemical_state.get("negative_contraction_pressure", 0.0) or 0.0),
+    )
+    positive_overextension = max(
+        float(positive_overextension),
+        float(neurochemical_state.get("positive_overextension", 0.0) or 0.0),
+    )
+    positive_return_pressure = max(
+        float(positive_return_pressure),
+        float(neurochemical_state.get("positive_return_pressure", 0.0) or 0.0),
+    )
+    mcm_axis_displacement = max(-1.0, min(1.0, float(positive_expansion_pressure - negative_contraction_pressure)))
+    mcm_axis_tension = _clip01(max(positive_expansion_pressure, negative_contraction_pressure))
+    if mcm_axis_displacement >= 0.45:
+        mcm_axis_state = "++"
+    elif mcm_axis_displacement >= 0.18:
+        mcm_axis_state = "+"
+    elif mcm_axis_displacement <= -0.45:
+        mcm_axis_state = "--"
+    elif mcm_axis_displacement <= -0.18:
+        mcm_axis_state = "-"
+    else:
+        mcm_axis_state = "0"
+    if positive_return_pressure > 0.0:
+        field_observation_need = _clip01(field_observation_need + (positive_return_pressure * 0.030))
+        act_watch_readiness = _clip01(act_watch_readiness + (positive_return_pressure * 0.025))
+        action_inhibition = _clip01(action_inhibition + (positive_return_pressure * 0.025))
+        action_clearance = _clip01(action_clearance - (positive_return_pressure * 0.018))
+        regulated_courage = _clip01(regulated_courage - (positive_overextension * 0.018))
+        inner_outer_reflection = _clip01(inner_outer_reflection + (positive_return_pressure * 0.025))
+        perceptual_distance = _clip01(perceptual_distance + (positive_return_pressure * 0.020))
+        conscious_perception_state["inner_outer_reflection"] = float(inner_outer_reflection)
+        conscious_perception_state["perceptual_distance"] = float(perceptual_distance)
+
     field_overcoupling = max(field_attachment, field_perception_strain, felt_afterimage)
     nervous_overload_reflection_need = max(
         0.0,
@@ -17060,6 +19151,72 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
             + (max(0.0, 0.24 - emotional_decoupling) * 0.20)
         )
     )
+    own_field_identity_strength = _clip01(
+        (inner_outer_alignment * 0.20)
+        + (perceptual_distance * 0.14)
+        + (reflective_distance * 0.10)
+        + (active_context_self_certainty * 0.16)
+        + (form_symbol_learning_trust * 0.10)
+        + (form_symbol_development_quality * 0.08)
+        + (temporal_self_consistency * 0.10)
+        + (memory_orientation * 0.08)
+        + (emotional_decoupling * 0.08)
+        - (semantic_shift_pressure * 0.10)
+        - (visual_resonance_unbound * 0.06)
+        - (nervous_context_overcoupling * 0.06)
+    )
+    foreign_semantic_pressure = _clip01(
+        (semantic_shift_pressure * 0.24)
+        + (visual_resonance_unbound * 0.14)
+        + (world_shift_evidence * 0.12)
+        + (orientation_gap * 0.12)
+        + (blind_thinking_load * 0.10)
+        + (field_perception_strain * 0.10)
+        + (nervous_context_overcoupling * 0.10)
+        + (max(0.0, 0.34 - known_form_support) * 0.10)
+        - (form_symbol_containment * 0.08)
+        - (memory_orientation * 0.06)
+    )
+    adopted_language_pressure = _clip01(
+        (foreign_semantic_pressure * 0.32)
+        + (active_context_activation * 0.14)
+        + (max(0.0, 0.40 - form_symbol_development_quality) * 0.18)
+        + (max(0.0, 0.38 - form_symbol_learning_trust) * 0.14)
+        + (semantic_shift_pressure * 0.12)
+        - (own_field_identity_strength * 0.10)
+    )
+    self_foreign_boundary_clarity = _clip01(
+        (inner_outer_alignment * 0.22)
+        + (perceptual_distance * 0.18)
+        + (temporal_source_binding * 0.14)
+        + (emotional_decoupling * 0.12)
+        + (form_symbol_object_distance * 0.10)
+        + (background_containment * 0.10)
+        + (reflective_distance * 0.10)
+        - (nervous_context_overcoupling * 0.10)
+        - (field_attachment * 0.08)
+        - (adopted_language_pressure * 0.06)
+    )
+    semantic_origin_conflict = _clip01(
+        (foreign_semantic_pressure * 0.30)
+        + (adopted_language_pressure * 0.24)
+        + (max(0.0, 0.42 - self_foreign_boundary_clarity) * 0.24)
+        + (max(0.0, active_context_self_certainty - own_field_identity_strength) * 0.14)
+        - (own_field_identity_strength * 0.08)
+    )
+    own_vs_foreign_margin = max(-1.0, min(1.0, float(own_field_identity_strength - foreign_semantic_pressure)))
+    borrowed_vs_own_margin = max(-1.0, min(1.0, float(adopted_language_pressure - own_field_identity_strength)))
+    boundary_support_margin = max(-1.0, min(1.0, float(self_foreign_boundary_clarity - semantic_origin_conflict)))
+    semantic_origin_state = "unlocated_semantic_contact"
+    if own_field_identity_strength >= 0.38 and own_vs_foreign_margin >= 0.05 and semantic_origin_conflict < 0.34:
+        semantic_origin_state = "own_field_origin"
+    elif borrowed_vs_own_margin >= 0.06 and self_foreign_boundary_clarity < 0.30:
+        semantic_origin_state = "borrowed_analogy_watch"
+    elif own_field_identity_strength >= 0.22 and foreign_semantic_pressure >= 0.20 and abs(own_vs_foreign_margin) < 0.12:
+        semantic_origin_state = "mixed_translation_zone"
+    elif self_foreign_boundary_clarity >= 0.30 and boundary_support_margin >= -0.04:
+        semantic_origin_state = "differentiated_contact"
+
     if nervous_context_overcoupling > 0.0:
         nervous_overload_reflection_need = _clip01(
             nervous_overload_reflection_need
@@ -17100,7 +19257,22 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         conscious_perception_state["perceptual_distance"] = float(perceptual_distance)
         conscious_perception_state["reflective_distance"] = float(reflective_distance)
         conscious_perception_state["inner_outer_reflection"] = float(inner_outer_reflection)
-    zero_point_value = 1.0 if bool(zero_point_regulation) else 0.0
+    if semantic_origin_conflict > 0.0:
+        field_observation_need = _clip01(field_observation_need + (semantic_origin_conflict * 0.035))
+        act_watch_readiness = _clip01(act_watch_readiness + (semantic_origin_conflict * 0.030))
+        self_reflection_boost = semantic_origin_conflict * 0.035
+    else:
+        self_reflection_boost = 0.0
+    positive_zero_point_regulation = bool(
+        positive_zero_point_regulation
+        or (
+            positive_return_pressure >= 0.30
+            and field_action_support < 0.46
+            and structure_action_bearing < 0.50
+            and decision_strength < 1.28
+        )
+    )
+    zero_point_value = 1.0 if bool(zero_point_regulation or positive_zero_point_regulation) else 0.0
     reflective_posture_value = 1.0 if inner_posture_label == "reflective" else 0.0
     reflective_perception_value = 1.0 if conscious_label == "reflective_check" else 0.0
     subconscious_field_pressure = max(
@@ -17438,6 +19610,7 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
             + (acetylcholine_focus * 0.06)
             + (conscious_workspace_focus * 0.08)
             + (nervous_overload_reflection_need * 0.08)
+            + (self_reflection_boost * 0.80)
             - (arousal_load * 0.08)
             - (blind_thinking_load * 0.06),
         ),
@@ -17538,6 +19711,8 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
     metaregulator_state = "adaptive_watch"
     if metaregulator_balance >= 0.46 and regulatory_second_order_load < 0.36 and subconscious_leakage < 0.26:
         metaregulator_state = "regulated_field"
+    elif positive_return_pressure >= 0.30 and positive_overextension >= 0.24:
+        metaregulator_state = "positive_expansion_return"
     elif spacetime_reflection_need >= 0.22 and spacetime_regulation_support < 0.32:
         metaregulator_state = "spacetime_reflection"
     elif shock_response_risk >= 0.42 and nervous_overload_reflection_need >= 0.30:
@@ -17834,6 +20009,132 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         rejection_reason = "cautious_hypothesis_reframe" if allow_ruminate else "cautious_hypothesis_observe"
         pre_action_phase = "replan" if allow_ruminate else "observe"
 
+    previous_thought_seed_state = dict(getattr(bot, "mcm_thought_seed_state", {}) or {}) if bot is not None else {}
+
+    def _seed_float(key, default=0.0):
+        try:
+            value = float(previous_thought_seed_state.get(key, default) or default)
+        except Exception:
+            value = float(default)
+        if value != value:
+            value = float(default)
+        return max(0.0, min(1.0, float(value)))
+
+    previous_digest_state = str(previous_thought_seed_state.get("thought_digest_state", "") or "")
+    previous_trust_return_readiness = _seed_float("trust_return_readiness")
+    previous_digestive_returned_trust = _seed_float("thought_digestive_returned_trust")
+    previous_digestive_replay_pull = _seed_float("thought_digestive_replay_pull")
+    previous_digestive_distance_pull = _seed_float("thought_digestive_distance_pull")
+    previous_digest_action_permission = _seed_float("open_hypothesis_action_permission")
+    previous_emergent_structure_state = str(previous_thought_seed_state.get("emergent_structure_state", "") or "")
+    previous_thought_confirmation_score = _seed_float("thought_confirmation_score")
+    previous_reality_binding_score = _seed_float("reality_binding_score")
+    previous_thought_maturity = _seed_float("thought_maturity")
+    previous_confirmed_structure_protection = _clip01(
+        ((1.0 if previous_emergent_structure_state == "confirmed_structural_interpretation" else 0.0) * 0.34)
+        + (previous_thought_confirmation_score * 0.24)
+        + (previous_reality_binding_score * 0.20)
+        + (previous_thought_maturity * 0.14)
+        + (open_hypothesis_confirmation_weight * 0.08)
+    )
+    trust_return_open_hypothesis_load = _clip01(
+        (0.28 if open_hypothesis_reifung_state == "open_hypothesis_reorganizing_memory" else 0.0)
+        + (0.20 if open_hypothesis_reifung_state == "open_hypothesis_burden_memory" else 0.0)
+        + (0.10 if open_hypothesis_reifung_state == "open_hypothesis_neutral_memory" else 0.0)
+        + (open_hypothesis_learning_charge * 0.20)
+        + (open_hypothesis_reality_check_need * 0.18)
+        + (max(0.0, open_hypothesis_confirmation_weight - 0.42) * 0.10)
+    )
+    trust_return_context_instability = _clip01(
+        (max(0.0, 0.42 - inner_outer_alignment) * 0.34)
+        + (max(0.0, 0.30 - perceptual_distance) * 0.18)
+        + (max(0.0, cortisol_load - 0.32) * 0.22)
+        + (max(0.0, nervous_system_overload - 0.28) * 0.16)
+        + (field_perception_strain * 0.10)
+    )
+    trust_return_motor_contact_strength = _clip01(
+        ((1.0 if previous_digest_state in ("digestive_trust_emergence", "digestive_trust_return") else 0.0) * 0.22)
+        + (previous_trust_return_readiness * 0.22)
+        + (previous_digestive_returned_trust * 0.16)
+        + (trust_return_open_hypothesis_load * 0.18)
+        + (trust_return_context_instability * 0.12)
+        + (max(previous_digestive_replay_pull, previous_digestive_distance_pull) * 0.10)
+        - (previous_confirmed_structure_protection * 0.10)
+    )
+    trust_return_motor_heat = _clip01(
+        (previous_trust_return_readiness * 0.28)
+        + (previous_digestive_returned_trust * 0.24)
+        + (max(0.0, cortisol_load - 0.30) * 0.22)
+        + (max(0.0, previous_digest_action_permission - 0.28) * 0.16)
+        + (max(previous_digestive_replay_pull, previous_digestive_distance_pull) * 0.10)
+        + (trust_return_open_hypothesis_load * 0.12)
+        + (trust_return_context_instability * 0.10)
+    )
+    trust_return_stabilization_need = _clip01(
+        ((1.0 if previous_digest_state in ("digestive_trust_emergence", "digestive_trust_return") else 0.0) * 0.18)
+        + (trust_return_motor_heat * 0.34)
+        + (trust_return_motor_contact_strength * 0.18)
+        + (max(0.0, cortisol_load - 0.34) * 0.24)
+        + (max(0.0, previous_digest_action_permission - 0.32) * 0.14)
+        + (max(0.0, 0.40 - emotional_decoupling) * 0.10)
+        + (trust_return_open_hypothesis_load * 0.18)
+        + (trust_return_context_instability * 0.16)
+        + (max(0.0, 0.40 - inner_outer_alignment) * 0.10)
+    )
+    trust_return_focus_pull = _clip01(
+        (previous_trust_return_readiness * 0.24)
+        + (previous_digestive_returned_trust * 0.18)
+        + (acetylcholine_focus * 0.14)
+        + (serotonin_stability * 0.12)
+        + (max(0.0, 1.0 - cortisol_load) * 0.10)
+        + (inner_outer_alignment * 0.12)
+        + (perceptual_distance * 0.10)
+        + (trust_return_context_instability * 0.08)
+    )
+    trust_return_motor_mode = "trust_quiet"
+    trust_return_motor_contact = bool(
+        previous_digest_state in ("digestive_trust_emergence", "digestive_trust_return")
+        or trust_return_motor_contact_strength >= 0.24
+    )
+    if trust_return_motor_contact:
+        if trust_return_stabilization_need >= 0.32 and cortisol_load >= 0.35:
+            trust_return_motor_mode = "trust_stabilize_before_act"
+        elif trust_return_focus_pull >= 0.30:
+            trust_return_motor_mode = "trust_focused_ready"
+        else:
+            trust_return_motor_mode = "trust_emerging"
+
+    trust_return_act_bridge = _clip01(
+        (trust_return_stabilization_need * 0.36)
+        + (trust_return_motor_contact_strength * 0.28)
+        + (trust_return_open_hypothesis_load * 0.18)
+        + (trust_return_context_instability * 0.12)
+        - (previous_confirmed_structure_protection * 0.16)
+    )
+    if (
+        bool(allow_plan)
+        and decision in ("LONG", "SHORT")
+        and trust_return_motor_mode == "trust_stabilize_before_act"
+        and trust_return_act_bridge >= 0.28
+        and decision_strength < (1.32 + trust_return_focus_pull * 0.26 + trust_return_act_bridge * 0.16)
+    ):
+        allow_plan = False
+        allow_observe = True
+        allow_ruminate = bool(
+            trust_return_stabilization_need >= 0.38
+            or previous_digestive_distance_pull >= 0.24
+            or trust_return_context_instability >= 0.16
+        )
+        allow_block = False
+        rejection_reason = "trust_return_stabilize_replay" if allow_ruminate else "trust_return_stabilize_focus"
+        pre_action_phase = "replan" if allow_ruminate else "act_watch"
+        act_watch_readiness = _clip01(act_watch_readiness + (trust_return_stabilization_need * 0.045))
+        field_observation_need = _clip01(field_observation_need + (trust_return_stabilization_need * 0.040))
+        action_inhibition = _clip01(action_inhibition + (trust_return_stabilization_need * 0.032))
+        action_clearance = _clip01(action_clearance - (trust_return_stabilization_need * 0.022))
+        perceptual_distance = _clip01(perceptual_distance + (trust_return_stabilization_need * 0.030))
+        inner_outer_reflection = _clip01(inner_outer_reflection + (trust_return_stabilization_need * 0.028))
+
     return {
         "allow_observe": bool(allow_observe),
         "allow_ruminate": bool(allow_ruminate),
@@ -17914,6 +20215,44 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         "previous_packet_label": str(previous_packet_label),
         "previous_packet_process_reward": float(previous_packet_process_reward),
         "previous_packet_reorganization_need": float(previous_packet_reorganization_need),
+        "previous_constructive_stimulation": float(previous_constructive_stimulation),
+        "previous_open_hypothesis_learning_state": str(previous_open_hypothesis_learning_state),
+        "previous_open_hypothesis_reorganization_posture": str(previous_open_hypothesis_reorganization_posture),
+        "previous_open_hypothesis_consequence_score": float(previous_open_hypothesis_consequence_score),
+        "previous_open_hypothesis_burden_score": float(previous_open_hypothesis_burden_score),
+        "previous_open_hypothesis_reorganization_score": float(previous_open_hypothesis_reorganization_score),
+        "previous_open_hypothesis_replay_need": float(previous_open_hypothesis_replay_need),
+        "previous_open_hypothesis_distance_need": float(previous_open_hypothesis_distance_need),
+        "previous_open_hypothesis_reinterpretation_need": float(previous_open_hypothesis_reinterpretation_need),
+        "open_hypothesis_trace_strength": float(open_hypothesis_trace_strength),
+        "hypothesis_weight": float(hypothesis_weight),
+        "hypothesis_trust": float(hypothesis_trust),
+        "hypothesis_caution": float(hypothesis_caution),
+        "hypothesis_reorganization_weight": float(hypothesis_reorganization_weight),
+        "action_weight": float(action_weight),
+        "decision_weight": float(decision_weight),
+        "open_hypothesis_reifung_state": str(open_hypothesis_reifung_state),
+        "open_hypothesis_bearing_echo": float(open_hypothesis_bearing_echo),
+        "open_hypothesis_reifung_pressure": float(open_hypothesis_reifung_pressure),
+        "open_hypothesis_reflection_pull": float(open_hypothesis_reflection_pull),
+        "open_hypothesis_motor_tension": float(open_hypothesis_motor_tension),
+        "open_hypothesis_confirmation_weight": float(open_hypothesis_confirmation_weight),
+        "open_hypothesis_learning_charge": float(open_hypothesis_learning_charge),
+        "open_hypothesis_action_permission": float(open_hypothesis_action_permission),
+        "open_hypothesis_reality_check_need": float(open_hypothesis_reality_check_need),
+        "previous_digest_state": str(previous_digest_state),
+        "previous_trust_return_readiness": float(previous_trust_return_readiness),
+        "previous_digestive_returned_trust": float(previous_digestive_returned_trust),
+        "previous_emergent_structure_state": str(previous_emergent_structure_state),
+        "previous_confirmed_structure_protection": float(previous_confirmed_structure_protection),
+        "trust_return_open_hypothesis_load": float(trust_return_open_hypothesis_load),
+        "trust_return_context_instability": float(trust_return_context_instability),
+        "trust_return_motor_contact_strength": float(trust_return_motor_contact_strength),
+        "trust_return_act_bridge": float(trust_return_act_bridge),
+        "trust_return_motor_heat": float(trust_return_motor_heat),
+        "trust_return_stabilization_need": float(trust_return_stabilization_need),
+        "trust_return_focus_pull": float(trust_return_focus_pull),
+        "trust_return_motor_mode": str(trust_return_motor_mode),
         "diffuse_open_development_pressure": float(diffuse_open_development_pressure),
         "posture_development_hint": str(posture_development_hint),
         "metaregulator_state": str(metaregulator_state),
@@ -18052,6 +20391,14 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         "neurochemical_support": float(neurochemical_state.get("neurochemical_support", 0.0) or 0.0),
         "neurochemical_balance": float(neurochemical_state.get("neurochemical_balance", 0.0) or 0.0),
         "reward_stability_echo": float(neurochemical_state.get("reward_stability_echo", 0.0) or 0.0),
+        "positive_expansion_pressure": float(positive_expansion_pressure),
+        "negative_contraction_pressure": float(negative_contraction_pressure),
+        "positive_overextension": float(positive_overextension),
+        "positive_return_pressure": float(positive_return_pressure),
+        "mcm_axis_displacement": float(mcm_axis_displacement),
+        "mcm_axis_tension": float(mcm_axis_tension),
+        "mcm_axis_state": str(mcm_axis_state),
+        "positive_zero_point_regulation": bool(positive_zero_point_regulation),
         "world_shift_evidence": float(neurochemical_state.get("world_shift_evidence", 0.0) or 0.0),
         "serotonin_carryover_risk": float(neurochemical_state.get("serotonin_carryover_risk", 0.0) or 0.0),
         "emotional_decoupling": float(neurochemical_state.get("emotional_decoupling", 0.0) or 0.0),
@@ -18062,6 +20409,15 @@ def build_meta_regulation_state(perception_state, processing_state, felt_state, 
         "nervous_overload_reflection_need": float(nervous_overload_reflection_need),
         "active_context_self_certainty": float(active_context_self_certainty),
         "nervous_context_overcoupling": float(nervous_context_overcoupling),
+        "own_field_identity_strength": float(own_field_identity_strength),
+        "foreign_semantic_pressure": float(foreign_semantic_pressure),
+        "adopted_language_pressure": float(adopted_language_pressure),
+        "self_foreign_boundary_clarity": float(self_foreign_boundary_clarity),
+        "semantic_origin_conflict": float(semantic_origin_conflict),
+        "own_vs_foreign_margin": float(own_vs_foreign_margin),
+        "borrowed_vs_own_margin": float(borrowed_vs_own_margin),
+        "boundary_support_margin": float(boundary_support_margin),
+        "semantic_origin_state": str(semantic_origin_state),
         "conscious_perception": dict(conscious_perception_state or {}),
         "conscious_perception_state": str(conscious_perception_state.get("conscious_perception_state", "open_perception") or "open_perception"),
         "inner_posture_state": str(conscious_perception_state.get("inner_posture_state", "uncertain_open") or "uncertain_open"),
